@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+	# BEGIN
+		RewriteEngine On
+		RewriteBase /
+		RewriteRule ^index\.php$ - [L]
+
+		# add a trailing slash to /crm-admin
+		RewriteRule ^([_0-9a-zA-Z-]+/)?crm-admin$ $1crm-admin/ [R=301,L]
+
+		RewriteCond %{REQUEST_FILENAME} -f [OR]
+		RewriteCond %{REQUEST_FILENAME} -d
+		RewriteRule ^ - [L]
+		RewriteRule ^([_0-9a-zA-Z-]+/)?(crm-(content|admin|includes).*) $2 [L]
+		RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
+		RewriteRule . index.php [L]
+	# END
+</IfModule>
