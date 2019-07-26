@@ -26,6 +26,7 @@ $thisFileDirname = dirname($thisFile);
 define('folder_config_global', $thisFileDirname);
 define('folder_admin', dirname($thisFileDirname . '../'));
 define('folder_principal', (dirname(folder_admin . '../')));
+define('folder_content', ((folder_principal . '/crm-content')));
 
 function getPath() : string {
 	$a = null;

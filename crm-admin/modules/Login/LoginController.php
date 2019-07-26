@@ -15,8 +15,8 @@ class LoginController extends ControladorBase {
 	
     public function __construct() {
         parent::__construct();
-		if(isset($_SESSION['user'])){
-			header("Location: /");
+		if(isset($_SESSION['user']) && get_called_class() != 'LoginController'){
+			@header("Location: /");
 			exit();
 		}
 		

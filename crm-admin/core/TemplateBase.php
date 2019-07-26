@@ -6,12 +6,21 @@ class TemplateBase {
 	public $footer;
 	public $ccr;
 	public $baseCode;
+	public $session;
+	public $thisClassName;
 	
 	public function __construct(){
-		$this->folder = folder_admin . "/themes/" . TEMA_DEFECTO;
-		$this->urlNav = "/crm-admin/themes/" . TEMA_DEFECTO;
+		$this->folder = folder_content . "/themes/" . TEMA_DEFECTO;
+		$this->urlNav = "/crm-content/themes/" . TEMA_DEFECTO;
 		$this->baseCode = $this->getBaseCode();
 		$this->ccr = $this->getCopyright();
+		
+		if(isset($_SESSION['user']) && is_array($_SESSION['user'])){
+			$this->session = $_SESSION['user'];
+		}else{
+			$this->session = null;
+		}
+		$this->thisClassName = $this->getClassName();	
 	}
 	
 	public function includeFile($urlFileInThemeFolder){
@@ -22,9 +31,19 @@ class TemplateBase {
 		}
 	}
 	
+	public function getClassName(){
+		return $thisClassName = str_replace(array(
+			"controller",
+			"Controller",
+		), array(
+			"",
+			"",
+		), get_class($this));
+	}
+	
 	public function loadDataFile($urlFileInThemeFolder){
 		if(!file_exists($this->folder . $urlFileInThemeFolder)){
-			return "";
+			return false;
 		}else{
 			return (@file_get_contents($this->folder . $urlFileInThemeFolder));
 		}
@@ -38,17 +57,17 @@ class TemplateBase {
 				return (@file_get_contents($this->folder . $urlFileInThemeFolder));
 			}
 		}else{
-			return "";
+			return false;
 		}
 	}
 	
 	public function getHead(){
-		return $this->includeFile('/global/head.php');
+		$this->includeFile('/global/head.php');
 		#return $this->loadDataFile('/global/head.php');
 	}
 	
 	public function getFooter(){
-		return $this->loadDataFile('/global/footer.php');
+		$this->includeFile('/global/footer.php');
 	}
 	
 	public function getScripts(){
@@ -68,18 +87,16 @@ class TemplateBase {
 		return ($this);
 	}
 	
-	public function getBody(){
+	public function getBody() : string {
 		return "";
 	}
 	
 	public function getMenuTop(){
 		$this->includeFile('/global/menus/top.php');
-		#return $this->loadDataFile('/global/menus/top.php');
 	}
 	
 	public function getMenuLeft(){
 		$this->includeFile('/global/menus/left.php');
-		return "";
 	}
 	
 	public function treeCode(){
@@ -126,6 +143,50 @@ class TemplateBase {
         return ("index.php?controller=".$controlador."&action=".$accion);
     }
 	
+	/* Mas optiones y function para acceder desde los componentes del tema */
+	public function userActive(){
+		return (isset($this->session) && $this->session != null && isset($this->session['id']) && $this->session['id'] > 0) ? true : false;
+	}
 	
+	public function getUserId() : int {
+		if($this->userActive() === true){
+			return $this->session['id'];
+		}else{
+			return 0;
+		}		
+	}
 	
+	public function getUserUsername() : string {
+		if($this->userActive() === true){
+			return $this->session['username'];
+		}else{
+			return "";
+		}		
+	}
+	
+	public function getUserNames() : string {
+		if($this->userActive() === true){
+			return $this->session['names'];
+		}else{
+			return "";
+		}		
+	}
+	
+	public function getUserSurname() : string {
+		if($this->userActive() === true){
+			return $this->session['surname'];
+		}else{
+			return "";
+		}		
+	}
+	
+	public static function getModules() : array {
+		$Mydir = folder_admin . '/modules/';
+		$dirs = array();
+		foreach(glob($Mydir.'*', GLOB_ONLYDIR) as $dir) {
+			$dir = str_replace($Mydir, '', $dir);
+			$dirs[] = $dir;
+		}
+		return $dirs;
+	}
 }

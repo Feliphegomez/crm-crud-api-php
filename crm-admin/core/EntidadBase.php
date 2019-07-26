@@ -59,8 +59,12 @@ class EntidadBase {
         while($row = $query->fetch_object()) {
            $resultSet[]=$row;
         }
-         
-        return $resultSet;
+		
+		if(!isset($resultSet)){
+			return array();
+		}else{
+			return $resultSet;
+		}
     }
      
     public function deleteById($id){
@@ -87,10 +91,10 @@ class EntidadBase {
 		
         while($row = $query->fetch_object()) { $resultSet[] = $row; }
 		
-		 if(isset($resultSet)){
-			 return $resultSet;
-		 }else{
+		 if(!isset($resultSet)){
 			 return array();
+		 }else{
+			 return $resultSet;
 		 }
 		 
     }

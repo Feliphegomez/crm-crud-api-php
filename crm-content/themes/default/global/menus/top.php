@@ -1,4 +1,8 @@
 <?php if(isset($_SESSION['user'])){ ?>
+
+<?php 
+	#echo json_encode($this);
+?>
 <div class="nav_menu">
 	<nav>
 	  <div class="nav toggle">
@@ -8,7 +12,7 @@
 	  <ul class="nav navbar-nav navbar-right">
 		<li class="">
 		  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-			<img src="images/img.jpg" alt="">John Doe
+			<img src="images/img.jpg" alt=""><?php echo $this->getUserNames(); ?>
 			<span class=" fa fa-angle-down"></span>
 		  </a>
 		  <ul class="dropdown-menu dropdown-usermenu pull-right">

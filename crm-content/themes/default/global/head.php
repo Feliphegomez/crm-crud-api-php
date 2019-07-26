@@ -26,3 +26,6 @@
 
     <!-- Custom Theme Style -->
     <link href="<?php echo $this->urlNav; ?>/assets/build/css/custom.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>

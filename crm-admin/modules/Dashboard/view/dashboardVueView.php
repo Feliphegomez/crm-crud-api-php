@@ -1,26 +1,35 @@
 <!-- // 
   -->
   <!-- // <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">-->
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
-<div class="container">
-  <div class="row">
-    <div class="col-md-3">
-      <h3>VUE-CRUD-UI</h3>
-    </div>
-  </div>
-  <main id="app">
-    <div class="row">
-      <div class="col-md-3">
+<div class="" id="app">
+	<div class="page-title">
+	  <div class="title_left">
+		<h3>Administrador General <small>Todos los formulario - Vista administrador</small></h3>
+	  </div>
+	  
+	  <!-- //
+	  <div class="title_right">
+		<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+		  <div class="input-group">
+			<input type="text" class="form-control" placeholder="Search for...">
+			<span class="input-group-btn">
+			  <button class="btn btn-default" type="button">Go!</button>
+			</span>
+		  </div>
+		</div>
+	  </div>
+	  -->
+	</div>
+	<div class="clearfix"></div>
+	
+	<div class="row">
+	  <div class="col-md-3 col-sm-3 col-xs-3">
         <menu-component v-if="definition!==null" :subjects="definition.tags"></menu-component>
-      </div>
-      <div class="col-md-9">
-        <router-view :key="$route.fullPath" v-if="definition!==null" :definition="definition"></router-view>
-      </div>
-    </div>
-  </main>
+	  </div>
+	  <div class="col-md-9 col-sm-9 col-xs-9">
+		<router-view :key="$route.fullPath" v-if="definition!==null" :definition="definition"></router-view>
+	  </div>
+	</div>
 </div>
 
 <template id="menu">
@@ -38,114 +47,176 @@
 </template>
 
 <template id="list">
-  <div>
-    <h2>{{ subject }}</h2>
-    <p>
-      <router-link class="btn btn-primary" v-bind:to="{name: 'Add', params: {subject: subject}}">
-        Add
-      </router-link>
-    </p>
-    <div class="card bg-light" v-if="field"><div class="card-body">
-      <div style="float:right;"><router-link v-bind:to="{name: 'List', params: {subject: subject}}">Clear filter</router-link></div>
-      <p class="card-text">Filtered by: {{ field }} = {{ id }}</p>
-    </div></div>
-    <p v-if="records===null">Loading...</p>
-    <table v-else class="table">
-      <thead>
-        <tr>
-          <th v-for="value in Object.keys(properties)">{{ value }}</th>
-          <th v-if="related">related</th>
-          <th v-if="primaryKey">actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="record in records">
-          <template v-for="(value, key) in record">
-            <td v-if="references[key] !== false">
-              <router-link v-bind:to="{name: 'View', params: {subject: references[key], id: referenceId(references[key], record[key])}}">{{ referenceText(references[key], record[key]) }}</router-link>
-            </td>
-            <td v-else>{{ value }}</td>
-          </template>
-          <td v-if="related">
-            <template v-for="(relation, i) in referenced">
-              <router-link v-bind:to="{name: 'Filter', params: {subject: relation[0], field: relation[1], id: record[primaryKey]}}">{{ relation[0] }}</router-link>&nbsp;
-            </template>
-          </td>
-          <td v-if="primaryKey" style="padding: 6px; white-space: nowrap;">
-            <router-link class="btn btn-secondary btn-sm" v-bind:to="{name: 'View', params: {subject: subject, id: record[primaryKey]}}">View</router-link>
-            <router-link class="btn btn-secondary btn-sm" v-bind:to="{name: 'Edit', params: {subject: subject, id: record[primaryKey]}}">Edit</router-link>
-            <router-link class="btn btn-danger btn-sm" v-bind:to="{name: 'Delete', params: {subject: subject, id: record[primaryKey]}}">Delete</router-link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+	<div>
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>{{ subject }} <small> Listado</small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <router-link tag="li" v-bind:to="{name: 'Add', params: {subject: subject}}">
+					<a><i class="fa fa-plus"></i></a>
+				  </router-link>
+				</ul>
+				<div class="clearfix"></div>
+			</div>
+				  
+			<div class="x_content table-responsive">
+				<div class="card bg-light" v-if="field"><div class="card-body">
+					<div style="float:right;"><router-link v-bind:to="{name: 'List', params: {subject: subject}}">Clear filter</router-link></div>
+						<p class="card-text">Filtrado por: {{ field }} = {{ id }}</p>
+					</div>
+				</div>
+				<p v-if="records===null">Cargando...</p>				
+				<table v-else class="table table-hover">
+				  <thead>
+					<tr>
+					  <th v-for="value in Object.keys(properties)">{{ value }}</th>
+					  <th v-if="related">Relacionado</th>
+					  <th v-if="primaryKey"></th>
+					</tr>
+				  </thead>
+				  <tbody>
+					<tr v-for="record in records">
+					  <template v-for="(value, key) in record">
+						<td v-if="references[key] !== false">
+						  <router-link v-bind:to="{name: 'View', params: {subject: references[key], id: referenceId(references[key], record[key])}}">{{ referenceText(references[key], record[key]) }}</router-link>
+						</td>
+						<td v-else>{{ value }}</td>
+					  </template>
+					  <td v-if="related">
+						<template v-for="(relation, i) in referenced">
+						  <router-link v-bind:to="{name: 'Filter', params: {subject: relation[0], field: relation[1], id: record[primaryKey]}}">{{ relation[0] }}</router-link>&nbsp;
+						</template>
+					  </td>
+					  <td v-if="primaryKey" style="padding: 6px; white-space: nowrap;">
+						<router-link class="btn btn-info btn-sm btn-round" v-bind:to="{name: 'View', params: {subject: subject, id: record[primaryKey]}}">
+							<i class="fa fa-eye"></i>
+						</router-link>
+						<router-link class="btn btn-warning btn-sm btn-round" v-bind:to="{name: 'Edit', params: {subject: subject, id: record[primaryKey]}}">
+							<i class="fa fa-pencil"></i>
+						</router-link>
+						<router-link class="btn btn-danger btn-sm btn-round" v-bind:to="{name: 'Delete', params: {subject: subject, id: record[primaryKey]}}">
+							<i class="fa fa-trash"></i>
+						</router-link>
+					  </td>
+					</tr>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+		
+   
   </div>
 </template>
 
 <template id="create">
-  <div>
-    <h2>{{ subject }} - add</h2>
-    <form v-on:submit="createRecord">
-      <template v-for="(value, key) in record">
-        <div class="form-group">
-          <label v-bind:for="key">{{ key }}</label>
-          <input v-if="references[key] === false" class="form-control" v-bind:id="key" v-model="record[key]" :disabled="key === primaryKey" />
-          <select v-else class="form-control" v-bind:id="key" v-model="record[key]">
-            <option value=""></option>
-            <option v-for="option in options[references[key]]" v-bind:value="option.key">{{ option.value }}</option>
-          </select>
-        </div>
-      </template>
-      <button type="submit" class="btn btn-primary">Create</button>
-      <router-link class="btn btn-primary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancel</router-link>
-    </form>
-  </div>
+	<div>
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>{{ subject }} <small> Crear</small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <router-link tag="li" v-bind:to="{name: 'Add', params: {subject: subject}}">
+					<a><i class="fa fa-plus"></i></a>
+				  </router-link>
+				</ul>
+				<div class="clearfix"></div>
+					<div class="x_content">
+						<br />
+						<form v-on:submit="createRecord" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+							<template v-for="(value, key) in record">
+								<div class="form-group">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12" v-bind:for="key">{{ key }} <!-- // <span class="required">*</span> --></label>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<input v-if="references[key] === false" class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]" :disabled="key === primaryKey" />
+										<select v-else class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]">
+											<option value=""></option>
+											<option v-for="option in options[references[key]]" v-bind:value="option.key">{{ option.value }}</option>
+										</select>
+									</div>
+								</div>
+							</template>
+							<div class="ln_solid"></div>
+							<div class="form-group">
+								<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+									<router-link tag="button" class="btn btn-primary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancelar</router-link>
+									<button class="btn btn-primary" type="reset">Limpiar</button>
+									<button type="submit" class="btn btn-success">Crear</button>
+								</div>
+							</div>
+						</form>
+                  </div>
+			</div>
+		</div>
+		
+	</div>
 </template>
 
+
 <template id="view">
-  <div>
-    <h2>{{ subject }} - view</h2>
-    <p v-if="record===null">Loading...</p>
+	<div>
+    <h2>{{ subject }} - Observando</h2>
+    <p v-if="record===null">Cargando...</p>
     <dl v-else>
       <template v-for="(value, key) in record">
         <dt>{{ key }} </dt>
         <dd>{{ value }}</dd>
       </template>
     </dl>
+      <router-link class="btn btn-secondary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancel</router-link>
   </div>
 </template>
 
 <template id="update">
-  <div>
-    <h2>{{ subject }} - edit</h2>
-    <p v-if="record===null">Loading...</p>
-    <form v-else v-on:submit="updateRecord">
-      <template v-for="(value, key) in record">
-        <div class="form-group">
-          <label v-bind:for="key">{{ key }}</label>
-          <input v-if="references[key] === false" class="form-control" v-bind:id="key" v-model="record[key]" :disabled="key === primaryKey" />
-          <select v-else-if="!options[references[key]]" class="form-control" disabled>
-            <option value="" selected>Loading...</option>
-          </select>
-          <select v-else class="form-control" v-bind:id="key" v-model="record[key]">
-            <option value=""></option>
-            <option v-for="option in options[references[key]]" v-bind:value="option.key">{{ option.value }}</option>
-          </select>
-        </div>
-      </template>
-      <button type="submit" class="btn btn-primary">Save</button>
-      <router-link class="btn btn-secondary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancel</router-link>
-    </form>
-  </div>
+	<div>
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>{{ subject }} <small> Modificar</small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <router-link tag="li" v-bind:to="{name: 'Add', params: {subject: subject}}">
+					<a><i class="fa fa-plus"></i></a>
+				  </router-link>
+				</ul>
+				<div class="clearfix"></div>
+					<div class="x_content">
+						<br />
+						<p v-if="record===null">Cargando...</p>
+						<form v-else v-on:submit="updateRecord" data-parsley-validate class="form-horizontal form-label-left">
+							<template v-for="(value, key) in record">
+								<div class="form-group">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12" v-bind:for="key">{{ key }} <!-- // <span class="required">*</span> --></label>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<input v-if="references[key] === false" class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]" :disabled="key === primaryKey" />
+										<select v-else-if="!options[references[key]]" class="form-control col-md-7 col-xs-12" disabled>
+											<option value="" selected>Cargando...</option>
+										</select>
+										<select v-else class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]">
+											<option value=""></option>
+											<option v-for="option in options[references[key]]" v-bind:value="option.key">{{ option.value }}</option>
+										</select>
+									</div>
+								</div>
+							</template>
+							<div class="ln_solid"></div>
+							<div class="form-group">
+								<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+									<router-link tag="button" class="btn btn-primary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancelar</router-link>
+									<button class="btn btn-primary" type="reset">Limpiar</button>
+									<button type="submit" class="btn btn-success">Guardar</button>
+								</div>
+							</div>
+						</form>
+				  </div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <template id="delete">
   <div>
-    <h2>{{ subject }} delete #{{ id }}</h2>
+    <h2>{{ subject }} Eliminar #{{ id }}</h2>
     <form v-on:submit="deleteRecord">
       <p>The action cannot be undone.</p>
-      <button type="submit" class="btn btn-danger">Delete</button>
-      <router-link class="btn btn-secondary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancel</router-link>
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+      <router-link class="btn btn-secondary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancelar</router-link>
     </form>
   </div>
 </template>
@@ -160,7 +231,7 @@ var api = axios.create({
 });
 api.interceptors.response.use(function (response) {
   if (response.headers['x-xsrf-token']) {
-    document.cookie = 'XSRF-TOKEN=' + response.headers['x-xsrf-token'] + '; path=/';
+    // document.cookie = 'XSRF-TOKEN=' + response.headers['x-xsrf-token'] + '; path=/';
   }
   return response;
 });
@@ -233,7 +304,7 @@ var orm = {
       api.get('/records/' + this.subject + '/' + this.id).then(function (response) {
         self.record = response.data;
       }).catch(function (error) {
-        console.log(error);
+        console.log(error);console.log(error.response);
       });
     },
     readRecords: function () {
@@ -254,7 +325,7 @@ var orm = {
       api.get(url).then(function (response) {
         self.records = response.data.records;
       }).catch(function (error) {
-        console.log(error);
+        console.log(error);console.log(error.response);
       });
     },
     readOptions: function() {
@@ -272,7 +343,7 @@ var orm = {
             });
             self.$forceUpdate();
           }.bind(null, subject, primaryKey, displayColumn)).catch(function (error) {
-            console.log(error);
+            console.log(error);console.log(error.response);
           });
         }
       }
@@ -281,7 +352,7 @@ var orm = {
       api.put('/records/' + this.subject + '/' + this.id, this.record).then(function (response) {
         console.log(response.data);
       }).catch(function (error) {
-        console.log(error);
+        console.log(error);console.log(error.response);
       });
       router.push({name: 'List', params: {subject: this.subject}});
     },
@@ -302,7 +373,7 @@ var orm = {
       api.post('/records/' + this.subject, this.record).then(function (response) {
         self.record.id = response.data;
       }).catch(function (error) {
-        console.log(error);
+        console.log(error);console.log(error.response);
       });
       router.push({name: 'List', params: {subject: this.subject}});
     },
@@ -310,7 +381,7 @@ var orm = {
       api.delete('/records/' + this.subject + '/' + this.id).then(function (response) {
         console.log(response.data);
       }).catch(function (error) {
-        console.log(error);
+        console.log(error);console.log(error.response);
       });
       router.push({name: 'List', params: {subject: this.subject}});
     }
@@ -490,7 +561,7 @@ app = new Vue({
 		console.log(response);
       self.definition = response.data;
     }).catch(function (error) {
-      console.log(error);
+      console.log(error);console.log(error.response);
     });
   }
 }).$mount('#app');

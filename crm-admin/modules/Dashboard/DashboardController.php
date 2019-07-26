@@ -13,12 +13,10 @@ class DashboardController extends ControladorBase {
     }
      
     public function index(){
-		echo 'index';
-		
+		$this->vue();		
     }
      
     public function php(){
-		echo 'dashboardPHP';
         $this->viewInTemplate(
 			"dashboardPHP", array(
 				"title" => "Dashboard PHP",
@@ -29,7 +27,6 @@ class DashboardController extends ControladorBase {
     }
      
     public function vue(){
-		echo 'dashboardVue';
         $this->viewInTemplate(
 			"dashboardVue", array(
 				"title" => "Dashboard Vue",

@@ -13,7 +13,7 @@ class UsuariosController extends ControladorBase {
         parent::__construct();
     }
      
-    public function index(){
+    public function index2(){
         //Creamos el objeto usuario
         $usuario = new Usuario();
         //Conseguimos todos los usuarios
@@ -25,7 +25,7 @@ class UsuariosController extends ControladorBase {
         ));
     }
      
-    public function index2(){
+    public function index(){
         //Creamos el objeto usuario
         $usuario = new Usuario();
         //Conseguimos todos los usuarios
@@ -67,7 +67,5 @@ class UsuariosController extends ControladorBase {
         $usu=$usuarios->getUnUsuario();
         echo json_encode($usu);
     }
-	
-	
 }
 ?>

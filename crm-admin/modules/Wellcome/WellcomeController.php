@@ -14,7 +14,6 @@ class WellcomeController extends ControladorBase {
 				"template" => $this->template,
 			)
 		);
-		/**/
     }
 	
 	

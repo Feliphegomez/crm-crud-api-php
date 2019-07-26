@@ -26,7 +26,7 @@ define('TBL_USERS_R_C', '');
 /* CONFIGURACION DE LA API */
 define("API_openApiBase", '{"info":{"title":"API-REST","version":"2.0.0"}}');
 define("API_controllers", 'records,columns,openapi,geojson,cache');
-define("API_middlewares", 'cors,dbAuth,xsrf,authorization,sanitation,ipAddress,pageLimits,validation,multiTenancy,customization'); // => Disabled jwtAuth
+define("API_middlewares", 'cors,dbAuth,authorization,sanitation,ipAddress,pageLimits,validation,multiTenancy,customization'); // => Disabled jwtAuth,xsrf
 define("API_dbAuth_mode", 'required');
 define("API_dbAuth_usersTable", TBL_USERS);
 define("API_dbAuth_usernameColumn", TBL_USERS_C_USERNAME);

@@ -12,6 +12,7 @@ require_once('api.php');
 require_once(folder_admin . '/core/ui.php');
 
 class ControladorBase {
+	public $thisClassName;
 	public $post;
 	public $get;
 	public $put;
@@ -35,6 +36,7 @@ class ControladorBase {
 	public $template;
 	public $vista_actual;
 	public $datos;
+	public $thisModule;
  
     public function __construct() {
         require_once 'EntidadBase.php';
@@ -47,10 +49,21 @@ class ControladorBase {
 		$this->sections = array();
 		$this->enlace_actual = $_SERVER['REQUEST_URI'];
          
-        //Incluir todos los modelos
-        foreach(glob(folder_admin . "/model/*.php") as $file){
-            require_once $file;
-        }
+        //Incluir todos los modelos del sistema
+        foreach(glob(folder_admin . "/model/*.php") as $file){ require_once $file; };
+        //Incluir todos los modelos de los modulos
+		$directorio = opendir(folder_admin . "/modules")	; //ruta actual
+		while ($nombreModulo = readdir($directorio)) 
+		{
+			//verificamos si es o no un directorio
+			if (is_dir(folder_admin . "/modules/" . $nombreModulo))
+			{
+				# echo "{$nombreModulo}\n";
+				foreach(glob(folder_admin . "/modules/{$nombreModulo}/models/*.php") as $file){
+					require_once $file;
+				};
+			}
+		}
 		
 		$this->setServer();
 		$this->folders = new stdClass();
@@ -89,8 +102,8 @@ class ControladorBase {
 			'dbAuth.usernameColumn' => API_dbAuth_usernameColumn,
 			'dbAuth.passwordColumn' => API_dbAuth_passwordColumn,
 			'dbAuth.returnedColumns' => API_dbAuth_returnedColumns,
-			'xsrf.cookieName' => API_dbAuth_returnedColumns,
-			'xsrf.headerName' => API_dbAuth_returnedColumns,
+			// 'xsrf.cookieName' => API_dbAuth_returnedColumns,
+			// 'xsrf.headerName' => API_dbAuth_returnedColumns,
 		]));
 		$this->response = $this->apiCore->handle($this->request);
 		
@@ -157,7 +170,7 @@ class ControladorBase {
 		
 		# Crear Template
 		require_once "TemplateBase.php";
-		$themeFileBase = folder_admin . "/themes/{$this->theme}/global/template.php";
+		$themeFileBase = folder_content . "/themes/{$this->theme}/global/template.php";
 		if($this->validateFileExist($themeFileBase) == true){
 			require_once $themeFileBase;
 			$template_name = "Template".ucwords(strtolower($this->theme));
@@ -165,12 +178,26 @@ class ControladorBase {
 			$this->template = $template->getTemplate();
 			
 		}else{
-			echo "Template no encontrado en el tema.";
+			echo "Template no encontrado en el tema. {$themeFileBase}";
 			exit();
 		}
+		
+		
+		$this->thisClassName = $this->getClassName();
+		$this->thisModule = $this->getThisModule();
 	}
 	
-	public function getModules(){
+	public static function getClassName(){
+		return str_replace(array(
+			"controller",
+			"Controller",
+		), array(
+			"",
+			"",
+		), get_called_class());
+	}
+	
+	public static function getModules() : array {
 		$Mydir = folder_admin . '/modules/';
 		$dirs = array();
 		foreach(glob($Mydir.'*', GLOB_ONLYDIR) as $dir) {
@@ -239,72 +266,111 @@ class ControladorBase {
 		
 		return true;
     }
+	
+	public static function getSections() {
+		$nombreModulo = str_replace(array(
+			"controller",
+			"Controller",
+		), array(
+			"",
+			"",
+		), get_called_class());
+		
+		$urlInfoModulo = folder_admin . "/modules/{$nombreModulo}/{$nombreModulo}.json";
+		if(ControladorBase::validateFileExist($urlInfoModulo)){
+			$infoModulo = json_decode(@file_get_contents($urlInfoModulo));
+		}else{
+			$infoModulo = json_decode(json_encode(array(
+				'name' => "Modulo {$nombreModulo}",
+				"isActive" => false
+			)));
+		}
+		
+		return (!isset($infoModulo->sections)) ? array() : $infoModulo->sections;
+		
+		/*
+		$nombreModulo = str_replace(array(
+			"controller",
+			"Controller",
+		), array(
+			"",
+			"",
+		), get_called_class());
+		
+		$urlInfoModulo = folder_admin . "/modules/{$nombreModulo}/{$nombreModulo}.json";
+		if(ControladorBase::validateFileExist($urlInfoModulo)){
+			return json_decode(@file_get_contents($urlInfoModulo));
+		}else{
+			$r = json_decode(json_encode(array(
+				'name' => "Modulo {$nombreModulo}",
+				"isActive" => false
+			)));
+			return $r->
+		}*/
+		
+	}
+	
+	public static function defaultInfoModule() {
+		
+	}
      
     //Plugins y funcionalidades
-     
-/*
-* Este método lo que hace es recibir los datos del controlador en forma de array
-* los recorre y crea una variable dinámica con el indice asociativo y le da el
-* valor que contiene dicha posición del array, luego carga los helpers para las
-* vistas y carga la vista que le llega como parámetro. En resumen un método para
-* renderizar vistas.
-*/
     public function view($vista,$datos){
-		# $this->viewInTemplate($vista,$datos);
-        
+		/*
+		* Este método lo que hace es recibir los datos del controlador en forma de array
+		* los recorre y crea una variable dinámica con el indice asociativo y le da el
+		* valor que contiene dicha posición del array, luego carga los helpers para las
+		* vistas y carga la vista que le llega como parámetro. En resumen un método para
+		* renderizar vistas.
+		*/
 		foreach ($datos as $id_assoc => $valor) {
             ${$id_assoc}=$valor;
         }
-		
-		
         require_once folder_admin . '/core/AyudaVistas.php';
         $helper=new AyudaVistas();
 		if(isset($vista)){
-			if(@file_exists(folder_admin . '/view/'.$vista.'View.php')){ require_once folder_admin . '/view/'.$vista.'View.php'; } 
-			else { echo ("<br> Vista: {{$vista}} No encontrada.<br>"); };
+			$urlVista = folder_admin . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
+			if(@file_exists($urlVista)){ require_once $urlVista; } 
+			else { echo ("<br> Vista: {{$vista}} No encontrada. URL: {$urlVista}<br>"); };
 		}
     }
-	
-	
 	
 	public function templateToCode($codeTemplate){
 		$vista = $this->vista_actual;
 		$datos = $this->datos;
-				foreach ($datos as $id_assoc => $valor) {
-					${$id_assoc}=$valor;
-				}
-				require_once folder_admin . '/core/AyudaVistas.php';
-				$helper=new AyudaVistas();
+		foreach ($datos as $id_assoc => $valor) {
+			${$id_assoc}=$valor;
+		}
+		require_once folder_admin . '/core/AyudaVistas.php';
+		$helper=new AyudaVistas();
 		if(is_array($codeTemplate)){
 			foreach($codeTemplate as $i => $prms){
 				if(isset($prms->name)){
 					$clss = (isset($prms->class) && $prms->class != "") ? " class=\"{$prms->class}\"" : '';
 					if(isset($prms->tag)){
-						echo str_repeat("\t", $i)."<{$prms->tag}{$clss}> \n";
+						echo str_repeat("\t", ($i+1))."<{$prms->tag}{$clss}> \n";
 					}
-					echo str_repeat("\t", $i)."<!-- // ↑ Inicio {$prms->name} --> \n";
+					echo str_repeat("\t", ($i+1))."<!-- // ↑ Inicio {$prms->name} --> \n";
 					if(isset($prms->function)){
 						if(method_exists($this->template, $prms->function)){
-							#echo str_repeat("\t", $i)."function => {$prms->function}::Result - encontrada.\n";
-							
-							echo $this->template->{$prms->function}();
+							$this->template->{$prms->function}();
 						}else{
-							echo str_repeat("\t", $i)."function => {$prms->function}::Result - NO encontrada.\n";
+							echo str_repeat("\t", ($i+1))."function => {$prms->function}::Result - NO encontrada.\n";
 						}
 						if($prms->function === 'getBody'){
-							# echo str_repeat("\t", $i)."---------------------------------------------------------------------------\n\n";	
 							if(isset($vista)){
-								if(@file_exists(folder_admin . '/view/'.$vista.'View.php')){ require_once folder_admin . '/view/'.$vista.'View.php'; } 
+								$urlVista = folder_admin . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
+								if(@file_exists($urlVista)){ require_once $urlVista; } 
 								else { echo ("<br> Vista: {{$vista}} No encontrada.<br>"); };
 							}
 						}
 					}
 					if(isset($prms->includes) && is_array($prms->includes)){
-						echo $this->templateToCode($prms->includes);
+						$this->templateToCode($prms->includes);
 					}
-					echo str_repeat("\t", $i)."<!-- // ↓ Fin {$prms->name} -->\n";
+					echo str_repeat("\t", ($i+1))."<!-- // ↓ Fin {$prms->name} -->\n";
 					if(isset($prms->tag)){
-						echo str_repeat("\t", $i)."</{$prms->tag}>\n";
+						echo str_repeat("\t", ($i+1))."</{$prms->tag}>\n";
 					}
 				}
 			}
@@ -314,13 +380,18 @@ class ControladorBase {
 	}
 	
 	public function viewInTemplate($vista,$datos){
+		/*
+		* Este método lo que hace es recibir los datos del controlador en forma de array
+		* los recorre y crea una variable dinámica con el indice asociativo y le da el
+		* valor que contiene dicha posición del array, luego carga los helpers para las
+		* vistas y carga la vista que le llega como parámetro con los archivos conjuntos de la plantilla. En resumen un método para
+		* renderizar vistas pero con el tema.
+		*/
         foreach ($datos as $id_assoc => $valor) {
             ${$id_assoc}=$valor;
         }
-		
 		$this->vista_actual = $vista;
 		$this->datos = $datos;
-		
 		echo "<!DOCTYPE html>\n";
 		$this->templateToCode($this->template->baseCode);
     }
@@ -342,12 +413,32 @@ class ControladorBase {
 		return "<form method=\"post\" action=\"/logout\"><button type=\"submit\">Cerar sesion</button></form>";
 	}
 	
-	public function validateFileExist($fileUrl){
+	public static function validateFileExist($fileUrl) {
 		return (!file_exists($fileUrl)) ? false : true;
 	}
 	
-	public function validateDirExist($dirUrl){
+	public static function validateDirExist($dirUrl) {
 		return (is_dir($dirUrl)) ? true : false;
 	}
 	
+	/* FUNCIONES PARA LOS MODULOS */
+	public static function getThisModule() {
+		$nombreModulo = str_replace(array(
+			"controller",
+			"Controller",
+		), array(
+			"",
+			"",
+		), get_called_class());
+		
+		$urlInfoModulo = folder_admin . "/modules/{$nombreModulo}/{$nombreModulo}.json";
+		if(ControladorBase::validateFileExist($urlInfoModulo)){
+			return json_decode(@file_get_contents($urlInfoModulo));
+		}else{
+			return json_decode(json_encode(array(
+				'name' => "Modulo {$nombreModulo}",
+				"isActive" => false
+			)));
+		}
+	}
 }
