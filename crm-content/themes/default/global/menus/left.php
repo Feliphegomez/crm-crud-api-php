@@ -48,7 +48,7 @@ class MenuLeft extends MenuBase {
 		$classLink1 = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller'] && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"active\"" : "";
 		$classLink2 = (isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"current-page\"" : "";
 		
-		return "<li{$classLink1}><a href=\"{$urlLink}\"><i class=\"fa fa-laptop\"></i> {$section->title} </a><li>\n";
+		return "<li{$classLink1}><a href=\"{$urlLink}\"><i class=\"fa fa-laptop\"></i> {$section->title} </a></li>\n";
 	}
 	
 	public function listMenuLeft001() {
