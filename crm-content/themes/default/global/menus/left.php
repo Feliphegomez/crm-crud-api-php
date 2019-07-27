@@ -14,14 +14,12 @@ class MenuLeft extends MenuBase {
 		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action) : "#";
 		$classLink1 = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller'] && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"active\"" : "";
 		$classLink2 = (isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action']) && $_GET['action'] == $section->action) ? " style=\"display: block;\"" : "";
-		// class=\"current-page\"
-		// class=\"sub_menu\"
-		// class=\"active\"
+		$tagIcon = (isset($section->icon) && $section->icon != null && $section->icon != "") ? " <i class=\"{$section->icon}\"></i> " : "";
 		
 		$r = "";
 		if(isset($section->tree) && count($section->tree) > 0){
 			$r .= "<li{$classLink1}>\n".
-				"<a><i class=\"fa fa-sitemap\"></i> {$section->title} <span class=\"fa fa-chevron-down\"></span></a>\n".
+				"<a>{$tagIcon} {$section->title} <span class=\"fa fa-chevron-down\"></span></a>\n".
 				"<ul class=\"nav child_menu\"{$classLink2}>\n";
 					foreach($section->tree as $item){
 						if(isset($item->tree) && count($item->tree) > 0){
@@ -47,11 +45,12 @@ class MenuLeft extends MenuBase {
 		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action) : "#";
 		$classLink1 = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller'] && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"active\"" : "";
 		$classLink2 = (isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"current-page\"" : "";
+		$tagIcon = (isset($section->icon) && $section->icon != null && $section->icon != "") ? " <i class=\"{$section->icon}\"></i> " : "";
 		
-		return "<li{$classLink1}><a href=\"{$urlLink}\"><i class=\"fa fa-laptop\"></i> {$section->title} </a></li>\n";
+		return "<li{$classLink1}><a href=\"{$urlLink}\">{$tagIcon} {$section->title} </a></li>\n";
 	}
 	
-	public function listMenuLeft001() {
+	public function listMenuLeft001($showNoActives = false) {
 		$r = "";
 		$modules = MenuLeft::getModules();
 		foreach($modules as $modulo){
@@ -62,16 +61,29 @@ class MenuLeft extends MenuBase {
 			$infoThisModule->name = (!isset($infoThisModule->name) || $infoThisModule->name == "") ? $modulo : $infoThisModule->name;
 			$classLink = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller']) ? " class=\"active\"" : "";
 			#
-			$r .= "<h3>{$infoThisModule->name}</h3>";
-			$r .= "<ul class=\"nav side-menu\">";
+			$moduloIcon = (isset($infoThisModule->icon) && $infoThisModule->icon != null && $infoThisModule->icon != "") ? " <i class=\"{$infoThisModule->icon}\"></i> " : "";
+			
+			
 				if(isset($infoThisModule->isActive) && $infoThisModule->isActive == true){
-					foreach($infoThisModuleSections as $section){
-						$r .= $this->menuConHijos($section);
+					if(isset($infoThisModule->showTitleModule) && $infoThisModule->showTitleModule == true){
+						$r .= "<h3>{$moduloIcon}{$infoThisModule->name}</h3>";
 					}
+					
+					$r .= "<ul class=\"nav side-menu\">";
+						foreach($infoThisModuleSections as $section){
+							$r .= $this->menuConHijos($section);
+						}
+					$r .= "</ul>";
 				}else{
-					$r .= "<li><a href=\"#\"><i class=\"fa fa-laptop\"></i> {$infoThisModule->name} <span class=\"label label-success pull-right\">Inactivo</span></a></li>\n";
+					if($showNoActives === true){
+						if(isset($infoThisModule->showTitleModule) && $infoThisModule->showTitleModule == true){
+							$r .= "<h3>{$moduloIcon}{$infoThisModule->name}</h3>";
+						}
+						$r .= "<ul class=\"nav side-menu\">";
+							$r .= "<li><a href=\"#\">{$moduloIcon}{$infoThisModule->name} <span class=\"label label-success pull-right\">Inactivo</span></a></li>\n";
+						$r .= "</ul>";
+					}
 				}
-			$r .= "</ul>";
 		}
 		
 		return $r;
@@ -90,7 +102,7 @@ if($this->userActive() === true){ ?>
 	<!-- menu profile quick info -->
 	<div class="profile clearfix">
 	  <div class="profile_pic">
-		<img src="images/img.jpg" alt="..." class="img-circle profile_img">
+		<img src="/crm-content/uploads/avatar001.jpg" alt="..." class="img-circle profile_img">
 	  </div>
 	  <div class="profile_info">
 		<span>Bienvenid@,</span>
@@ -99,33 +111,14 @@ if($this->userActive() === true){ ?>
 	  </div>
 	</div>
 	<!-- /menu profile quick info -->
-
 	<br />
-
 	<!-- sidebar menu -->
 	<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-	  <div class="menu_section">
-		<h3>-- Todos los modulos --</h3>
-	  </div>
-	  <div class="menu_section">
-			<?php 
-				$menuModules = $menu->listMenuLeft001();
-				echo $menuModules;
-			?>
-	  </div>
+	  <?php #echo "<div class=\"menu_section\">".$menu->listMenuLeft001()."</div>"; ?>
+	  <?php echo "<div class=\"menu_section\">".$menu->listMenuLeft001(true)."</div>"; ?>
 	  <div class="menu_section">
 		<h3>General</h3>
 		<ul class="nav side-menu">
-			<li>
-				<a><i class="fa fa-home"></i> Dashboards <span class="fa fa-chevron-down"></span></a>
-				<ul class="nav child_menu">
-					<li><a href="/<?php echo $this->linkUrl('FrontPage', 'index'); ?>">Debug</a></li>
-					<li><a href="/<?php echo $this->linkUrl('dashboard', 'vue'); ?>">Dashboard Vue</a></li>
-					<!-- // <li><a href="/<?php echo $this->linkUrl('dashboard', 'php'); ?>">Dashboard PHP</a></li> -->
-					<li><a href="/<?php echo $this->linkUrl('wellcome', 'index'); ?>">Dashboard Wellcome</a></li>
-				</ul>
-			</li>
-			
 			
 			<li>
 				<a><i class="fa fa-home"></i> Formularios <span class="fa fa-chevron-down"></span></a>
