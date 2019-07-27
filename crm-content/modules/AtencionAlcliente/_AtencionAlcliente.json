@@ -1,0 +1,32 @@
+{
+	"name": "Atencion al cliente",
+	"isActive": true,
+	"sections": [
+		{
+			"title": "Usuarios",
+			"controller": "AtencionAlcliente",
+			"action": null,
+			"tree": [
+				{
+					"title": "Usuarios clientes",
+					"controller": "AtencionAlcliente",
+					"action": null,
+					"tree": [
+						{
+							"title": "Nuevo Usuario",
+							"controller": "AtencionAlcliente",
+							"action": "index"
+						}
+					]
+				}
+			]
+		},
+		{
+			"title": "PQRf",
+			"controller": "AtencionAlcliente",
+			"action": "index2",
+			"tree": [
+			]
+		}
+	]
+}
