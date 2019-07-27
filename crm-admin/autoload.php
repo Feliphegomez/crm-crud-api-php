@@ -10,7 +10,7 @@
 
 //Configuración global
 require_once 'crm-admin/config/global.php';
- 
+
 //Base para los controladores
 require_once 'crm-admin/core/ControladorBase.php';
  
