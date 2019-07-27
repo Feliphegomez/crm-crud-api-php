@@ -11,11 +11,15 @@
  
 function cargarControlador($controller){
     $controlador=ucwords($controller).'Controller';
-    $strFileController = folder_admin . '/modules/'.ucwords($controller).'/'.$controlador.'.php';
-     
+    $strFileController = folder_admin . '/controller/'.ucwords($controller).'/'.$controlador.'.php';
     if(!is_file($strFileController)){
-        echo $strFileController = folder_admin . '/modules/'.ucwords(CONTROLADOR_DEFECTO).'/'.ucwords(CONTROLADOR_DEFECTO).'Controller.php';
+		$strFileController = folder_admin . '/controller/'.ucwords(CONTROLADOR_DEFECTO).'/'.ucwords(CONTROLADOR_DEFECTO).'Controller.php';
     }
+	$strFileController = folder_content . '/modules/'.ucwords($controller).'/'.$controlador.'.php';
+	if(!is_file($strFileController)){
+		$strFileController = folder_content . '/modules/'.ucwords(CONTROLADOR_DEFECTO).'/'.ucwords(CONTROLADOR_DEFECTO).'Controller.php';
+    }
+	
 	if(@file_exists($strFileController)){		
 		require_once $strFileController;
 		$controllerObj = new $controlador();

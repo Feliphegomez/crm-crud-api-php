@@ -181,7 +181,7 @@ class TemplateBase {
 	}
 	
 	public static function getModules() : array {
-		$Mydir = folder_admin . '/modules/';
+		$Mydir = folder_content . '/modules/';
 		$dirs = array();
 		foreach(glob($Mydir.'*', GLOB_ONLYDIR) as $dir) {
 			$dir = str_replace($Mydir, '', $dir);

@@ -48,18 +48,18 @@ class ControladorBase {
 		$this->userData = new stdClass();
 		$this->sections = array();
 		$this->enlace_actual = $_SERVER['REQUEST_URI'];
-         
+		
         //Incluir todos los modelos del sistema
         foreach(glob(folder_admin . "/model/*.php") as $file){ require_once $file; };
         //Incluir todos los modelos de los modulos
-		$directorio = opendir(folder_admin . "/modules")	; //ruta actual
+		$directorio = opendir(folder_content . "/modules"); //ruta actual
 		while ($nombreModulo = readdir($directorio)) 
 		{
 			//verificamos si es o no un directorio
-			if (is_dir(folder_admin . "/modules/" . $nombreModulo))
+			if (is_dir(folder_content . "/modules/" . $nombreModulo))
 			{
 				# echo "{$nombreModulo}\n";
-				foreach(glob(folder_admin . "/modules/{$nombreModulo}/models/*.php") as $file){
+				foreach(glob(folder_content . "/modules/{$nombreModulo}/models/*.php") as $file){
 					require_once $file;
 				};
 			}
@@ -70,7 +70,6 @@ class ControladorBase {
 		$this->folders->principal = folder_principal;
 		$this->folders->admin = folder_admin;
 		$this->theme = TEMA_DEFECTO;
-		
 		
 		if(
 			isset($_POST) && count($_POST) > 0
@@ -198,7 +197,7 @@ class ControladorBase {
 	}
 	
 	public static function getModules() : array {
-		$Mydir = folder_admin . '/modules/';
+		$Mydir = folder_content . '/modules/';
 		$dirs = array();
 		foreach(glob($Mydir.'*', GLOB_ONLYDIR) as $dir) {
 			$dir = str_replace($Mydir, '', $dir);
@@ -210,13 +209,21 @@ class ControladorBase {
 	public function tableDebug($data){
 		$keys = array();
 		$values = array();
-		foreach($data as $k => $v){ $keys[] = $k; $values[] = $v; }
-		$html = "<div class=\"container-debug\" style=\"width:100%\"><table border=\"1\" style=\"width: 100%;overflow: auto;display: inherit;\"><tr>";
+		$html = "<div class=\"container-debug table table-responsive\" style=\"width:100%\"><table class=\"table table-responsive\">";
+		foreach($data as $k => $v){
+			$html .= "<tr>";
+			
+			$html .= "<th>{$k}</th>";
+			if(is_array($v) || is_object($v)){
+				$html .= "<td>{$this->tableDebug($v)}</td>";
+			}else{
+				$html .= "<td>".json_encode($v)."</td>";
+			}
+			
+			$html .= "</tr>";
+		}
+		$html .= "</table></div>";
 		
-		foreach($keys as $k){ $html .= "<th>{$k}</th>"; }
-		$html .= "</tr><tr>";
-		foreach($values as $v){ $html .= "<td>".json_encode($v)."</td>"; }
-		$html .= "</tr></table></div>";
 		return $html;
 	}
 	
@@ -276,7 +283,7 @@ class ControladorBase {
 			"",
 		), get_called_class());
 		
-		$urlInfoModulo = folder_admin . "/modules/{$nombreModulo}/{$nombreModulo}.json";
+		$urlInfoModulo = folder_content . "/modules/{$nombreModulo}/{$nombreModulo}.json";
 		if(ControladorBase::validateFileExist($urlInfoModulo)){
 			$infoModulo = json_decode(@file_get_contents($urlInfoModulo));
 		}else{
@@ -297,7 +304,7 @@ class ControladorBase {
 			"",
 		), get_called_class());
 		
-		$urlInfoModulo = folder_admin . "/modules/{$nombreModulo}/{$nombreModulo}.json";
+		$urlInfoModulo = folder_content . "/modules/{$nombreModulo}/{$nombreModulo}.json";
 		if(ControladorBase::validateFileExist($urlInfoModulo)){
 			return json_decode(@file_get_contents($urlInfoModulo));
 		}else{
@@ -329,7 +336,7 @@ class ControladorBase {
         require_once folder_admin . '/core/AyudaVistas.php';
         $helper=new AyudaVistas();
 		if(isset($vista)){
-			$urlVista = folder_admin . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
+			$urlVista = folder_content . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
 			if(@file_exists($urlVista)){ require_once $urlVista; } 
 			else { echo ("<br> Vista: {{$vista}} No encontrada. URL: {$urlVista}<br>"); };
 		}
@@ -359,7 +366,7 @@ class ControladorBase {
 						}
 						if($prms->function === 'getBody'){
 							if(isset($vista)){
-								$urlVista = folder_admin . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
+								$urlVista = folder_content . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
 								if(@file_exists($urlVista)){ require_once $urlVista; } 
 								else { echo ("<br> Vista: {{$vista}} No encontrada.<br>"); };
 							}
@@ -431,13 +438,13 @@ class ControladorBase {
 			"",
 		), get_called_class());
 		
-		$urlInfoModulo = folder_admin . "/modules/{$nombreModulo}/{$nombreModulo}.json";
+		$urlInfoModulo = folder_content . "/modules/{$nombreModulo}/{$nombreModulo}.json";
 		if(ControladorBase::validateFileExist($urlInfoModulo)){
 			return json_decode(@file_get_contents($urlInfoModulo));
 		}else{
 			return json_decode(json_encode(array(
 				'name' => "Modulo {$nombreModulo}",
-				"isActive" => false
+				"isActive" => false,
 			)));
 		}
 	}
