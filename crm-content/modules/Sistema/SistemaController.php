@@ -20,7 +20,7 @@ class SistemaController extends ControladorBase {
     public function database_vue(){
 		$this->viewInTemplate(
 			"database_vue", array(
-				"title" => "Modo Debug",
+				"title" => "Administrador DB",
 				"template" => $this->template,
 			)
 		);
@@ -38,16 +38,7 @@ class SistemaController extends ControladorBase {
     public function api_docs(){
 		$this->viewInTemplate(
 			"api_docs", array(
-				"title" => "Modo Debug",
-				"template" => $this->template,
-			)
-		);
-    }
-	
-    public function api_examples(){
-		$this->viewInTemplate(
-			"api_examples", array(
-				"title" => "Modo Debug",
+				"title" => "Documentacion API",
 				"template" => $this->template,
 			)
 		);
@@ -62,7 +53,7 @@ class SistemaController extends ControladorBase {
 		
 		$this->viewInTemplate(
 			"users_list", array(
-				"title" => "Modo Debug",
+				"title" => "Todos los usuarios",
 				"allusers"=>$allusers,
 				"template" => $this->template,
 			)
@@ -72,6 +63,24 @@ class SistemaController extends ControladorBase {
     public function modules_list(){
 		$this->viewInTemplate(
 			"modules_list", array(
+				"title" => "Todos los modulos",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function users_add(){
+		$this->viewInTemplate(
+			"users_add", array(
+				"title" => "Nuevo Usuario",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function theme_list(){
+		$this->viewInTemplate(
+			"theme_list", array(
 				"title" => "Modo Debug",
 				"template" => $this->template,
 			)

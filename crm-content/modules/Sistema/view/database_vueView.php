@@ -174,11 +174,15 @@
     <p v-if="record===null">Cargando...</p>
     <dl v-else>
       <template v-for="(value, key) in record">
-        <dt>{{ key }} </dt>
-        <dd>{{ value }}</dd>
+		<table class="table table-responsive table-hover">
+			<tr>
+				<th>{{ key }}</th>
+				<td>{{ value }}</td>
+			</tr>
+		</table>
       </template>
     </dl>
-      <router-link class="btn btn-secondary" v-bind:to="{name: 'List', params: {subject: subject}}">Cancel</router-link>
+      <router-link class="btn btn-default" v-bind:to="{name: 'List', params: {subject: subject}}">Regresar al listado</router-link>
   </div>
 </template>
 

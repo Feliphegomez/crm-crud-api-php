@@ -134,7 +134,7 @@
 				{
 					"title": "Añadir nuevo",
 					"controller": "Sistema",
-					"action": "modules_add",
+					"action": "users_add",
 					"icon": "fa fa-plus",
 					"tree": [
 					]
