@@ -174,7 +174,7 @@
 				{
 					"title": "Biblioteca",
 					"controller": "Sistema",
-					"action": "theme_list",
+					"action": "gallery",
 					"icon": "fa fa-folder-open",
 					"tree": [
 					]
@@ -182,7 +182,7 @@
 				{
 					"title": "Añadir nuevo",
 					"controller": "Sistema",
-					"action": "modules_add",
+					"action": "gallery_add",
 					"icon": "fa fa-plus",
 					"tree": [
 					]
