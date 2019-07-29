@@ -86,4 +86,40 @@ class SistemaController extends ControladorBase {
 			)
 		);
     }
+	
+    public function settings(){
+		$this->viewInTemplate(
+			"blank", array(
+				"title" => "Modo Debug",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function privacy(){
+		$this->viewInTemplate(
+			"blank", array(
+				"title" => "Modo Debug",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function ads(){
+		$this->viewInTemplate(
+			"blank", array(
+				"title" => "Modo Debug",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function header_and_footer_scripts(){
+		$this->viewInTemplate(
+			"blank", array(
+				"title" => "Modo Debug",
+				"template" => $this->template,
+			)
+		);
+    }
 }

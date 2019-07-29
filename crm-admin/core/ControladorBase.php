@@ -164,9 +164,6 @@ class ControladorBase {
 			$this->userData = $this->getLoadProfile($this->session->id);
 		}
 		
-		# Modo debug
-		// echo $this->tableDebug($this);
-		
 		# Crear Template
 		require_once "TemplateBase.php";
 		$themeFileBase = folder_content . "/themes/{$this->theme}/global/template.php";
@@ -217,7 +214,7 @@ class ControladorBase {
 			if(is_array($v) || is_object($v)){
 				$html .= "<td>{$this->tableDebug($v)}</td>";
 			}else{
-				$html .= "<td>".json_encode($v)."</td>";
+				$html .= "<td>".($v)."</td>";
 			}
 			
 			$html .= "</tr>";
@@ -322,7 +319,7 @@ class ControladorBase {
 	}
      
     //Plugins y funcionalidades
-    public function view($vista,$datos){
+    public function viewSystem($vista,$datos){
 		/*
 		* Este método lo que hace es recibir los datos del controlador en forma de array
 		* los recorre y crea una variable dinámica con el indice asociativo y le da el
@@ -336,10 +333,57 @@ class ControladorBase {
         require_once folder_admin . '/core/AyudaVistas.php';
         $helper=new AyudaVistas();
 		if(isset($vista)){
+			$urlVista = folder_admin . '/view/'.$vista.'View.php';
+			if(@file_exists($urlVista)){ require_once $urlVista; } 
+			else { echo ("<br> Vista: {{$vista}} No encontrada. URL: {$urlVista}<br>"); };
+		}
+    }
+	
+    public function view($vista,$datos){
+		foreach ($datos as $id_assoc => $valor) {
+            ${$id_assoc}=$valor;
+        }
+        require_once folder_admin . '/core/AyudaVistas.php';
+        $helper=new AyudaVistas();
+		if(isset($vista)){
 			$urlVista = folder_content . '/modules/' . $this->getClassName() . '/view/'.$vista.'View.php';
 			if(@file_exists($urlVista)){ require_once $urlVista; } 
 			else { echo ("<br> Vista: {{$vista}} No encontrada. URL: {$urlVista}<br>"); };
 		}
+    }
+	
+	public function viewInTemplate($vista,$datos){
+		/*
+		* Este método lo que hace es recibir los datos del controlador en forma de array
+		* los recorre y crea una variable dinámica con el indice asociativo y le da el
+		* valor que contiene dicha posición del array, luego carga los helpers para las
+		* vistas y carga la vista que le llega como parámetro con los archivos conjuntos de la plantilla. En resumen un método para
+		* renderizar vistas pero con el tema.
+		*/
+        foreach ($datos as $id_assoc => $valor) {
+            ${$id_assoc}=$valor;
+        }
+		$this->vista_actual = $vista;
+		$this->datos = $datos;
+		echo "<!DOCTYPE html>\n";
+		$this->templateToCode($this->template->baseCode);
+    }
+	
+	public function viewSystemInTemplate($vista,$datos){
+		/*
+		* Este método lo que hace es recibir los datos del controlador en forma de array
+		* los recorre y crea una variable dinámica con el indice asociativo y le da el
+		* valor que contiene dicha posición del array, luego carga los helpers para las
+		* vistas y carga la vista que le llega como parámetro con los archivos conjuntos de la plantilla. En resumen un método para
+		* renderizar vistas pero con el tema.
+		*/
+        foreach ($datos as $id_assoc => $valor) {
+            ${$id_assoc}=$valor;
+        }
+		$this->vista_actual = $vista;
+		$this->datos = $datos;
+		echo "<!DOCTYPE html>\n";
+		$this->templateSystemToCode($this->template->baseCode);
     }
 	
 	public function templateToCode($codeTemplate){
@@ -386,23 +430,50 @@ class ControladorBase {
 		#	return $html;
 	}
 	
-	public function viewInTemplate($vista,$datos){
-		/*
-		* Este método lo que hace es recibir los datos del controlador en forma de array
-		* los recorre y crea una variable dinámica con el indice asociativo y le da el
-		* valor que contiene dicha posición del array, luego carga los helpers para las
-		* vistas y carga la vista que le llega como parámetro con los archivos conjuntos de la plantilla. En resumen un método para
-		* renderizar vistas pero con el tema.
-		*/
-        foreach ($datos as $id_assoc => $valor) {
-            ${$id_assoc}=$valor;
-        }
-		$this->vista_actual = $vista;
-		$this->datos = $datos;
-		echo "<!DOCTYPE html>\n";
-		$this->templateToCode($this->template->baseCode);
-    }
-     
+	public function templateSystemToCode($codeTemplate){
+		$vista = $this->vista_actual;
+		$datos = $this->datos;
+		foreach ($datos as $id_assoc => $valor) {
+			${$id_assoc}=$valor;
+		}
+		require_once folder_admin . '/core/AyudaVistas.php';
+		$helper=new AyudaVistas();
+		if(is_array($codeTemplate)){
+			foreach($codeTemplate as $i => $prms){
+				if(isset($prms->name)){
+					$clss = (isset($prms->class) && $prms->class != "") ? " class=\"{$prms->class}\"" : '';
+					if(isset($prms->tag)){
+						echo str_repeat("\t", ($i+1))."<{$prms->tag}{$clss}> \n";
+					}
+					echo str_repeat("\t", ($i+1))."<!-- // ↑ Inicio {$prms->name} --> \n";
+					if(isset($prms->function)){
+						if(method_exists($this->template, $prms->function)){
+							$this->template->{$prms->function}();
+						}else{
+							echo str_repeat("\t", ($i+1))."function => {$prms->function}::Result - NO encontrada.\n";
+						}
+						if($prms->function === 'getBody'){
+							if(isset($vista)){
+								$urlVista = folder_admin . '/view/'.$vista.'View.php';
+								if(@file_exists($urlVista)){ require_once $urlVista; } 
+								else { echo ("<br> Vista: {{$vista}} No encontrada.<br>"); };
+							}
+						}
+					}
+					if(isset($prms->includes) && is_array($prms->includes)){
+						$this->templateSystemToCode($prms->includes);
+					}
+					echo str_repeat("\t", ($i+1))."<!-- // ↓ Fin {$prms->name} -->\n";
+					if(isset($prms->tag)){
+						echo str_repeat("\t", ($i+1))."</{$prms->tag}>\n";
+					}
+				}
+			}
+		}
+		
+		#	return $html;
+	}
+	
     public function redirect($controlador=CONTROLADOR_DEFECTO,$accion=ACCION_DEFECTO){
         header("Location:index.php?controller=".$controlador."&action=".$accion);
     }

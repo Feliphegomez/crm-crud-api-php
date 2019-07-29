@@ -31,7 +31,7 @@ class LoginController extends ControladorBase {
     }
 	
     public function index(){
-		$this->view(
+		$this->viewSystem(
 			"login", array(
 				"options" => $this->options,
 				"title" => "Bienvenid@",
@@ -52,7 +52,7 @@ class LoginController extends ControladorBase {
 			$searchUser = $this->searchUserLogin($this->identification_type, $this->identification_number);
 			
 			if($searchUser == true){
-				$this->view(
+				$this->viewSystem(
 					"password", array(
 						"options" => $this->options,
 						"title" => "Hola {$this->user->names}",
@@ -74,7 +74,7 @@ class LoginController extends ControladorBase {
 		{
 			$message = base64_decode($_GET['message']);
 		}
-		$this->view(
+		$this->viewSystem(
 			"loginError", array(
 				"options" => $this->options,
 				"title" => $title,
