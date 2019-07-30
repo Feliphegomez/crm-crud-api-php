@@ -110,7 +110,7 @@ if($this->userActive() === true){ ?>
 	<br />
 	<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 	  <?php echo "<div class=\"menu_section\">".$menu->listMenuLeft001()."</div>"; ?>
-	  <?php echo "<div class=\"menu_section\">".$menu->listMenuLeft001(true)."</div>"; ?>
+	  <?php #echo "<div class=\"menu_section\">".$menu->listMenuLeft001(true)."</div>"; ?>
 	</div>
 	<!-- /menu footer buttons -->
 	<div class="sidebar-footer hidden-small">
