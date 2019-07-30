@@ -98,22 +98,6 @@
 					"icon": "fa fa-plug",
 					"tree": [
 					]
-				},
-				{
-					"title": "Añadir Modulo",
-					"controller": "Sistema",
-					"action": "modules_add",
-					"icon": "fa fa-plus",
-					"tree": [
-					]
-				},
-				{
-					"title": "Editor de Modulos",
-					"controller": "Sistema",
-					"action": "modules_editor",
-					"icon": "fa fa-pencil",
-					"tree": [
-					]
 				}
 			]
 		},
@@ -152,14 +136,6 @@
 					"controller": "Sistema",
 					"action": "theme_list",
 					"icon": "fa fa-magic",
-					"tree": [
-					]
-				},
-				{
-					"title": "Añadir nuevo",
-					"controller": "Sistema",
-					"action": "modules_add",
-					"icon": "fa fa-plus",
 					"tree": [
 					]
 				}

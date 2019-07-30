@@ -22,6 +22,7 @@ define('TBL_USERS', 'users_login');
 define('TBL_USERS_C_USERNAME', 'username');
 define('TBL_USERS_C_PASSWORD', 'password');
 define('TBL_USERS_R_C', '');
+define('TBL_PICTURES', 'pictures');
 
 /* CONFIGURACION DE LA API */
 define("API_openApiBase", '{"info":{"title":"API-REST","version":"2.0.0"}}');

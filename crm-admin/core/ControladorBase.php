@@ -419,9 +419,9 @@ class ControladorBase {
 					if(isset($prms->includes) && is_array($prms->includes)){
 						$this->templateToCode($prms->includes);
 					}
-					echo str_repeat("\t", ($i+1))."<!-- // ↓ Fin {$prms->name} -->\n";
+					echo @str_repeat("\t", ($i+1))."<!-- // ↓ Fin {$prms->name} -->\n";
 					if(isset($prms->tag)){
-						echo str_repeat("\t", ($i+1))."</{$prms->tag}>\n";
+						echo @str_repeat("\t", ($i+1))."</{$prms->tag}>\n";
 					}
 				}
 			}

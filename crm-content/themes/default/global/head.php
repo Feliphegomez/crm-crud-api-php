@@ -29,3 +29,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+
+    <!-- bootstrap-datetimepicker -->
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <!-- Ion.RangeSlider -->
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/normalize-css/normalize.css" rel="stylesheet">
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+    <!-- Bootstrap Colorpicker -->
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">

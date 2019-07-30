@@ -39,4 +39,16 @@
 
     <!-- Custom Theme Scripts -->
     <script src="<?php echo $this->urlNav; ?>/assets/build/js/custom.min.js"></script>
+    <!-- bootstrap-datetimepicker -->    
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	
+    <!-- Ion.RangeSlider -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+    <!-- Bootstrap Colorpicker -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+    <!-- jquery.inputmask -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <!-- jQuery Knob -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+    <!-- Cropper -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/cropper/dist/cropper.min.js"></script>

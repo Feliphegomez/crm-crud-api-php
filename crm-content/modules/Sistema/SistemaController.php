@@ -143,7 +143,7 @@ class SistemaController extends ControladorBase {
 	
     public function gallery(){
 		$this->viewInTemplate(
-			"blank", array(
+			"gallery", array(
 				"title" => "Modo Debug",
 				"template" => $this->template,
 			)
@@ -152,7 +152,25 @@ class SistemaController extends ControladorBase {
 	
     public function gallery_add(){
 		$this->viewInTemplate(
-			"blank", array(
+			"picture_create", array(
+				"title" => "Modo Debug",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function picture(){
+		$this->view(
+			"picture", array(
+				"title" => "Modo Debug",
+				"template" => $this->template,
+			)
+		);
+    }
+	
+    public function picture_editor(){
+		$this->viewInTemplate(
+			"picture_editor", array(
 				"title" => "Modo Debug",
 				"template" => $this->template,
 			)
