@@ -32,23 +32,6 @@
 						<div class="clearfix"></div>
 					</div>
 					<div class="x_content">
-						<!-- // -->
-						<div class="clearfix"></div>
-						<!-- // -->
-						<!-- // -->
-						<div>
-							<!-- //
-							<div class="alert alert-danger alert-dismissible fade in" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-							</div>
-							-->
-							<div id="messageBox"></div>
-							
-							<div class="clearfix"></div>
-							<br />
-						</div>
-						<!-- // -->
-						
 						<form id="jvalidate" role="form" class="form-horizontal" action="javascript:alert('Error Enviando datos.');">
 							<p>
 								For alternative validation library <code>parsleyJS</code> check out in the <a href="form.html">form page</a>
@@ -58,65 +41,75 @@
 							<!-- // -->
 							<span class="section">Información Personal</span>
 							
-							<div class="" v-if="inputs !== null">
-								<div class="item form-group" v-for="(item, i) in inputs">
-									<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
-										{{ item.label }} <span class="required" v-if="item.required === true">*</span>
-									</label>
-									
-									<div class="col-md-8 col-sm-8 col-xs-12">
-										<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
-											:name="item.name"
-											:required="item.required" 
-											:readonly="item.readonly" 
-											:disabled="item.disabled" 
-											:type="item.type" 
-											:title="item.title" 
-											:value="item.value" 
-										/>
+							<template v-if="inputs !== null">
+								<div>
+									<div class="item form-group" v-for="(item, i) in inputs" v-if="item.show === true">
+										<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
+											{{ item.label }} <span class="required" v-if="item.required === true">*</span>
+										</label>
 										
-										<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
-											:name="item.name"
-											:required="item.required" 
-											:readonly="item.readonly" 
-											:disabled="item.disabled" 
-											:type="item.type" 
-											:title="item.title" 
-											:value="item.value"
-										>
-											<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
-										</select>
-										
-										<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
-											:name="item.name"
-											:required="item.required" 
-											:readonly="item.readonly" 
-											:disabled="item.disabled" 
-											:title="item.title" 
-										>{{ item.value }}</textarea>
-										<!---
-										< v-if="item.tag === ''" class="form-control col-xs-12" :name="item.name"></textarea>-->
+										<div class="col-md-8 col-sm-8 col-xs-12">
+											<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
+												:name="item.name"
+												:required="item.required" 
+												:readonly="item.readonly" 
+												:disabled="item.disabled" 
+												:type="item.type" 
+												:title="item.title" 
+												:value="item.value" 
+											/>
+											
+											<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
+												:name="item.name"
+												:required="item.required" 
+												:readonly="item.readonly" 
+												:disabled="item.disabled" 
+												:type="item.type" 
+												:title="item.title" 
+												:value="item.value"
+											>
+												<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
+											</select>
+											
+											<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
+												:name="item.name"
+												:required="item.required" 
+												:readonly="item.readonly" 
+												:disabled="item.disabled" 
+												:title="item.title" 
+											>{{ item.value }}</textarea>
+											<!---
+											< v-if="item.tag === ''" class="form-control col-xs-12" :name="item.name"></textarea>-->
+										</div>
 									</div>
-									
-									<!--
-									<div class="col-md-8 col-sm-8 col-xs-12">
-										
-									</div>
-									--->
 								</div>
-							</div>
+							</template> 
+						
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
 									<button type="reset" class="btn btn-default">Limpiar</button>
-									<button type="submit" class="btn btn-success">Guardar</button>
+									<button type="submit" class="btn btn-success" onClick="javascript: $('#messageBox').html('');">Guardar</button>
 								</div>
 							</div>
 						</form>
+						<!-- // -->
+						<div>
+							<!-- //
+							<div class="alert alert-danger alert-dismissible fade in" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+							</div>
+							-->
+							<div class="clearfix"></div>
+							<br />
+							<div id="messageBox"></div>
+							
+						</div>
+						<!-- // -->
+						
 					</div>
 			
 					<div class="x_content">
-						<!-- // {{ record }} -->
 						<br />
 						<button v-on:click="count++">You clicked me {{ count }} times.</button>
 					</div>
@@ -132,47 +125,7 @@
 				<hr>
 					<!-- //
 					<template v-if="fields !== null" v-for="(value, key) in record">						
-					</template> -->
-					
-					<!-- //
-					<template v-if="fields !== null" v-for="(value, key) in record">
-						<div class="form-group" v-if="fields[key] != undefined && fields[key].show === undefined || fields[key] != undefined && fields[key].show === true">
-							<label v-if="fields[key] != undefined && fields[key].title != undefined" class="control-label col-md-3 col-sm-3 col-xs-12" v-bind:for="key">
-								{{ fields[key].title }} 
-								<span v-if="fields[key] != undefined && fields[key].required != undefined && fields[key].required  == true" class="required">*</span>
-							</label>
-							<label v-else="" class="control-label col-md-4 col-sm-4 col-xs-12" v-bind:for="key">
-								{{ key }} 
-								<span v-if="fields[key] != undefined && fields[key].required != undefined && fields[key].required  == true" class="required">*</span>
-							</label>
-							<div class="col-md-8 col-sm-8 col-xs-12">
-								<input type="text" v-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'text'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="number" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'number'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="date" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'date'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="datetime-local" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'datetime-local'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="email" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'email'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="month" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'month'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="password" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'password'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="tel" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'tel'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="time" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'time'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<input type="url" v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput === 'url'"  class="form-control col-md-7 col-xs-12" v-bind:id="key" :disabled="key === primaryKey" v-model="record[key]"  />
-								<select 
-									v-else-if="references[key] != false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput == 'select'" 
-									class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]">
-									<option value=""></option>
-									<option v-for="option in options[references[key]]" v-bind:value="option.key">
-										{{ option.value }}
-									</option>
-								</select>
-								<textarea 
-									v-else-if="references[key] === false && fields[key] != undefined && fields[key].typeInput != undefined && fields[key].typeInput == 'textarea'" 
-									class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]"></textarea>
-								< !-- // <input v-else="" class="form-control col-md-7 col-xs-12" v-bind:id="key" v-model="record[key]" :disabled="key === primaryKey" />  -- >
-							</div>
-						</div>
-					</template>
-					-->
-				
+					</template> -->				
 			</div>
 		</div>
 	</div>
@@ -230,7 +183,22 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
                 ignore: [],
                 rules: self.rules,
 				submitHandler: function() {
-					alert("Submit Form");
+					bootbox.confirm({
+						message: "Debes confirmar que deseas continuar, una vez confirmes el envio/guardado no podras volver a modificar el contenido de esta informacion.",
+						locale: 'es',
+						 buttons: {
+							cancel: {
+								label: '<i class="fa fa-times"></i> Cancelar'
+							},
+							confirm: {
+								label: '<i class="fa fa-check"></i> Confirmar'
+							}
+						},
+						callback: function (result) {
+							console.log('This was logged in the callback: ' + result);
+							
+						}
+					});
 				},
 				onsubmit: true,
 				errorPlacement: function(error, element){
@@ -313,7 +281,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				for (const [key, value] of Object.entries(fields)) {
 					var optionsRule = {};
 					var optionsInput = {};
-					
+					if((value.show !== undefined)){ optionsRule.show = value.show; } else { optionsRule.show = true; }
 					if((value.required !== undefined)){ optionsRule.required = value.required; } else {}
 					if((value.remote !== undefined)){ optionsRule.remote = value.remote; } else {}
 					if((value.min !== undefined)){ optionsRule.min = value.min; } else {}
@@ -345,6 +313,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 						optionsInput.value = null;
 						self.record[key] = null;
 					}
+					if(value.show !== undefined){ optionsInput.show = value.show; } else { optionsInput.show = true; }
 					
 					if((value.typeInput != undefined)){
 						switch(value.typeInput){
@@ -406,6 +375,11 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 						optionsInput.tag = 'none';
 					}
 					optionsInput.title = value.label;
+					
+					if(optionsInput.show == false){
+						optionsInput.tag = 'input';
+						optionsInput.type = 'hidden';
+					}
 					
 					self.inputs.push(optionsInput);
 					self.rules[key] = optionsRule;
@@ -491,9 +465,42 @@ var AddPQRsPeticion = Vue.extend({
 						typeInput: "textarea"
 					},
 					event_occurred: {
-						label: "Hechos del evento",
+						label: "Relacion de los Hechos",
 						required: true,
-						typeInput: "textarea"
+						typeInput: "textarea",
+						valueDataDynamic: {
+							fields: {
+								"fecha": {
+									label: "Dirección",
+									required: true,
+									typeInput: "textarea"
+								},
+								"hora": {
+									label: "Dirección",
+									required: true,
+									typeInput: "textarea"
+								},
+								"lugar": {
+									label: "Dirección",
+									required: true,
+									typeInput: "textarea"
+								},
+								"direccion": {
+									label: "Dirección",
+									required: true,
+									typeInput: "textarea"
+								},
+								"daño": {
+									label: "Dirección",
+									required: true,
+									typeInput: "textarea"
+								}
+							},
+							result: [
+								/*["fecha", "hora"],
+								["lugar", "hora"]*/
+							]
+						},
 					},
 					event_date: {
 						label: "Fecha del evento",

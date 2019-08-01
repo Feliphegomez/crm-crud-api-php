@@ -271,3 +271,6 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/validator/validator.js"></script>
 
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery-validation/jquery.validate.js"></script>
+	
+	<script src="<?php echo $this->urlNav; ?>/assets/vendors/bootbox/bootbox.min.js"></script>
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootbox/bootbox.locales.min.js"></script>
