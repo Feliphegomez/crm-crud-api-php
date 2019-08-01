@@ -43,12 +43,88 @@
 							
 							<template v-if="inputs !== null">
 								<div>
-									<div class="item form-group" v-for="(item, i) in inputs" v-if="item.show === true">
-										<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
-											{{ item.label }} <span class="required" v-if="item.required === true">*</span>
-										</label>
-										
-										<div class="col-md-8 col-sm-8 col-xs-12">
+									<div class="item form-group" v-for="(item, i) in inputs">
+										<template v-if="item.show === true">
+											<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
+												{{ item.label }} <span class="required" v-if="item.required === true">*</span>
+											</label>
+											
+											<div class="col-md-8 col-sm-8 col-xs-12">
+												
+												<template v-if="item.dynamic == true" class="row">
+													<div class="col-sm-12" v-for="(subItem, j) in item.dynamicOptions.inputs">
+														<template v-if="subItem.show === true">
+															<label class="control-label col-sm-4" for="identification_type">
+																{{ subItem.label }} <span class="required" v-if="subItem.required === true">*</span>
+															</label>
+															<div class="col-sm-8">
+																<input class="form-control col-xs-12" v-if="subItem.tag === 'input'" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:type="subItem.type" 
+																	:title="subItem.title" 
+																	@change="changeSubItem(item, subItem)"
+																/>
+																<select v-if="subItem.tag === 'select'" class="form-control col-xs-12" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:type="subItem.type" 
+																	:title="subItem.title"
+																>
+																	<option :value="option.value" v-if="subItem.options != undefined && subItem.options != null" v-for="(option, index) in subItem.options">{{ option.text }}</option>
+																</select>
+																<textarea v-if="subItem.tag === 'textarea'" class="form-control col-xs-12" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:title="subItem.title" 
+																	@change="changeSubItem(item, subItem)"
+																></textarea>
+															</div>
+														</template>
+													</div>
+													Resultado => {{ item.result }}
+												</template>
+												
+												<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
+													:name="item.name"
+													:required="item.required" 
+													:readonly="item.readonly" 
+													:disabled="item.disabled" 
+													:type="item.type" 
+													:title="item.title" 
+													:value="item.value" 
+													v-model="record[item.name]"
+												/>
+												<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
+													:name="item.name"
+													:required="item.required" 
+													:readonly="item.readonly" 
+													:disabled="item.disabled" 
+													:type="item.type" 
+													:title="item.title" 
+													:value="item.value"
+													v-model="record[item.name]"
+												>
+													<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
+												</select>
+												<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
+													:name="item.name"
+													:required="item.required" 
+													:readonly="item.readonly" 
+													:disabled="item.disabled" 
+													:title="item.title" 
+													v-model="record[item.name]"
+												>{{ record[item.name] }}</textarea>
+												
+											</div>
+										</template>
+										<template v-else="">
 											<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
 												:name="item.name"
 												:required="item.required" 
@@ -58,29 +134,7 @@
 												:title="item.title" 
 												:value="item.value" 
 											/>
-											
-											<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
-												:name="item.name"
-												:required="item.required" 
-												:readonly="item.readonly" 
-												:disabled="item.disabled" 
-												:type="item.type" 
-												:title="item.title" 
-												:value="item.value"
-											>
-												<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
-											</select>
-											
-											<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
-												:name="item.name"
-												:required="item.required" 
-												:readonly="item.readonly" 
-												:disabled="item.disabled" 
-												:title="item.title" 
-											>{{ item.value }}</textarea>
-											<!---
-											< v-if="item.tag === ''" class="form-control col-xs-12" :name="item.name"></textarea>-->
-										</div>
+										</template>
 									</div>
 								</div>
 							</template> 
@@ -172,6 +226,18 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 		returnFalse(){
 			return false;
 		},
+		changeSubItem(item, subItem){
+			console.log("Recibiendo cambio.");
+			console.log("item");
+			console.log(item);
+			console.log("subItem");
+			console.log(subItem);
+			
+			
+			console.log("item result");
+			console.log(item.result);
+			// item.value = "NUEVO VALOR."
+		},
 		getValidatorForm(){
 			var self = this;
 			self.jvalidate = $("#jvalidate").validate({
@@ -202,9 +268,6 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				},
 				onsubmit: true,
 				errorPlacement: function(error, element){
-					console.log(error);
-					console.log(element);
-					console.log(element[0].title);
 					var errorClone = error.clone();
 					var errorHTML = '<div class="alert alert-danger alert-dismissible fade in" role="alert">';
 						errorHTML += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>';
@@ -228,37 +291,34 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 					}
 					
 					if((value.options != undefined)){
-							console.log("Cargar: " + value.options);							
-							api.get('/records/' + value.options, {
-								params: {}
-							})
-							.then(function (r) {
-								if(!r.status){
-									alert('Ocurrio un error creando el campo del formulario. [' + key + ']');
-								} else {
-									if(r.status === 200){
-										console.log('creando el campo del formulario. [' + key + ']');
-										for (const [kRecord, vRecord] of Object.entries(r.data.records)) {
-											if(vRecord.name != undefined && vRecord.code != undefined){
-												// console.log({ text: vRecord.name + ' - ' + vRecord.name, value: vRecord.id });
-												self.options[value.options].push({ text: vRecord.code + ' - ' + vRecord.name, value: vRecord.id });
-											} else if(vRecord.name != undefined && vRecord.code == undefined){
-												self.options[value.options].push({ text: vRecord.name, value: vRecord.id });
-											} else if(vRecord.names != undefined && vRecord.name == undefined){
-												self.options[value.options].push({ text: vRecord.names, value: vRecord.id });
-											}  else if(vRecord.title != undefined && vRecord.name == undefined){
-												self.options[value.options].push({ text: vRecord.title, value: vRecord.id });
-											} 
-											else {
-												self.options[value.options].push({ text: vRecord.id, value: vRecord.id });
-											}
-										};
-									}
+						api.get('/records/' + value.options, {
+							params: {}
+						})
+						.then(function (r) {
+							if(!r.status){
+								alert('Ocurrio un error creando el campo del formulario. [' + key + ']');
+							} else {
+								if(r.status === 200){
+									for (const [kRecord, vRecord] of Object.entries(r.data.records)) {
+										if(vRecord.name != undefined && vRecord.code != undefined){
+											self.options[value.options].push({ text: vRecord.code + ' - ' + vRecord.name, value: vRecord.id });
+										} else if(vRecord.name != undefined && vRecord.code == undefined){
+											self.options[value.options].push({ text: vRecord.name, value: vRecord.id });
+										} else if(vRecord.names != undefined && vRecord.name == undefined){
+											self.options[value.options].push({ text: vRecord.names, value: vRecord.id });
+										}  else if(vRecord.title != undefined && vRecord.name == undefined){
+											self.options[value.options].push({ text: vRecord.title, value: vRecord.id });
+										} 
+										else {
+											self.options[value.options].push({ text: vRecord.id, value: vRecord.id });
+										}
+									};
 								}
-							})
-							.catch(function (e) {
-								console.log(e);
-							});
+							}
+						})
+						.catch(function (e) {
+							console.log(e);
+						});
 					}
 				}
 				self.getOptions();
@@ -267,6 +327,140 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			}
 			
 			self.getValidatorForm();
+		},
+		createFormElement(fields){
+			var self = this;
+			if(fields == undefined || fields == null){ fields = []; };
+			
+			var returnData = { 
+				"fields": fields, 
+				"inputs": [],
+				"record": {},
+				"rules": {}
+			};
+			
+			for (const [key, value] of Object.entries(fields)) {
+				var optionsRule = {};
+				var optionsInput = {};
+				// if((value.show !== undefined)){ optionsRule.show = value.show; } else { optionsRule.show = true; }
+				if((value.required !== undefined)){ optionsRule.required = value.required; } else {}
+				if((value.remote !== undefined)){ optionsRule.remote = value.remote; } else {}
+				if((value.min !== undefined)){ optionsRule.min = value.min; } else {}
+				if((value.max !== undefined)){ optionsRule.max = value.max; } else {}
+				if((value.email !== undefined)){ optionsRule.email = value.email; } else {}
+				if((value.minlength !== undefined)){ optionsRule.minlength = value.minlength; } else {}
+				if((value.maxlength !== undefined)){ optionsRule.maxlength = value.maxlength; } else {}
+				if((value.rangelength !== undefined)){ optionsRule.rangelength = value.rangelength; } else {}
+				if((value.range !== undefined)){ optionsRule.range = value.range; } else {}
+				if((value.step !== undefined)){ optionsRule.step = value.step; } else {}
+				if((value.date !== undefined)){ optionsRule.date = value.date; } else {}
+				if((value.dateISO !== undefined)){ optionsRule.dateISO = value.dateISO; } else {}
+				if((value.url !== undefined)){ optionsRule.url = value.url; } else {}
+				if((value.number !== undefined)){ optionsRule.number = value.number; } else {}
+				if((value.digits !== undefined)){ optionsRule.digits = value.digits; } else {}
+				if((value.equalTo !== undefined)){ optionsRule.equalTo = value.equalTo; } else {}
+				
+				// for (const [kValue, vValue] of Object.entries(value)) {};
+				
+				optionsInput.name = key;
+				if(value.label !== undefined){ optionsInput.label = value.label; } else { optionsInput.label = key; }
+				if(value.required !== undefined){ optionsInput.required = value.required; } else { optionsInput.required = false; }
+				if(value.readonly !== undefined){ optionsInput.readonly = value.readonly; } else { optionsInput.readonly = false; }
+				if(value.disabled !== undefined){ optionsInput.disabled = value.disabled; } else { optionsInput.disabled = false; }
+				if(value.value !== undefined){
+					optionsInput.value = value.value;
+					returnData.record[key] = value.value;
+				} else {
+					optionsInput.value = null;
+					returnData.record[key] = null;
+				}
+				if(value.show !== undefined){ optionsInput.show = value.show; } else { optionsInput.show = true; }
+				
+				if((value.typeInput != undefined)){
+					switch(value.typeInput){
+						case 'text':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'text';
+						break;
+						case 'email':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'email';
+						break;
+						case 'textarea':
+							returnData.record[key] = '';
+							optionsInput.tag = 'textarea';
+						break;
+						case 'date':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'date';
+						break;
+						case 'dateISO':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'dateISO';
+						break;
+						case 'datetime':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'datetime';
+						break;
+						case 'datetime-local':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'datetime-local';
+						break;
+						case 'time':
+							returnData.record[key] = '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'time';
+						break;
+						case 'number':
+							returnData.record[key] = 0;
+							optionsInput.tag = 'input';
+							optionsInput.type = 'number';
+						break;
+						case 'select':
+							returnData.record[key] = 0;
+							optionsInput.tag = 'select';
+							if((value.options != undefined)){
+								if(self.options[value.options] != undefined){ optionsInput.options = self.options[value.options]; }
+							}
+						break;
+						default:
+							returnData.record[key] = null;
+						break;
+					}
+					
+				} else {
+					returnData.record[key] = null;
+					optionsInput.tag = 'none';
+				}
+				optionsInput.title = value.label;
+				
+				if(optionsInput.show == false){
+					optionsInput.tag = 'input';
+					optionsInput.type = 'hidden';
+				}
+				if(value.valueDataDynamic != undefined){
+					// validar si existen fields
+					if(value.valueDataDynamic.fields != undefined && value.valueDataDynamic.result != undefined){
+						optionsInput.readonly = true;
+						optionsInput.dynamic = true;
+						optionsInput.result = value.valueDataDynamic.result;
+						optionsInput.dynamicOptions = self.createFormElement(value.valueDataDynamic.fields);
+					}
+				}
+				
+				// self.inputs.push(optionsInput);
+				// self.rules[key] = optionsRule;
+				
+				returnData.inputs.push(optionsInput);
+				returnData.rules[key] = optionsRule;
+			}
+			return returnData;
 		},
 		getOptions(){
 			var self = this;
@@ -277,113 +471,13 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				self.title = (self.options_form.titulo != undefined) ? self.options_form.titulo : '';
 				// self.subject = (self.options_form.tabla != undefined) ? self.options_form.tabla : '';
 				fields = (self.options_form.fields != undefined) ? self.options_form.fields : {};
+				fieldsRepair = self.createFormElement(fields);
+				console.log(fieldsRepair);
 				
-				for (const [key, value] of Object.entries(fields)) {
-					var optionsRule = {};
-					var optionsInput = {};
-					if((value.show !== undefined)){ optionsRule.show = value.show; } else { optionsRule.show = true; }
-					if((value.required !== undefined)){ optionsRule.required = value.required; } else {}
-					if((value.remote !== undefined)){ optionsRule.remote = value.remote; } else {}
-					if((value.min !== undefined)){ optionsRule.min = value.min; } else {}
-					if((value.max !== undefined)){ optionsRule.max = value.max; } else {}
-					if((value.email !== undefined)){ optionsRule.email = value.email; } else {}
-					if((value.minlength !== undefined)){ optionsRule.minlength = value.minlength; } else {}
-					if((value.maxlength !== undefined)){ optionsRule.maxlength = value.maxlength; } else {}
-					if((value.rangelength !== undefined)){ optionsRule.rangelength = value.rangelength; } else {}
-					if((value.range !== undefined)){ optionsRule.range = value.range; } else {}
-					if((value.step !== undefined)){ optionsRule.step = value.step; } else {}
-					if((value.date !== undefined)){ optionsRule.date = value.date; } else {}
-					if((value.dateISO !== undefined)){ optionsRule.dateISO = value.dateISO; } else {}
-					if((value.url !== undefined)){ optionsRule.url = value.url; } else {}
-					if((value.number !== undefined)){ optionsRule.number = value.number; } else {}
-					if((value.digits !== undefined)){ optionsRule.digits = value.digits; } else {}
-					if((value.equalTo !== undefined)){ optionsRule.equalTo = value.equalTo; } else {}
-					
-					// for (const [kValue, vValue] of Object.entries(value)) {};
-					
-					optionsInput.name = key;
-					if(value.label !== undefined){ optionsInput.label = value.label; } else { optionsInput.label = key; }
-					if(value.required !== undefined){ optionsInput.required = value.required; } else { optionsInput.required = false; }
-					if(value.readonly !== undefined){ optionsInput.readonly = value.readonly; } else { optionsInput.readonly = false; }
-					if(value.disabled !== undefined){ optionsInput.disabled = value.disabled; } else { optionsInput.disabled = false; }
-					if(value.value !== undefined){
-						optionsInput.value = value.value;
-						self.record[key] = value.value;
-					} else {
-						optionsInput.value = null;
-						self.record[key] = null;
-					}
-					if(value.show !== undefined){ optionsInput.show = value.show; } else { optionsInput.show = true; }
-					
-					if((value.typeInput != undefined)){
-						switch(value.typeInput){
-							case 'text':
-								self.record[key] = '';
-								optionsInput.tag = 'input';
-								optionsInput.type = 'text';
-							break;
-							case 'email':
-								self.record[key] = '';
-								optionsInput.tag = 'input';
-								optionsInput.type = 'email';
-							break;
-							case 'textarea':
-								self.record[key] = '';
-								optionsInput.tag = 'textarea';
-							break;
-							case 'date':
-								self.record[key] = '';
-								optionsInput.tag = 'input';
-								optionsInput.type = 'date';
-							break;
-							case 'dateISO':
-								self.record[key] = '';
-								optionsInput.tag = 'input';
-								optionsInput.type = 'dateISO';
-							break;
-							case 'datetime':
-								self.record[key] = '';
-								optionsInput.tag = 'input';
-								optionsInput.type = 'datetime';
-							break;
-							case 'datetime-local':
-								self.record[key] = '';
-								optionsInput.tag = 'input';
-								optionsInput.type = 'datetime-local';
-							break;
-							case 'number':
-								self.record[key] = 0;
-								optionsInput.tag = 'input';
-								optionsInput.type = 'number';
-							break;
-							case 'select':
-								self.record[key] = 0;
-								optionsInput.tag = 'select';
-								if((value.options != undefined)){
-									if(self.options[value.options] != undefined){
-										optionsInput.options = self.options[value.options];
-									}
-								}
-							break;
-							default:
-								self.record[key] = null;
-							break;
-						}
-						
-					} else {
-						self.record[key] = null;
-						optionsInput.tag = 'none';
-					}
-					optionsInput.title = value.label;
-					
-					if(optionsInput.show == false){
-						optionsInput.tag = 'input';
-						optionsInput.type = 'hidden';
-					}
-					
-					self.inputs.push(optionsInput);
-					self.rules[key] = optionsRule;
-				}
+				
+				if(fieldsRepair.record != undefined){ self.record = fieldsRepair.record; };
+				if(fieldsRepair.inputs != undefined){ self.inputs = fieldsRepair.inputs; };
+				if(fieldsRepair.rules != undefined){ self.rules = fieldsRepair.rules; };
 			} else {
 				console.log('options_form no definido.');
 			}
@@ -471,19 +565,19 @@ var AddPQRsPeticion = Vue.extend({
 						valueDataDynamic: {
 							fields: {
 								"fecha": {
-									label: "Dirección",
+									label: "Fecha",
 									required: true,
-									typeInput: "textarea"
+									typeInput: "date"
 								},
 								"hora": {
-									label: "Dirección",
+									label: "Hora",
 									required: true,
-									typeInput: "textarea"
+									typeInput: "time"
 								},
 								"lugar": {
-									label: "Dirección",
+									label: "Lugar",
 									required: true,
-									typeInput: "textarea"
+									typeInput: "text"
 								},
 								"direccion": {
 									label: "Dirección",
@@ -491,12 +585,17 @@ var AddPQRsPeticion = Vue.extend({
 									typeInput: "textarea"
 								},
 								"daño": {
-									label: "Dirección",
+									label: "Daño",
 									required: true,
 									typeInput: "textarea"
 								}
 							},
 							result: [
+								[
+									"Fecha y Hora: ",
+									"fecha",
+									"hora"
+								]
 								/*["fecha", "hora"],
 								["lugar", "hora"]*/
 							]
