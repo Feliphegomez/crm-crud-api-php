@@ -45,84 +45,91 @@
 								<div>
 									<div class="item form-group" v-for="(item, i) in inputs">
 										<template v-if="item.show === true">
-											<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
-												{{ item.label }} <span class="required" v-if="item.required === true">*</span>
-											</label>
+									
+											<template v-if="item.dynamic == true" class="row">
+												<div class="col-sm-12" v-for="(subItem, j) in item.dynamicOptions.inputs">
+													<template v-if="subItem.show === true">
+														<label class="control-label col-sm-4" for="identification_type">
+															{{ subItem.label }} <span class="required" v-if="subItem.required === true">*</span>
+														</label>
+														<div class="col-sm-8">
+															<input class="form-control col-xs-12" v-if="subItem.tag === 'input'" 
+																:name="subItem.name"
+																:required="subItem.required" 
+																:readonly="subItem.readonly" 
+																:disabled="subItem.disabled" 
+																:type="subItem.type" 
+																:title="subItem.title" 
+																v-model="otherRecords[subItem.name]" 
+																@change="changeSubItem(item, subItem)"
+															/>
+															<select v-if="subItem.tag === 'select'" class="form-control col-xs-12" 
+																:name="subItem.name"
+																:required="subItem.required" 
+																:readonly="subItem.readonly" 
+																:disabled="subItem.disabled" 
+																:type="subItem.type" 
+																:title="subItem.title"
+																v-model="otherRecords[subItem.name]" 
+																@change="changeSubItem(item, subItem)"
+															>
+																<option :value="option.value" v-if="subItem.options != undefined && subItem.options != null" v-for="(option, index) in subItem.options">{{ option.text }}</option>
+															</select>
+															<textarea v-if="subItem.tag === 'textarea'" class="form-control col-xs-12" 
+																:name="subItem.name"
+																:required="subItem.required" 
+																:readonly="subItem.readonly" 
+																:disabled="subItem.disabled" 
+																:title="subItem.title" 
+																v-model="otherRecords[subItem.name]" 
+																@change="changeSubItem(item, subItem)"
+															></textarea>
+														</div>
+													</template>
+												</div>
+												Resultado => {{ item.result }}
+											</template>
+											<template v-else>
+												
+											</template>
 											
-											<div class="col-md-8 col-sm-8 col-xs-12">
+											
+												<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
+													{{ item.label }} <span class="required" v-if="item.required === true">*</span>
+												</label>
 												
-												<template v-if="item.dynamic == true" class="row">
-													<div class="col-sm-12" v-for="(subItem, j) in item.dynamicOptions.inputs">
-														<template v-if="subItem.show === true">
-															<label class="control-label col-sm-4" for="identification_type">
-																{{ subItem.label }} <span class="required" v-if="subItem.required === true">*</span>
-															</label>
-															<div class="col-sm-8">
-																<input class="form-control col-xs-12" v-if="subItem.tag === 'input'" 
-																	:name="subItem.name"
-																	:required="subItem.required" 
-																	:readonly="subItem.readonly" 
-																	:disabled="subItem.disabled" 
-																	:type="subItem.type" 
-																	:title="subItem.title" 
-																	@change="changeSubItem(item, subItem)"
-																/>
-																<select v-if="subItem.tag === 'select'" class="form-control col-xs-12" 
-																	:name="subItem.name"
-																	:required="subItem.required" 
-																	:readonly="subItem.readonly" 
-																	:disabled="subItem.disabled" 
-																	:type="subItem.type" 
-																	:title="subItem.title"
-																>
-																	<option :value="option.value" v-if="subItem.options != undefined && subItem.options != null" v-for="(option, index) in subItem.options">{{ option.text }}</option>
-																</select>
-																<textarea v-if="subItem.tag === 'textarea'" class="form-control col-xs-12" 
-																	:name="subItem.name"
-																	:required="subItem.required" 
-																	:readonly="subItem.readonly" 
-																	:disabled="subItem.disabled" 
-																	:title="subItem.title" 
-																	@change="changeSubItem(item, subItem)"
-																></textarea>
-															</div>
-														</template>
-													</div>
-													Resultado => {{ item.result }}
-												</template>
-												
-												<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
-													:name="item.name"
-													:required="item.required" 
-													:readonly="item.readonly" 
-													:disabled="item.disabled" 
-													:type="item.type" 
-													:title="item.title" 
-													:value="item.value" 
-													v-model="record[item.name]"
-												/>
-												<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
-													:name="item.name"
-													:required="item.required" 
-													:readonly="item.readonly" 
-													:disabled="item.disabled" 
-													:type="item.type" 
-													:title="item.title" 
-													:value="item.value"
-													v-model="record[item.name]"
-												>
-													<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
-												</select>
-												<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
-													:name="item.name"
-													:required="item.required" 
-													:readonly="item.readonly" 
-													:disabled="item.disabled" 
-													:title="item.title" 
-													v-model="record[item.name]"
-												>{{ record[item.name] }}</textarea>
-												
-											</div>
+												<div class="col-md-8 col-sm-8 col-xs-12">
+													
+													<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
+														:name="item.name"
+														:required="item.required" 
+														:readonly="item.readonly" 
+														:disabled="item.disabled" 
+														:type="item.type" 
+														:title="item.title" 
+														v-model="record[item.name]"
+													/>
+													<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
+														:name="item.name"
+														:required="item.required" 
+														:readonly="item.readonly" 
+														:disabled="item.disabled" 
+														:type="item.type" 
+														:title="item.title" 
+														v-model="record[item.name]"
+													>
+														<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
+													</select>
+													<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
+														:name="item.name"
+														:required="item.required" 
+														:readonly="item.readonly" 
+														:disabled="item.disabled" 
+														:title="item.title" 
+														v-model="record[item.name]"
+													>{{ record[item.name] }}</textarea>
+													
+												</div>
 										</template>
 										<template v-else="">
 											<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
@@ -175,6 +182,8 @@
 			<div class="x_content">
 				{{ rules }}
 				<hr>
+				{{ otherRecords }}
+				<hr>
 				{{ record }}
 				<hr>
 					<!-- //
@@ -208,6 +217,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			table: "",
 			rules: null,
 			record: null,
+			otherRecords: {},
 			options: null,
 			jvalidate: null,
 			inputs: []
@@ -227,16 +237,40 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			return false;
 		},
 		changeSubItem(item, subItem){
+			var self = this;
 			console.log("Recibiendo cambio.");
-			console.log("item");
-			console.log(item);
-			console.log("subItem");
-			console.log(subItem);
+			// console.log("item");
+			// console.log(item);
+			//console.log("subItem");
+			//console.log(subItem);
+			// console.log('self.otherRecords[subItem.name]');
+			// console.log(self.otherRecords[subItem.name]);
 			
+			// console.log("item result");
+			// console.log(item.result);
 			
-			console.log("item result");
-			console.log(item.result);
+			self.record[item.name] = self.returnResultDynamic(item.result);
+			// for (const [key, value] of Object.entries(fields)) {
 			// item.value = "NUEVO VALOR."
+		},
+		returnResultDynamic(itemResult){
+			var self = this;
+			var r = '';
+			for (const [index, result] of  Object.entries(itemResult)) {
+				if (Array.isArray(result)) {
+					r += ' ' + self.returnResultDynamic(result);
+					r += '\n';
+				} else if (self.otherRecords[result] !== undefined) {
+					if (self.otherRecords[result] == '' || self.otherRecords[result] == null || self.otherRecords[result] == 0) {
+						r += ' { Falta -> ' + result + '}';
+					} else {
+						r += ' ' + self.otherRecords[result];
+					};
+				} else {
+					r += ' ' + result;
+				};
+			}
+			return r;
 		},
 		getValidatorForm(){
 			var self = this;
@@ -336,6 +370,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				"fields": fields, 
 				"inputs": [],
 				"record": {},
+				"othersRecord": {},
 				"rules": {}
 			};
 			
@@ -451,6 +486,15 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 						optionsInput.dynamic = true;
 						optionsInput.result = value.valueDataDynamic.result;
 						optionsInput.dynamicOptions = self.createFormElement(value.valueDataDynamic.fields);
+						
+							// console.log(optionsInput.dynamicOptions);
+						for (const [kDynamic, vDynamic] of Object.entries(optionsInput.dynamicOptions.record)) {
+							// console.log(kDynamic, vDynamic);
+							//self.otherRecords.push(console.log(kDynamic));
+							if(self.otherRecords[kDynamic] == undefined || self.otherRecords[kDynamic] == null){
+								self.otherRecords[kDynamic] = vDynamic;
+							}
+						};
 					}
 				}
 				
@@ -474,10 +518,11 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				fieldsRepair = self.createFormElement(fields);
 				console.log(fieldsRepair);
 				
-				
 				if(fieldsRepair.record != undefined){ self.record = fieldsRepair.record; };
 				if(fieldsRepair.inputs != undefined){ self.inputs = fieldsRepair.inputs; };
 				if(fieldsRepair.rules != undefined){ self.rules = fieldsRepair.rules; };
+				
+//				if(fieldsRepair.othersRecord != undefined){ self.otherRecords = fieldsRepair.othersRecord; }else{ self.otherRecords = {}; };
 			} else {
 				console.log('options_form no definido.');
 			}
@@ -565,39 +610,51 @@ var AddPQRsPeticion = Vue.extend({
 						valueDataDynamic: {
 							fields: {
 								"fecha": {
-									label: "Fecha",
+									label: "Fecha de los hechos",
 									required: true,
 									typeInput: "date"
 								},
 								"hora": {
-									label: "Hora",
+									label: "Hora de los hechos",
 									required: true,
 									typeInput: "time"
 								},
 								"lugar": {
-									label: "Lugar",
+									label: "Lugar de los hechos",
 									required: true,
 									typeInput: "text"
 								},
 								"direccion": {
-									label: "Dirección",
+									label: "Dirección de los hechos",
 									required: true,
 									typeInput: "textarea"
 								},
 								"daño": {
-									label: "Daño",
+									label: "Daño de los hechos",
 									required: true,
 									typeInput: "textarea"
 								}
 							},
 							result: [
 								[
-									"Fecha y Hora: ",
+									"Fecha y Hora de los hechos: ",
 									"fecha",
 									"hora"
+								],
+								[
+									"Lugar de los hechos: ",
+									"lugar"
+								],
+								[
+									"Dirección de los hechos: ",
+									"direccion"
+								],
+								[
+									"Daño: ",
+									"daño"
 								]
 								/*["fecha", "hora"],
-								["lugar", "hora"]*/
+								["", "hora"]*/
 							]
 						},
 					},
