@@ -101,8 +101,8 @@ class ControladorBase {
 			'dbAuth.usernameColumn' => API_dbAuth_usernameColumn,
 			'dbAuth.passwordColumn' => API_dbAuth_passwordColumn,
 			'dbAuth.returnedColumns' => API_dbAuth_returnedColumns,
-			// 'xsrf.cookieName' => API_dbAuth_returnedColumns,
-			// 'xsrf.headerName' => API_dbAuth_returnedColumns,
+			// 'xsrf.cookieName' => API_xsrf_cookieName,
+			// 'xsrf.headerName' => API_xsrf_headerName
 		]));
 		$this->response = $this->apiCore->handle($this->request);
 		
@@ -112,6 +112,10 @@ class ControladorBase {
 		if((
 			isset($request_headers['X-CORE']) && $request_headers['X-CORE'] == 'api') 
 			|| (isset($this->sections[0]) && $this->sections[0] == 'api') 
+			|| (isset($this->sections[0]) && $this->sections[0] == 'openapi') 
+			// || (isset($this->sections[0]) && $this->sections[0] == 'login') 
+			// || (isset($this->sections[0]) && $this->sections[0] == 'logout') 
+			|| (isset($this->sections[0]) && $this->sections[0] == 'records') 
 			|| (isset($_GET['core']) && $_GET['core'] == 'api')
 		){
 			$this->api = ResponseUtils::output($this->response, true);

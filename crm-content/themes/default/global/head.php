@@ -43,15 +43,17 @@
 	
 	<script>
 		var api = axios.create({
-			baseURL: '/index.php',
+			baseURL: '/',
 			withCredentials: true,
 			headers: {
 				'X-CORE': 'api'
 			}
 		});
 		api.interceptors.response.use(function (response) {
-		  if (response.headers['x-xsrf-token']) {
-			// document.cookie = 'XSRF-TOKEN=' + response.headers['x-xsrf-token'] + '; path=/';
+		  if (response.headers['<?php echo API_xsrf_headerName; ?>']) {
+			document.cookie = '<?php echo API_xsrf_cookieName; ?>=' + response.headers['<?php echo API_xsrf_headerName; ?>'] + '; path=/';
+			console.log('Cookie');
+			console.log(document.cookie);
 		  }
 		  return response;
 		});

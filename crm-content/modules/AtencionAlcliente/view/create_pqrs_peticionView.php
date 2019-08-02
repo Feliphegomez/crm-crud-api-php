@@ -45,91 +45,93 @@
 								<div>
 									<div class="item form-group" v-for="(item, i) in inputs">
 										<template v-if="item.show === true">
-									
-											<template v-if="item.dynamic == true" class="row">
-												<div class="col-sm-12" v-for="(subItem, j) in item.dynamicOptions.inputs">
-													<template v-if="subItem.show === true">
-														<label class="control-label col-sm-4" for="identification_type">
-															{{ subItem.label }} <span class="required" v-if="subItem.required === true">*</span>
-														</label>
-														<div class="col-sm-8">
-															<input class="form-control col-xs-12" v-if="subItem.tag === 'input'" 
-																:name="subItem.name"
-																:required="subItem.required" 
-																:readonly="subItem.readonly" 
-																:disabled="subItem.disabled" 
-																:type="subItem.type" 
-																:title="subItem.title" 
-																v-model="otherRecords[subItem.name]" 
-																@change="changeSubItem(item, subItem)"
-															/>
-															<select v-if="subItem.tag === 'select'" class="form-control col-xs-12" 
-																:name="subItem.name"
-																:required="subItem.required" 
-																:readonly="subItem.readonly" 
-																:disabled="subItem.disabled" 
-																:type="subItem.type" 
-																:title="subItem.title"
-																v-model="otherRecords[subItem.name]" 
-																@change="changeSubItem(item, subItem)"
-															>
-																<option :value="option.value" v-if="subItem.options != undefined && subItem.options != null" v-for="(option, index) in subItem.options">{{ option.text }}</option>
-															</select>
-															<textarea v-if="subItem.tag === 'textarea'" class="form-control col-xs-12" 
-																:name="subItem.name"
-																:required="subItem.required" 
-																:readonly="subItem.readonly" 
-																:disabled="subItem.disabled" 
-																:title="subItem.title" 
-																v-model="otherRecords[subItem.name]" 
-																@change="changeSubItem(item, subItem)"
-															></textarea>
-														</div>
-													</template>
-												</div>
-												Resultado => {{ item.result }}
-											</template>
-											<template v-else>
-												
-											</template>
 											
-											
-												<label class="control-label col-md-4 col-sm-4 col-xs-12" for="identification_type">
-													{{ item.label }} <span class="required" v-if="item.required === true">*</span>
-												</label>
+											<label class="control-label col-md-4 col-sm-4 col-xs-12" v-bind:for="'id-' + item.name">
+												{{ item.label }} <span class="required" v-if="item.required === true">*</span>
+											</label>
+											<div class="col-md-8 col-sm-8 col-xs-12">
+												<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
+													:id="'id-' + item.name" 
+													:name="item.name"
+													:required="item.required" 
+													:readonly="item.readonly" 
+													:disabled="item.disabled" 
+													:type="item.type" 
+													:title="item.title" 
+													v-model="record[item.name]"
+												/>
+												<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
+													:id="'id-' + item.name" 
+													:name="item.name" 
+													:required="item.required" 
+													:readonly="item.readonly" 
+													:disabled="item.disabled" 
+													:type="item.type" 
+													:title="item.title" 
+													v-model="record[item.name]"
+												>
+													<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
+												</select>
+												<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
+													:id="'id-' + item.name" 
+													:name="item.name" 
+													:required="item.required" 
+													:readonly="item.readonly" 
+													:disabled="item.disabled" 
+													:title="item.title" 
+													v-model="record[item.name]" 
+													rows="8" 
+												>{{ record[item.name] }}</textarea>
 												
-												<div class="col-md-8 col-sm-8 col-xs-12">
-													
-													<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
-														:name="item.name"
-														:required="item.required" 
-														:readonly="item.readonly" 
-														:disabled="item.disabled" 
-														:type="item.type" 
-														:title="item.title" 
-														v-model="record[item.name]"
-													/>
-													<select v-if="item.tag === 'select'" class="form-control col-xs-12" 
-														:name="item.name"
-														:required="item.required" 
-														:readonly="item.readonly" 
-														:disabled="item.disabled" 
-														:type="item.type" 
-														:title="item.title" 
-														v-model="record[item.name]"
-													>
-														<option :value="option.value" v-if="item.options != undefined && item.options != null" v-for="(option, index) in item.options">{{ option.text }}</option>
-													</select>
-													<textarea v-if="item.tag === 'textarea'" class="form-control col-xs-12" 
-														:name="item.name"
-														:required="item.required" 
-														:readonly="item.readonly" 
-														:disabled="item.disabled" 
-														:title="item.title" 
-														v-model="record[item.name]"
-													>{{ record[item.name] }}</textarea>
-													
-												</div>
+												<template v-if="item.dynamic == true" class="row">
+													Resultado => {{ item.result }}
+													<div class="row" v-for="(subItem, j) in item.dynamicOptions.inputs">
+														<template v-if="subItem.show === true">
+															<label class="control-label col-sm-4" v-bind:for="'id-' + subItem.name">
+																{{ subItem.label }} <span class="required" v-if="subItem.required === true">*</span>
+															</label>
+															<div class="col-sm-8">
+																<input class="form-control col-xs-12" v-if="subItem.tag === 'input'" 
+																	:id="'id-' + subItem.name" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:type="subItem.type" 
+																	:title="subItem.title" 
+																	v-model="otherRecords[subItem.name]" 
+																	@change="changeSubItem(item, subItem)"
+																/>
+																<select v-if="subItem.tag === 'select'" class="form-control col-xs-12" 
+																	:id="'id-' + subItem.name" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:type="subItem.type" 
+																	:title="subItem.title"
+																	v-model="otherRecords[subItem.name]" 
+																	@change="changeSubItem(item, subItem)"
+																>
+																	<option :value="option.value" v-if="subItem.options != undefined && subItem.options != null" v-for="(option, index) in subItem.options">{{ option.text }}</option>
+																</select>
+																<textarea v-if="subItem.tag === 'textarea'" class="form-control col-xs-12" 
+																	:id="'id-' + subItem.name" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:title="subItem.title" 
+																	v-model="otherRecords[subItem.name]" 
+																	@change="changeSubItem(item, subItem)" 
+																	rows="3" 
+																></textarea>
+															</div>
+														</template>
+													</div>
+												</template>
+												<template v-else></template>
+											</div>
 										</template>
 										<template v-else="">
 											<input class="form-control col-xs-12" v-if="item.tag === 'input'" 
@@ -139,8 +141,56 @@
 												:disabled="item.disabled" 
 												:type="item.type" 
 												:title="item.title" 
-												:value="item.value" 
+												v-model="record[item.name]" 
 											/>
+											<template v-if="item.dynamic == true" class="row">
+													<div class="row" v-for="(subItem, j) in item.dynamicOptions.inputs">
+														<template v-if="subItem.show === true">
+															<label class="control-label col-sm-4" v-bind:for="'id-' + subItem.name">
+																{{ subItem.label }} <span class="required" v-if="subItem.required === true">*</span>
+															</label>
+															<div class="col-sm-8">
+																<input class="form-control col-xs-12" v-if="subItem.tag === 'input'" 
+																	:id="'id-' + subItem.name" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:type="subItem.type" 
+																	:title="subItem.title" 
+																	v-model="otherRecords[subItem.name]" 
+																	@change="changeSubItem(item, subItem)"
+																/>
+																<select v-if="subItem.tag === 'select'" class="form-control col-xs-12" 
+																	:id="'id-' + subItem.name" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:type="subItem.type" 
+																	:title="subItem.title"
+																	v-model="otherRecords[subItem.name]" 
+																	@change="changeSubItem(item, subItem)"
+																>
+																	<option :value="option.value" v-if="subItem.options != undefined && subItem.options != null" v-for="(option, index) in subItem.options">{{ option.text }}</option>
+																</select>
+																<textarea v-if="subItem.tag === 'textarea'" class="form-control col-xs-12" 
+																	:id="'id-' + subItem.name" 
+																	:name="subItem.name"
+																	:required="subItem.required" 
+																	:readonly="subItem.readonly" 
+																	:disabled="subItem.disabled" 
+																	:title="subItem.title" 
+																	v-model="otherRecords[subItem.name]" 
+																	@change="changeSubItem(item, subItem)" 
+																	rows="3" 
+																></textarea>
+															</div>
+														</template>
+													</div>
+													Resultado => {{ item.result }}
+												</template>
+												<template v-else></template>
 										</template>
 									</div>
 								</div>
@@ -213,6 +263,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 	data(){
 		return {
 			count: 0,
+			action: "",
 			title: "",
 			table: "",
 			rules: null,
@@ -220,7 +271,8 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			otherRecords: {},
 			options: null,
 			jvalidate: null,
-			inputs: []
+			inputs: [],
+			callEvent: null
 		};
 	},
 	computed: {
@@ -238,20 +290,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 		},
 		changeSubItem(item, subItem){
 			var self = this;
-			console.log("Recibiendo cambio.");
-			// console.log("item");
-			// console.log(item);
-			//console.log("subItem");
-			//console.log(subItem);
-			// console.log('self.otherRecords[subItem.name]');
-			// console.log(self.otherRecords[subItem.name]);
-			
-			// console.log("item result");
-			// console.log(item.result);
-			
 			self.record[item.name] = self.returnResultDynamic(item.result);
-			// for (const [key, value] of Object.entries(fields)) {
-			// item.value = "NUEVO VALOR."
 		},
 		returnResultDynamic(itemResult){
 			var self = this;
@@ -259,7 +298,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			for (const [index, result] of  Object.entries(itemResult)) {
 				if (Array.isArray(result)) {
 					r += ' ' + self.returnResultDynamic(result);
-					r += '\n';
+					// r += '\n';
 				} else if (self.otherRecords[result] !== undefined) {
 					if (self.otherRecords[result] == '' || self.otherRecords[result] == null || self.otherRecords[result] == 0) {
 						r += ' { Falta -> ' + result + '}';
@@ -282,7 +321,23 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				//wrapper: "strong",
                 ignore: [],
                 rules: self.rules,
-				submitHandler: function() {
+				onsubmit: true,
+				errorPlacement: function(error, element){
+					var errorClone = error.clone();
+					var errorHTML = '<div class="alert alert-danger alert-dismissible fade in" role="alert">';
+						errorHTML += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>';
+						errorHTML += '<strong>' + element[0].title + '</strong> revisa este campo.';
+					errorHTML += '</div>';
+					$("#messageBox").append(errorHTML);
+				},
+				submitHandler: function(form){
+					console.log('form');
+					console.log(form);
+					console.log('tabla');
+					console.log(self.table);
+					console.log('record');
+					console.log(self.record);
+					
 					bootbox.confirm({
 						message: "Debes confirmar que deseas continuar, una vez confirmes el envio/guardado no podras volver a modificar el contenido de esta informacion.",
 						locale: 'es',
@@ -295,20 +350,40 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 							}
 						},
 						callback: function (result) {
-							console.log('This was logged in the callback: ' + result);
-							
+							if(result === true){
+								switch(self.action){
+									case 'create':
+										api.post('/records/' + self.table, self.record)
+										.then(function (z) {
+											if(!z.status){
+												alert('Ocurrio un error creando el campo del formulario. [' + key + ']');
+											} else {
+												if(z.status === 200){
+													self.callEvent(z.data)
+												}else{
+													console.log("Console ERROR:");
+												}
+											}
+										})
+										.catch(function (e) {
+											console.log(e);
+											if(e.data){
+												console.log(e.data);
+												self.callEvent(z.data)
+											}
+										});
+										/**/
+									break;
+									case 'create':
+									break;
+									default:
+									break;
+								}
+							}
+							//self.submitEvent
 						}
 					});
 				},
-				onsubmit: true,
-				errorPlacement: function(error, element){
-					var errorClone = error.clone();
-					var errorHTML = '<div class="alert alert-danger alert-dismissible fade in" role="alert">';
-						errorHTML += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>';
-						errorHTML += '<strong>' + element[0].title + '</strong> revisa este campo.';
-					errorHTML += '</div>';
-					$("#messageBox").append(errorHTML);
-				}
 			});
 		},
 		getOptionsInputs(){
@@ -404,76 +479,89 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				if(value.disabled !== undefined){ optionsInput.disabled = value.disabled; } else { optionsInput.disabled = false; }
 				if(value.value !== undefined){
 					optionsInput.value = value.value;
-					returnData.record[key] = value.value;
+					// returnData.record[key] = value.value;
 				} else {
 					optionsInput.value = null;
-					returnData.record[key] = null;
+					// returnData.record[key] = null;
 				}
 				if(value.show !== undefined){ optionsInput.show = value.show; } else { optionsInput.show = true; }
 				
+				
+				// returnData.record[key] = value.value;
 				if((value.typeInput != undefined)){
 					switch(value.typeInput){
 						case 'text':
-							returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'text';
 						break;
 						case 'email':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'email';
 						break;
 						case 'textarea':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'textarea';
 						break;
 						case 'date':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'date';
 						break;
 						case 'dateISO':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'dateISO';
 						break;
 						case 'datetime':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'datetime';
 						break;
 						case 'datetime-local':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'datetime-local';
 						break;
 						case 'time':
-							returnData.record[key] = '';
+							// returnData.record[key] = '';
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
 							optionsInput.type = 'time';
 						break;
 						case 'number':
-							returnData.record[key] = 0;
+							// returnData.record[key] = 0;
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : 0;
 							optionsInput.tag = 'input';
 							optionsInput.type = 'number';
 						break;
 						case 'select':
-							returnData.record[key] = 0;
+							// returnData.record[key] = 0;
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : 0;
 							optionsInput.tag = 'select';
 							if((value.options != undefined)){
 								if(self.options[value.options] != undefined){ optionsInput.options = self.options[value.options]; }
 							}
 						break;
 						default:
-							returnData.record[key] = null;
+							// returnData.record[key] = null;
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 						break;
 					}
-					
 				} else {
-					returnData.record[key] = null;
+					//returnData.record[key] = null;
+					returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 					optionsInput.tag = 'none';
 				}
 				optionsInput.title = value.label;
+				optionsInput.value = returnData.record[key];
 				
 				if(optionsInput.show == false){
 					optionsInput.tag = 'input';
@@ -512,17 +600,18 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			self.record = {};
 			self.inputs = [];
 			if(self.options_form != undefined){
+				self.action = (self.options_form.action != undefined) ? self.options_form.action : 'view';
 				self.title = (self.options_form.titulo != undefined) ? self.options_form.titulo : '';
-				// self.subject = (self.options_form.tabla != undefined) ? self.options_form.tabla : '';
+				self.table = (self.options_form.tabla != undefined) ? self.options_form.tabla : 'none';
+				self.callEvent = (self.options_form.callEvent != undefined) ? self.options_form.callEvent : function(){
+					console.log("No hay respuesta configurada.");
+				};
 				fields = (self.options_form.fields != undefined) ? self.options_form.fields : {};
 				fieldsRepair = self.createFormElement(fields);
-				console.log(fieldsRepair);
 				
 				if(fieldsRepair.record != undefined){ self.record = fieldsRepair.record; };
 				if(fieldsRepair.inputs != undefined){ self.inputs = fieldsRepair.inputs; };
 				if(fieldsRepair.rules != undefined){ self.rules = fieldsRepair.rules; };
-				
-//				if(fieldsRepair.othersRecord != undefined){ self.otherRecords = fieldsRepair.othersRecord; }else{ self.otherRecords = {}; };
 			} else {
 				console.log('options_form no definido.');
 			}
@@ -540,6 +629,7 @@ var AddPQRsPeticion = Vue.extend({
 		return {
 			thisForm: {
 				titulo: 'PQRs - Nueva Petición',
+				action: "create",
 				tabla: "pqrs",
 				fields: {
 					type: {
@@ -609,16 +699,6 @@ var AddPQRsPeticion = Vue.extend({
 						typeInput: "textarea",
 						valueDataDynamic: {
 							fields: {
-								"fecha": {
-									label: "Fecha de los hechos",
-									required: true,
-									typeInput: "date"
-								},
-								"hora": {
-									label: "Hora de los hechos",
-									required: true,
-									typeInput: "time"
-								},
 								"lugar": {
 									label: "Lugar de los hechos",
 									required: true,
@@ -637,31 +717,41 @@ var AddPQRsPeticion = Vue.extend({
 							},
 							result: [
 								[
-									"Fecha y Hora de los hechos: ",
-									"fecha",
-									"hora"
-								],
-								[
 									"Lugar de los hechos: ",
-									"lugar"
+									"lugar",
+									'\n'
 								],
 								[
 									"Dirección de los hechos: ",
-									"direccion"
+									"direccion",
+									'\n'
 								],
 								[
 									"Daño: ",
-									"daño"
+									"daño",
 								]
-								/*["fecha", "hora"],
-								["", "hora"]*/
 							]
 						},
 					},
 					event_date: {
 						label: "Fecha del evento",
 						required: true,
-						typeInput: "date"
+						typeInput: "datetime",
+						valueDataDynamic: {
+							fields: {
+								"fecha": {
+									label: "Fecha de los hechos",
+									required: true,
+									typeInput: "date"
+								},
+								"hora": {
+									label: "Hora de los hechos",
+									required: true,
+									typeInput: "time"
+								}
+							},
+							result: [ [ "fecha", "hora" ] ]
+						},
 					},
 					petition: {
 						label: "Peticion",
@@ -669,8 +759,19 @@ var AddPQRsPeticion = Vue.extend({
 						typeInput: "textarea"
 					},
 				},
-				submitEvent(){
+				callEvent(resultado){
+					console.log('resultado callback');
+					console.log(resultado);
 					
+					if(Number(resultado) > 0 && Number(resultado) != 'NaN'){
+						bootbox.alert({
+							message: "<h1>Muy Bien!</h1><br>La PQRs se a creado y enviado con éxito, el # del Radicado es <h5>" + resultado + "</h5>",
+							callback: function () {
+								// console.log('This was logged in the callback!');
+								location.reload();
+							}
+						})
+					}
 				}
 			}
 		};

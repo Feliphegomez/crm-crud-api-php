@@ -14,7 +14,7 @@
 				{
 					"title": "Peticiones",
 					"controller": "AsistenciaJuridica",
-					"action": null,
+					"action": "peticiones_pendientes",
 					"icon": "fa fa-",
 					"tree": [
 					]
@@ -22,7 +22,7 @@
 				{
 					"title": "Quejas",
 					"controller": "AsistenciaJuridica",
-					"action": "index",
+					"action": "quejas_pendientes",
 					"icon": "fa fa-",
 					"tree": [
 					]
