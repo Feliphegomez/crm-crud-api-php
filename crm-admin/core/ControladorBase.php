@@ -29,7 +29,7 @@ class ControladorBase {
 	public $sections;
 	public $status;
 	public $enlace_actual;
-	public $session;
+	private $session;
 	public $userData;
 	public $modules;
 	public $theme;
@@ -58,7 +58,6 @@ class ControladorBase {
 			//verificamos si es o no un directorio
 			if (is_dir(folder_content . "/modules/" . $nombreModulo))
 			{
-				# echo "{$nombreModulo}\n";
 				foreach(glob(folder_content . "/modules/{$nombreModulo}/models/*.php") as $file){
 					require_once $file;
 				};
@@ -161,12 +160,8 @@ class ControladorBase {
 			echo "Fail Login";
 			exit();
 		}
-		$this->session = isset($_SESSION) ? $_SESSION : null;
-		if(!isset($this->session->id) || $this->session == null){
-			$this->userData = $this->getProfileDefault();
-		}else{
-			$this->userData = $this->getLoadProfile($this->session->id);
-		}
+		$this->session = isset($_SESSION) ? $this->validateSession() : array();
+		$this->userData = (isset($this->session['user'])) ? $this->getLoadProfile($this->session['user']['id']) : $this->getProfileDefault();
 		
 		# Crear Template
 		require_once "TemplateBase.php";
@@ -185,6 +180,32 @@ class ControladorBase {
 		
 		$this->thisClassName = $this->getClassName();
 		$this->thisModule = $this->getThisModule();
+		
+		#echo json_encode($this);
+		#echo json_encode($this->validatePermission('Usuarios'));
+		#exit();
+	}
+	
+	public static function validateSession(){
+		if (isset($_SESSION) && isset($_SESSION['user']) && is_array($_SESSION['user']) && isset($_SESSION['user']['id'])){
+			$userid = (int) $_SESSION['user']['id'];
+		} else if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user']) && isset($_SESSION['user']->id)) {
+			$userid = (int) $_SESSION['user']->id;
+		}else{
+			$userid = 0;
+		}
+		
+		$user = new Usuario();
+		$resultSearch = $user->getById($userid);
+		
+		if(isset($resultSearch[0]) && isset($resultSearch[0]->id) && isset($resultSearch[0]->username)){
+			$_SESSION['user'] = array();
+			foreach($resultSearch[0] as $k=>$v){
+				$_SESSION['user'][$k] = $v;
+			}
+		}
+			
+		return (isset($_SESSION) && isset($_SESSION['user']) && isset($_SESSION['user']['id']) && isset($_SESSION['user']['permissions']) && $_SESSION['user']['permissions'] != null) ? $_SESSION : array();
 	}
 	
 	public static function getClassName(){
@@ -228,15 +249,59 @@ class ControladorBase {
 		return $html;
 	}
 	
-	function getLoadProfile($userid){
+	public static function getPermissions(){
+		$user = ControladorBase::validateSession();
+		if(isset($user['user']['permissions']) && (int) $user['user']['permissions'] > 0){
+			$permisoID = (int) $user['user']['permissions'];
+		}else{
+			$permisoID = 0;
+		}
+		
+		$perm = new Permiso();
+		$endPermiso = ($perm->getById($permisoID));
+		return ($endPermiso);
+		
+	}
+	
+	public static function validatePermission($module, $action){
+		$t = ControladorBase::getPermissions();
+		$p = (isset($t->data)) ? $t->data : new stdClass();
+		
+		if(isset($p->{"isAdmin"}) && $p->{"isAdmin"} == true){
+			return true;
+		} else {
+			if($action == null){
+				return (isset($p->{$module})) ? true : false;
+			}else{
+				return (isset($p->{$module}->{$action}) && $p->{$module}->{$action} == true) ? true : false;
+			}
+		}
+	}
+	
+	public function isUser(){
+		if(isset($this->userData->userID) && $this->userData->userID > 0 && isset($this->userData->permissions) && $this->userData->permissions > 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static function getLoadProfile($userid) {
+		$dataUser = ControladorBase::getProfileDefault();
 		$userid = (int) $userid;
 		$user = new Usuario();
-		$user->getId($userid);
+		$resultSearch = $user->getById($userid);
+		
+		if(isset($resultSearch[0]) && isset($resultSearch[0]->id) && isset($resultSearch[0]->username)){
+			$dataUser->userID = (int) $resultSearch[0]->id;
+			$dataUser->username = $resultSearch[0]->username;
+			$dataUser->userInfo = $resultSearch[0];
+			return ($dataUser);
+		}
 		return $user;
 	}
 	
-	function getProfileDefault(){
-		$a = null;
+	public static function getProfileDefault() {
 		$a = new stdClass();
 		$a->userID = 0;
 		$a->username = 0;
@@ -246,7 +311,6 @@ class ControladorBase {
 	
 	function getPath() : string {
 		$a = null;
-		
         if (!isset($_SERVER['PHP_SELF'])) {
             $_SERVER['PHP_SELF'] = '/';
         }
@@ -254,8 +318,7 @@ class ControladorBase {
 		return $a;
 	}
 	
-    function setServer()
-    {
+    function setServer() {
         $this->protocol = @$_SERVER['HTTP_X_FORWARDED_PROTO'] ?: @$_SERVER['REQUEST_SCHEME'] ?: ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") ? "https" : "http");
         $this->port = @intval($_SERVER['HTTP_X_FORWARDED_PORT']) ?: @intval($_SERVER["SERVER_PORT"]) ?: (($this->protocol === 'https') ? 443 : 80);
         $this->host = @explode(":", $_SERVER['HTTP_HOST'])[0] ?: @$_SERVER['SERVER_NAME'] ?: @$_SERVER['SERVER_ADDR'];
@@ -323,7 +386,7 @@ class ControladorBase {
 	}
      
     //Plugins y funcionalidades
-    public function viewSystem($vista,$datos){
+    public function viewSystem($vista,$datos) {
 		/*
 		* Este método lo que hace es recibir los datos del controlador en forma de array
 		* los recorre y crea una variable dinámica con el indice asociativo y le da el

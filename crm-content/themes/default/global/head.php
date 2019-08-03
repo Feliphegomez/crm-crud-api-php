@@ -214,8 +214,6 @@
 	
 	
 	
-	
-	
 	<!-- FOOTER FROM -->
 	
     <!-- jQuery -->

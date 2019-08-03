@@ -19,6 +19,7 @@ class Usuario extends EntidadBase {
     public $company_name;
     public $company_position;
     public $notes;
+    public $permissions;
     public $registered;
     public $updated;
     public $last_connection;
@@ -32,6 +33,10 @@ class Usuario extends EntidadBase {
 		return json_encode($this);
 	}
 	
+	public function getThisAll(){
+		return json_encode($this);
+	}
+	
 	public function getId(){
 		return ($this->id == null) ? 0 : (int) $this->id;
 	}
@@ -39,7 +44,6 @@ class Usuario extends EntidadBase {
 	public function isUser(){
 		if($this->getId() > 0){ return true; } else { return false; }
 	}
-	
 	
 	public function getByUsername($v1){
 		 $usuario = $this->getBy('username', $v1);

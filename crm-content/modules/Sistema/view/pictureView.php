@@ -1,17 +1,17 @@
 <?php 
 $picture = new PicturesModel();
 
-
 if(isset($_GET['id']) && ((int) $_GET['id']) > 0){
 	$b = $picture->getById($_GET['id']);
 }else{
 	exit("KO");
 }
 
-
-# echo json_encode($picture);
-# echo json_encode($b->name);
-$pictureData = @explode('data:', $b->data);
+/*
+echo json_encode($b->getName());
+exit();
+*/
+$pictureData = @explode('data:', $b->getData());
 if(isset($pictureData[1])){
 	$Base64Img = new stdClass();
 	$Base64Img->type = "image\/none";

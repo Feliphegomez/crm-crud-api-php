@@ -24,7 +24,7 @@ function cargarControlador($controller){
 		$strFileController = $folder_system;
 	}
 	else if(!is_file($folder_system) && !is_file($folder_modules)){
-		exit("Error: Controlador no detectado.");
+		exit("Error: Controlador no detectado. {$controller}");
 	}
 	else {
 		exit("Error: problema en el controlador.");

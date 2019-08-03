@@ -22,6 +22,5 @@ class AyudaVistas{
         return $urlString;
     }
      
-    //Helpers para las vistas
 }
 ?>

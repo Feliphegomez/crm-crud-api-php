@@ -12,30 +12,41 @@ class MenuLeft extends MenuBase {
 		$section->action = (!isset($section->action)) ? "index" : $section->action;
 		$section->title = (!isset($section->title) || $section->title == "" || $section->title == null) ? "Sin Titulo" : $section->title;
 		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action) : "#";
-		$classLink1 = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller'] && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"active\"" : "";
-		$classLink2 = (isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action']) && $_GET['action'] == $section->action) ? " style=\"display: block;\"" : "";
+		$classLink1 = "";
+		if(isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action'])){
+			$classLink1 = ($_GET['action'] == $section->action) ? " class=\"active\"" : "";
+			$classLink1 = ($_GET['action'] == "#") ? " class=\"active\"" : "";
+		}
+		$classLink2 = "";
+		if(isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action'])){
+			$classLink2 = ($_GET['action'] == $section->action) ? " style=\"display: block;\"" : "";
+			$classLink2 = ($_GET['action'] == "#") ? " style=\"display: block;\"" : "";
+			$classLink2 = " style=\"display: block;\"";
+		}
+		
 		$tagIcon = (isset($section->icon) && $section->icon != null && $section->icon != "") ? " <i class=\"{$section->icon}\"></i> " : "";
 		
 		$r = "";
-		if(isset($section->tree) && count($section->tree) > 0){
-			$r .= "<li{$classLink1}>\n".
-				"<a>{$tagIcon} {$section->title} <span class=\"fa fa-chevron-down\"></span></a>\n".
-				"<ul class=\"nav child_menu\"{$classLink2}>\n";
-					foreach($section->tree as $item){
-						if(isset($item->tree) && count($item->tree) > 0){
-							$r .= $this->menuConHijos($item);
-						}else{
-							$r .= $this->menuSinHijos($item);
+		if($this->validatePermission($section->controller, $section->action) == true){
+			if(isset($section->tree) && count($section->tree) > 0){
+				$r .= "<li{$classLink1}>\n".
+					"<a>{$tagIcon} {$section->title} <span class=\"fa fa-chevron-down\"></span></a>\n".
+					"<ul class=\"nav child_menu\" {$classLink2}>\n";
+						foreach($section->tree as $item){
+							if(isset($item->tree) && count($item->tree) > 0){
+								$r .= $this->menuConHijos($item);
+							}else{
+								$r .= $this->menuSinHijos($item);
+							}
 						}
-					}
-						/*
-					*/
-			$r .= "</ul>\n".
-			"</li>\n";
-		}else{
-			$r .= $this->menuSinHijos($section);
+							/*
+						*/
+				$r .= "</ul>\n".
+				"</li>\n";
+			}else{
+				$r .= $this->menuSinHijos($section);
+			}
 		}
-		
 		return $r;
 	}
 	
@@ -59,31 +70,49 @@ class MenuLeft extends MenuBase {
 			$infoThisModule = $nombreclassModulo::getThisModule();
 			$infoThisModuleSections = $nombreclassModulo::getSections();
 			$infoThisModule->name = (!isset($infoThisModule->name) || $infoThisModule->name == "") ? $modulo : $infoThisModule->name;
-			$classLink = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller']) ? " class=\"active\"" : "";
+			$classLink = (isset($_GET['controller']) && $_GET['controller'] == ucwords($modulo)) ? " class=\"active\"" : "";
+			$classLink2 = (isset($_GET['controller']) && $_GET['controller'] == ucwords($modulo)) ? " style=\"display: block;\"" : "";
+			
 			#
 			$moduloIcon = (isset($infoThisModule->icon) && $infoThisModule->icon != null && $infoThisModule->icon != "") ? " <i class=\"{$infoThisModule->icon}\"></i> " : "";
-			
-			
-				if(isset($infoThisModule->isActive) && $infoThisModule->isActive == true){
-					if(isset($infoThisModule->showTitleModule) && $infoThisModule->showTitleModule == true){
-						$r .= "<h3>{$moduloIcon}{$infoThisModule->name}</h3>";
-					}
-					
-					$r .= "<ul class=\"nav side-menu\">";
-						foreach($infoThisModuleSections as $section){
-							$r .= $this->menuConHijos($section);
-						}
-					$r .= "</ul>";
-				}else{
-					if($showNoActives === true){
-						if(isset($infoThisModule->showTitleModule) && $infoThisModule->showTitleModule == true){
-							$r .= "<h3>{$moduloIcon}{$infoThisModule->name}</h3>";
-						}
-						$r .= "<ul class=\"nav side-menu\">";
-							$r .= "<li><a href=\"#\">{$moduloIcon}{$infoThisModule->name} <span class=\"label label-success pull-right\">Inactivo</span></a></li>\n";
-						$r .= "</ul>";
-					}
+			if(ControladorBase::validatePermission(ucwords($modulo), null) == true){
+				if(isset($infoThisModule->showTitleModule) && $infoThisModule->showTitleModule == true){
+					// $r .= "<h3>{$moduloIcon} Modulo {$infoThisModule->name}</h3>";
 				}
+				$r .= "<ul class=\"nav side-menu\">";
+					$r .= "<li{$classLink}>";
+						$r .= "<a>{$moduloIcon}{$infoThisModule->name} <span class=\"fa fa-chevron-down\"></span></a>";
+						$r .= "<ul class=\"nav child_menu\"{$classLink2}>";
+							if(isset($infoThisModule->isActive) && $infoThisModule->isActive == true){
+								/*		
+								$r .= "<ul class=\"nav side-menu\">";
+									foreach($infoThisModuleSections as $section){
+										$r .= $this->menuConHijos($section);
+									}
+								$r .= "</ul>";
+								
+								<h3>General</h3>
+								<ul class="nav side-menu">
+								  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+									<ul class="nav child_menu">
+									  <li><a href="index.html">Dashboard</a></li>
+									  <li><a href="index2.html">Dashboard2</a></li>
+									  <li><a href="index3.html">Dashboard3</a></li>
+									</ul>
+								  </li>
+								*/
+								foreach($infoThisModuleSections as $section){
+									$r .= $this->menuConHijos($section);
+								}
+							}else{
+								if($showNoActives === true){
+									$r .= "<li><a href=\"#\">{$moduloIcon}{$infoThisModule->name} <span class=\"label label-success pull-right\">Inactivo</span></a></li>\n";
+								}
+							}
+						$r .= "</ul>";
+					$r .= "</li>";
+				$r .= "</ul>";
+			}
 		}
 		
 		return $r;
@@ -109,15 +138,15 @@ if($this->userActive() === true){ ?>
 	</div>
 	<br />
 	<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-	  <?php echo "<div class=\"menu_section\">".$menu->listMenuLeft001()."</div>"; ?>
+	  <?php echo "<div class=\"menu_section\"><h3>Modulos</h3>".$menu->listMenuLeft001()."</div>"; ?>
 	  <?php #echo "<div class=\"menu_section\">".$menu->listMenuLeft001(true)."</div>"; ?>
 	</div>
 	<!-- /menu footer buttons -->
 	<div class="sidebar-footer hidden-small">
-	<!-- //
 	  <a data-toggle="tooltip" data-placement="top" title="Settings">
 		<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 	  </a>
+	<!-- //
 	  <a data-toggle="tooltip" data-placement="top" title="FullScreen">
 		<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
 	  </a>

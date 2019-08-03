@@ -45,36 +45,22 @@ class EntidadBase {
      
     public function getById($id){
         $query=$this->db->query("SELECT * FROM $this->table WHERE id=$id");
- 
-        if($row = $query->fetch_object()) {
-           $resultSet=$row;
-        }
-         
-        return $resultSet;
+		return $this->FetchObject($query);
     }
      
     public function getBy($column, $value){
         $query=$this->db->query("SELECT * FROM $this->table WHERE $column='$value'");
- 
-        while($row = $query->fetch_object()) {
-           $resultSet[]=$row;
-        }
-		
-		if(!isset($resultSet)){
-			return array();
-		}else{
-			return $resultSet;
-		}
+		return $this->FetchObject($query);
     }
      
     public function deleteById($id){
         $query=$this->db->query("DELETE FROM $this->table WHERE id=$id");
-        return $query;
+        return $this->FetchObject($query);
     }
      
     public function deleteBy($column,$value){
         $query=$this->db->query("DELETE FROM $this->table WHERE $column='$value'");
-        return $query;
+       return $this->FetchObject($query);
     }
      
     public function get($key) { return $this->{$key}; }
@@ -88,6 +74,10 @@ class EntidadBase {
     public function getByDoubleColm($k1, $v1, $k2, $v2){
 		$r = null;
         $query = $this->db->query("SELECT * FROM $this->table WHERE {$k1} IN ('{$v1}') AND {$k2} IN ('{$v2}')");
+		return $this->FetchObject($query);		 
+    }
+	
+	public function FetchObject($query){
 		
         while($row = $query->fetch_object()) { $resultSet[] = $row; }
 		
@@ -96,7 +86,6 @@ class EntidadBase {
 		 }else{
 			 return $resultSet;
 		 }
-		 
-    }
+	}
 	
 }

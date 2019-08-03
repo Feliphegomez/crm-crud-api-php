@@ -35,20 +35,17 @@
 						<?php 
 							$picture = new PicturesModel();
 							foreach($picture->getAll() as $i){
-								if(isset($i->id)){
-									$b = new PicturesModel();
-									$item = $b->getById($i->id);
-									
+								if($i->getId() > 0){
 									?>
 									<div class="col-md-55">
 										<div class="thumbnail">
 											<div class="image view view-first">
-												<img style="width: 100%; display: block;" src="<?php echo "/index.php?controller=Sistema&action=picture&id={$item->id}"; ?>" alt="image" />
+												<img style="width: 100%; display: block;" src="<?php echo "/index.php?controller=Sistema&action=picture&id={$i->getId()}"; ?>" alt="image" />
 												<div class="mask">
-													<p><?php echo $item->name; ?></p>
+													<p><?php echo $i; ?></p>
 													<div class="tools tools-bottom">
-														<a target="_blank" href="<?php echo "/index.php?controller=Sistema&action=picture&id={$item->id}&w=original"; ?>"><i class="fa fa-link"></i></a>
-														<a href="<?php echo "/index.php?controller=Sistema&action=picture_editor&id={$item->id}"; ?>"><i class="fa fa-pencil"></i></a>
+														<a target="_blank" href="<?php echo "/index.php?controller=Sistema&action=picture&id={$i->getId()}&w=original"; ?>"><i class="fa fa-link"></i></a>
+														<a href="<?php echo "/index.php?controller=Sistema&action=picture_editor&id={$i->getId()}"; ?>"><i class="fa fa-pencil"></i></a>
 														<a href="#"><i class="fa fa-times"></i></a>
 													</div>
 												</div>

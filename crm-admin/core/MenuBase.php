@@ -1,5 +1,6 @@
 <?php 
-class MenuBase {
+class MenuBase extends ControladorBase {
+	public $data;
 	public $allmodules;
 	
 	public function __construct(){

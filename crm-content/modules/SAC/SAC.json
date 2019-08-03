@@ -1,0 +1,41 @@
+{
+	"name": "Sistema de Atención al Consumidor - SAC",
+	"isActive": true,
+	"author": "FelipheGomez - Andres Felipe Gomez Maya",
+	"icon": "fa fa-users",
+	"showTitleModule": true,
+	"sections": [
+		{
+			"title": "PQRs",
+			"controller": "SAC",
+			"action": null,
+			"icon": "fa fa-legal",
+			"tree": [
+				{
+					"title": "Introduccion",
+					"controller": "SAC",
+					"action": "index",
+					"icon": "fa fa-home",
+					"tree": [
+					]
+				},
+				{
+					"title": "Nueva Peticion",
+					"controller": "SAC",
+					"action": "create_pqrs_peticion",
+					"icon": "fa fa-plus",
+					"tree": [
+					]
+				},
+				{
+					"title": "Nueva Queja",
+					"controller": "SAC",
+					"action": "create_pqrs_queja",
+					"icon": "fa fa-plus",
+					"tree": [
+					]
+				}
+			]
+		}
+	]
+}

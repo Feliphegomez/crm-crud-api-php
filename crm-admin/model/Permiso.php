@@ -50,4 +50,10 @@ class Permiso extends EntidadBase {
         //$this->db()->error;
         return $save;
     }
+	
+    public function getById($id){
+        $a = parent::getById($id);
+		$a[0]->data = (isset($a[0]->data)) ? json_decode($a[0]->data) : new stdClass();
+        return $a[0];
+    }
 }
