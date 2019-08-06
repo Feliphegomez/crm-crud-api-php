@@ -6197,6 +6197,8 @@ abstract class Condition
 
     public static function fromString(ReflectedTable $table, string $value): Condition
     {
+		$value = (is_array($value)) ? $value[0] : $value;
+		
         $condition = new NoCondition();
         $parts = explode(',', $value, 3);
         if (count($parts) < 2) {
@@ -6530,7 +6532,7 @@ class FilterInfo
         $key = 'filter' . implode('', $path);
         if (isset($params[$key])) {
             foreach ($params[$key] as $filter) {
-                $condition = Condition::fromString($table, $filter);
+                $condition = Condition::fromString($table, (string) $filter[0]);
                 if (($condition instanceof NoCondition) == false) {
                     $conditions->put($path, $condition);
                 }
@@ -6936,7 +6938,9 @@ class RelationJoiner
         if (isset($params['join'])) {
             foreach ($params['join'] as $tableNames) {
                 $path = array();
-                foreach (explode(',', $tableNames) as $tableName) {
+				
+				$tableNames = is_array($tableNames) ? $tableNames[0] : $tableNames;
+                foreach (@explode(',', $tableNames) as $tableName) {
                     $t = $this->reflection->getTable($tableName);
                     if ($t != null) {
                         $path[] = $t->getName();
@@ -7569,7 +7573,7 @@ class RequestUtils
         $uniqueTableNames[$tableName] = true;
         if (isset($parameters['join'])) {
             foreach ($parameters['join'] as $parameter) {
-                $tableNames = explode(',', trim($parameter));
+                $tableNames = @explode(',', trim($parameter));
                 foreach ($tableNames as $tableName) {
                     $uniqueTableNames[$tableName] = true;
                 }

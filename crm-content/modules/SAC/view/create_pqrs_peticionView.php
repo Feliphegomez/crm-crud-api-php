@@ -107,10 +107,59 @@ var AddPQRsPeticion = Vue.extend({
 								"direccion": {
 									label: "Dirección de los hechos",
 									required: true,
-									typeInput: "textarea"
+									typeInput: "textarea",
+									/*
+									valueDataDynamic: {
+										fields: {
+											"typevia": {
+												label: "Tipo de Vía",
+												required: true,
+												typeInput: "text"
+											},
+											"numberI": {
+												label: "Num",
+												required: true,
+												typeInput: "text"
+											},
+											"letterI": {
+												label: "Letra",
+												required: true,
+												typeInput: "text"
+											},
+											"quadrantI": {
+												label: "Cuadrante",
+												required: true,
+												typeInput: "text"
+											}
+										},
+										result: [
+											[
+												"typevia",
+												', '
+											],
+											[
+												"numberI",
+												', '
+											],
+											[
+												"letterI",
+												', '
+											],
+											[
+												"quadrantI",
+												', '
+											]
+										]
+									},
+									*/
 								},
 								"daño": {
-									label: "Daño de los hechos",
+									label: "Daño causado",
+									required: true,
+									typeInput: "textarea"
+								},
+								"masinfo": {
+									label: "Información Adicional",
 									required: true,
 									typeInput: "textarea"
 								}
@@ -127,8 +176,13 @@ var AddPQRsPeticion = Vue.extend({
 									'\n'
 								],
 								[
-									"Daño: ",
+									"Daño causado: ",
 									"daño",
+									'\n'
+								],
+								[
+									"Información Adicional: ",
+									"masinfo",
 								]
 							]
 						},
@@ -164,18 +218,16 @@ var AddPQRsPeticion = Vue.extend({
 					},
 				},
 				callEvent(resultado){
-					console.log('resultado callback');
-					console.log(resultado);
-					
-					if(Number(resultado) > 0 && Number(resultado) != 'NaN'){
+					if(resultado.id != undefined && resultado.id > 0){
 						bootbox.alert({
-							message: "<h1>Muy Bien!</h1><br>La PQRs se a creado y enviado con éxito, el # del Radicado es <h5>" + resultado + "</h5>",
+							message: "<h1>Muy Bien!</h1><br>La PQRs se a creado y enviado con éxito, el # del Radicado es <h5>" + resultado.recordId + "</h5>",
 							callback: function () {
 								// console.log('This was logged in the callback!');
 								location.reload();
 							}
 						})
 					}
+					
 				}
 			}
 		};

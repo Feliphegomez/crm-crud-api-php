@@ -256,6 +256,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 		self.getOptionsInputs();
 	},
 	methods: {
+		zfill: zfill,
 		returnFalse(){
 			return false;
 		},
@@ -319,21 +320,18 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 									case 'create':
 										api.post('/records/' + self.table, self.record)
 										.then(function (z) {
-											if(!z.status){
-												alert('Ocurrio un error creando el campo del formulario. [' + key + ']');
-											} else {
-												if(z.status === 200){
-													self.callEvent(z.data)
-												}else{
-													console.log("Console ERROR:");
-												}
+											if(z.data){
+												self.resposeCall(z);
+											}else{
+												console.log("Console ERROR:");
 											}
 										})
 										.catch(function (e) {
 											console.log(e);
 											if(e.data){
 												console.log(e.data);
-												self.callEvent(z.data)
+												console.log("Console catch ERROR:");
+												self.resposeCall(e);
 											}
 										});
 									break;
@@ -347,6 +345,51 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 					});
 				},
 			});
+		},
+		resposeCall(z){
+			var self = this;
+			var rrr = {
+				"id": 0,
+				"recordId": '',
+				"recordDateText": '',
+				"data": self.record,
+			};
+			
+			if(!z.status){
+				alert('Ocurrio un error resposeCall. !z.status');
+			} else {
+				if(z.status === 200){
+					if(Number(z.data) > 0 && Number(z.data) != 'NaN'){
+						radID = (z.data);
+						api.get('/records/' + self.table + '/' + radID)
+						.then(function (a) {
+							console.log('Existe a');
+							if(a.data){
+								console.log('Existe a.data');
+								radSeparate = a.data.created.split(" ");
+								if(radSeparate[0] != undefined){
+									console.log('Existe radSeparate');
+									radFecha = radSeparate[0].split("-");
+									if(radFecha.length === 3){
+										console.log('Existe Fecha');
+										rrr.recordId = radFecha[0] + radFecha[1] + radFecha[2] + self.zfill(radID, 5);
+										rrr.recordDateText = radFecha[0] + radFecha[1] + radFecha[2];
+										rrr.data = a.data;
+										rrr.id = radID;
+										self.callEvent(rrr);
+									}
+								}
+							}
+						})
+						
+						
+					}
+				}else{
+					console.log("Console ERROR:");
+				}
+			}
+			
+			
 		},
 		getOptionsInputs(){
 			var self = this;
@@ -531,28 +574,10 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				optionsInput.value = returnData.record[key];
 				
 				if(value.valueDataDynamic != undefined){
-					// validar si existen fields
-					if(value.valueDataDynamic.fields != undefined && value.valueDataDynamic.result != undefined){
-						optionsInput.readonly = true;
-						optionsInput.dynamic = true;
-						optionsInput.result = value.valueDataDynamic.result;
-						optionsInput.dynamicOptions = self.createFormElement(value.valueDataDynamic.fields);
-						
-							// console.log(optionsInput.dynamicOptions);
-						for (const [kDynamic, vDynamic] of Object.entries(optionsInput.dynamicOptions.record)) {
-							// console.log(kDynamic, vDynamic);
-							//self.otherRecords.push(console.log(kDynamic));
-							if(self.otherRecords[kDynamic] == undefined || self.otherRecords[kDynamic] == null){
-								self.otherRecords[kDynamic] = vDynamic;
-							}
-						};
-					}
+					self.getValueDataDynamic(value, optionsInput);
 				}
 				
-				if(optionsInput.show == false){
-					optionsInput.tag = 'input';
-					optionsInput.type = 'hidden';
-				}
+				if(optionsInput.show == false){ optionsInput.tag = 'input'; optionsInput.type = 'hidden'; };
 				// self.inputs.push(optionsInput);
 				// self.rules[key] = optionsRule;
 				
@@ -560,6 +585,26 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				returnData.rules[key] = optionsRule;
 			}
 			return returnData;
+		},
+		getValueDataDynamic(value, optionsInput){
+			var self = this;
+			// validar si existen fields
+			if(value.valueDataDynamic.fields != undefined && value.valueDataDynamic.result != undefined){
+				optionsInput.readonly = true;
+				optionsInput.dynamic = true;
+				optionsInput.result = value.valueDataDynamic.result;
+				optionsInput.dynamicOptions = self.createFormElement(value.valueDataDynamic.fields);
+				
+					// console.log(optionsInput.dynamicOptions);
+				for (const [kDynamic, vDynamic] of Object.entries(optionsInput.dynamicOptions.record)) {
+					// console.log(kDynamic, vDynamic);
+					//self.otherRecords.push(console.log(kDynamic));
+					if(self.otherRecords[kDynamic] == undefined || self.otherRecords[kDynamic] == null){
+						self.otherRecords[kDynamic] = vDynamic;
+					}
+				};
+			}
+			return { "value": value, "optionsInput": optionsInput }
 		},
 		getOptions(){
 			var self = this;

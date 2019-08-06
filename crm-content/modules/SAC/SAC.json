@@ -6,17 +6,41 @@
 	"showTitleModule": true,
 	"sections": [
 		{
+			"title": "Introduccion",
+			"controller": "SAC",
+			"action": "index",
+			"icon": "fa fa-home",
+			"tree": [
+			]
+		},
+		{
 			"title": "PQRs",
 			"controller": "SAC",
 			"action": null,
 			"icon": "fa fa-legal",
 			"tree": [
 				{
-					"title": "Introduccion",
+					"title": "Buscar PQRs",
 					"controller": "SAC",
-					"action": "index",
-					"icon": "fa fa-home",
+					"action": null,
+					"icon": "fa fa-search",
 					"tree": [
+						{
+							"title": "Peticion",
+							"controller": "SAC",
+							"action": "search_pqrs_peticion",
+							"icon": "fa fa-plus",
+							"tree": [
+							]
+						},
+						{
+							"title": "Queja",
+							"controller": "SAC",
+							"action": "search_pqrs_queja",
+							"icon": "fa fa-plus",
+							"tree": [
+							]
+						}
 					]
 				},
 				{

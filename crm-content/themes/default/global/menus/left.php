@@ -33,14 +33,17 @@ class MenuLeft extends MenuBase {
 					"<a>{$tagIcon} {$section->title} <span class=\"fa fa-chevron-down\"></span></a>\n".
 					"<ul class=\"nav child_menu\" {$classLink2}>\n";
 						foreach($section->tree as $item){
-							if(isset($item->tree) && count($item->tree) > 0){
-								$r .= $this->menuConHijos($item);
-							}else{
-								$r .= $this->menuSinHijos($item);
+							
+							if(ControladorBase::validatePermission($item->controller, $item->action) == true){
+								
+								if(isset($item->tree) && count($item->tree) > 0){
+									$r .= $this->menuConHijos($item);
+								}else{
+									$r .= $this->menuSinHijos($item);
+								}
 							}
+							
 						}
-							/*
-						*/
 				$r .= "</ul>\n".
 				"</li>\n";
 			}else{
@@ -84,23 +87,6 @@ class MenuLeft extends MenuBase {
 						$r .= "<a>{$moduloIcon}{$infoThisModule->name} <span class=\"fa fa-chevron-down\"></span></a>";
 						$r .= "<ul class=\"nav child_menu\"{$classLink2}>";
 							if(isset($infoThisModule->isActive) && $infoThisModule->isActive == true){
-								/*		
-								$r .= "<ul class=\"nav side-menu\">";
-									foreach($infoThisModuleSections as $section){
-										$r .= $this->menuConHijos($section);
-									}
-								$r .= "</ul>";
-								
-								<h3>General</h3>
-								<ul class="nav side-menu">
-								  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-									<ul class="nav child_menu">
-									  <li><a href="index.html">Dashboard</a></li>
-									  <li><a href="index2.html">Dashboard2</a></li>
-									  <li><a href="index3.html">Dashboard3</a></li>
-									</ul>
-								  </li>
-								*/
 								foreach($infoThisModuleSections as $section){
 									$r .= $this->menuConHijos($section);
 								}
