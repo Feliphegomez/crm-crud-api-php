@@ -25,40 +25,53 @@
 					</li>
 					<li><a href="javascript:;">Help</a></li>
 					<li>
-						<form method="POST" action="/logout">
-							<a >
+						<a data-toggle="tooltip" data-placement="top" title="Salir">
+							<form method="POST" action="/logout">
 								<button style="background-color: transparent;border: 0px;" type="submit">
-									<i class="fa fa-sign-out pull-right"></i> Log Out
-								</button>
-							</a>
-						</form>
+									<i class="fa fa-sign-out pull-right"></i>Cerrar Sesion</button>
+							</form>
+						</a>
 					</li>
 			
-					<a data-toggle="tooltip" data-placement="top" title="Salir" href="#"></a>
+					<a  href="#"></a>
 				</ul>
 			</li>
 			
-			
-			<li role="presentation" class="dropdown">
-				<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-					<i class="fa fa-legal"></i>
-					<span class="badge bg-green">0</span>
-				</a>
-				<ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-					<li>
-					  <a>
-						<span>
-						  <span>John Smith</span>
-						  <span class="time">3 mins ago</span>
-						</span>
-						<span class="message">
-						  Film festivals used to be do-or-die moments for movie makers. They were where...
-						</span>
-					  </a>
-					</li>
-				</ul>
-			</li>
-			
+			<?php if(ControladorBase::validatePermission("", "") == true){ ?>
+				<li role="presentation" class="dropdown" id="navbartop-notifications-legal" @click="load()">
+					<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+						<i class="fa fa-legal"></i>
+						<span class="badge bg-red" v-if="count > 0">{{ count }}</span>
+					</a>
+					<ul class="dropdown-menu list-unstyled msg_list" role="menu">
+						<template v-if="records.length > 0">
+							<li v-for="(pqrs, i) in records">
+								<a v-bind:href="getLink(pqrs)">
+									<span>
+										<span>{{ pqrs.type.name }}</span>
+										<span class="time">{{ pqrs.created }}</span>
+									</span>
+									<span class="message">
+										{{ pqrs.name }} {{ pqrs.surname }}
+										<!-- <br><b>Estado PQRS: </b> {{ pqrs.status.name }} -->
+									</span>
+								</a>
+								
+								
+							</li>
+						</template>
+						<template v-else>
+							<li>
+								<a>
+									<span><span></span><span class="time"></span></span>
+									<span class="message">No hay PQRs pendientes para iniciar procesos</span>
+								</a>
+							</li>
+						</template>
+					</ul>
+				</li>
+			<?php } ?>
+				
 			
 			
 			<li role="presentation" class="dropdown">
@@ -66,20 +79,19 @@
 					<i class="fa fa-envelope-o"></i>
 					<span class="badge bg-green">6</span>
 				</a>
-				<ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+				<ul class="dropdown-menu list-unstyled msg_list" role="menu">
 					<li>
-					  <a>
-						<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-						<span>
-						  <span>John Smith</span>
-						  <span class="time">3 mins ago</span>
-						</span>
-						<span class="message">
-						  Film festivals used to be do-or-die moments for movie makers. They were where...
-						</span>
-					  </a>
+						<a>
+							<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+							<span>
+								<span>John Smith</span>
+								<span class="time">3 mins ago</span>
+							</span>
+							<span class="message">
+								Film festivals used to be do-or-die moments for movie makers. They were where...
+							</span>
+						</a>
 					</li>
-					
 				</ul>
 			</li>
 		</ul>

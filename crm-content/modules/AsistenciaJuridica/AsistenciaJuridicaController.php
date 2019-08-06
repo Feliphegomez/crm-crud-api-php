@@ -26,4 +26,13 @@ class AsistenciaJuridicaController extends ControladorBase {
 		);
 	}
 	
+	public function pqrs_respuesta(){
+		$this->viewInTemplate(
+			"pqrs_respuesta", array(
+				"title" => "Vista FrontPage",
+				"template" => $this->template,
+			)
+		);
+	}
+	
 }

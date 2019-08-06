@@ -29,7 +29,7 @@
 							"title": "Peticion",
 							"controller": "SAC",
 							"action": "search_pqrs_peticion",
-							"icon": "fa fa-plus",
+							"icon": "",
 							"tree": [
 							]
 						},
@@ -37,26 +37,34 @@
 							"title": "Queja",
 							"controller": "SAC",
 							"action": "search_pqrs_queja",
-							"icon": "fa fa-plus",
+							"icon": "",
 							"tree": [
 							]
 						}
 					]
 				},
 				{
-					"title": "Nueva Peticion",
+					"title": "Crear PQRs",
 					"controller": "SAC",
-					"action": "create_pqrs_peticion",
+					"action": null,
 					"icon": "fa fa-plus",
 					"tree": [
-					]
-				},
-				{
-					"title": "Nueva Queja",
-					"controller": "SAC",
-					"action": "create_pqrs_queja",
-					"icon": "fa fa-plus",
-					"tree": [
+						{
+							"title": "Nueva Peticion",
+							"controller": "SAC",
+							"action": "create_pqrs_peticion",
+							"icon": "",
+							"tree": [
+							]
+						},
+						{
+							"title": "Nueva Queja",
+							"controller": "SAC",
+							"action": "create_pqrs_queja",
+							"icon": "",
+							"tree": [
+							]
+						}
 					]
 				}
 			]

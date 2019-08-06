@@ -1,4 +1,3 @@
-
 <template id="Forms-Create-Diynamic">
 	<div>
 		<div class="row">
@@ -6,6 +5,8 @@
 				<div class="x_panel">
 					<div class="x_title">
 						<h2>{{ title }} <small>{{ subtitle }} </small></h2>
+						
+						<!-- //
 						<ul class="nav navbar-right panel_toolbox">
 							<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 							<li class="dropdown">
@@ -17,6 +18,7 @@
 							</li>
 							<li><a class="close-link"><i class="fa fa-close"></i></a></li>
 						</ul>
+						-->
 						<div class="clearfix"></div>
 					</div>
 					<div class="x_content">
@@ -205,18 +207,20 @@
 							
 						</div>
 						<!-- // -->
-						
+						{{ record }}
 					</div>
-			
+					<!-- // 
 					<div class="x_content">
 						<br />
 						<button v-on:click="count++">You clicked me {{ count }} times.</button>
 					</div>
+					-->
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
+
 
 <script>
 var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
@@ -237,19 +241,21 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 			subtitle: "",
 			contentDescription: "",
 			table: "",
+			idUpdate: 0,
 			rules: null,
 			record: null,
 			otherRecords: {},
 			options: null,
 			jvalidate: null,
 			inputs: [],
-			callEvent: null
+			callEvent: null,
+			originalRecords: {}
 		};
 	},
 	computed: {
 	},
 	created(){
-		var self = this;
+		var self = this;		
 	},
 	mounted(){
 		var self = this;
@@ -267,24 +273,91 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 		returnResultDynamic(itemResult){
 			var self = this;
 			var r = '';
+			
 			for (const [index, result] of  Object.entries(itemResult)) {
-				if (Array.isArray(result)) {
-					r += ' ' + self.returnResultDynamic(result);
-					// r += '\n';
-				} else if (self.otherRecords[result] !== undefined) {
-					if (self.otherRecords[result] == '' || self.otherRecords[result] == null || self.otherRecords[result] == 0) {
-						r += ' { Falta -> ' + result + '}';
+				if(!self.record[result.parent]){
+					if (Array.isArray(result)) {
+						r += self.returnResultDynamic(result);
+						// r += '\n';
+					} else if (self.otherRecords[result] !== undefined) {
+						if (self.otherRecords[result] == '' || self.otherRecords[result] == null || self.otherRecords[result] == 0) {
+							r += '{ Falta -> ' + result + '}';
+						} else {
+							r += self.otherRecords[result];
+						};
 					} else {
-						r += ' ' + self.otherRecords[result];
+						console.log(result);
+						if(!result.parent){
+							r += '' + result;
+						}else{
+							// r += self.record[result.parent];
+						}
 					};
-				} else {
-					r += ' ' + result;
-				};
+				}else{
+					if(!self.originalRecords[result.parent]){ self.originalRecords[result.parent] = self.record[result.parent]; };
+					if(self.record[result.parent] != self.originalRecords[result.parent]){ self.record[result.parent] = self.originalRecords[result.parent]; }
+					
+					
+					console.log(result.parent);
+					console.log(self.originalRecords[result.parent]);
+					console.log(self.record[result.parent]);
+					console.log(self.otherRecords[result.parent]);
+					console.log(self.record[result.parent] + self.otherRecords[result.parent]);
+					r += self.originalRecords[result.parent];
+					
+					/// r = self.record[result.parent] + self.otherRecords[result.parent];
+					// 
+					
+					// r += self.otherRecords[result.parent];
+					// r += self.originalRecords[result.parent] + self.otherRecords[result.parent];
+					// r += self.otherRecords[result.parent];
+					//
+				}
+			
 			}
 			return r;
 		},
 		getValidatorForm(){
 			var self = this;
+			
+			
+			if(
+				self.idUpdate !== "" && self.idUpdate !== null && self.idUpdate !== undefined && self.idUpdate > 0
+				&& self.action !== "" && self.action !== null && self.action !== undefined
+			){
+				switch(self.action){
+					case 'edit':
+						api.get('/records/' + self.table + '/' + self.idUpdate)
+						.then(function (z) {
+							if(z.data){
+								for (const [k, v] of  Object.entries(z.data)) {
+									// console.log(k, v);
+									
+									if(self.record.hasOwnProperty(k)){
+										self.record[k] = v;
+									}
+								}
+							}else{
+								console.log("Console ERROR:");
+							}
+						})
+						.catch(function (e) {
+							console.log(e);
+							if(e.data){
+								console.log(e.data);
+								console.log("Console catch ERROR:");
+								console.log(e.response);
+							}
+						});
+					break;
+					default:
+					break;
+				}
+			}else{
+				console.log('error buscando registro');
+				console.log(self.idUpdate);
+			}
+			
 			self.jvalidate = $("#jvalidate").validate({
 				//wrapper: "alert alert-danger alert-dismissible fade in",
 				///errorContainer: "#messageBox",
@@ -335,7 +408,25 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 											}
 										});
 									break;
-									case 'create':
+									case 'view':
+									break;
+									case 'edit':
+										api.put('/records/' + self.table + '/' + self.idUpdate, self.record)
+										.then(function (z) {
+											if(z.data){
+												self.resposeCall(z);
+											}else{
+												console.log("Console ERROR:");
+											}
+										})
+										.catch(function (e) {
+											console.log(e);
+											if(e.data){
+												console.log(e.data);
+												console.log("Console catch ERROR:");
+												self.resposeCall(e);
+											}
+										});
 									break;
 									default:
 									break;
@@ -495,6 +586,11 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				// returnData.record[key] = value.value;
 				if((value.typeInput != undefined)){
 					switch(value.typeInput){
+						case 'checkbox':
+							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
+							optionsInput.tag = 'input';
+							optionsInput.type = 'checkbox';
+						break;
 						case 'text':
 							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 							optionsInput.tag = 'input';
@@ -561,6 +657,9 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 							optionsInput.type = 'section';
 						break;
 						default:
+							optionsInput.tag = 'input';
+							optionsInput.type = value.type;
+							
 							// returnData.record[key] = null;
 							returnData.record[key] = (optionsInput.value != null) ? optionsInput.value : '';
 						break;
@@ -595,7 +694,6 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				optionsInput.result = value.valueDataDynamic.result;
 				optionsInput.dynamicOptions = self.createFormElement(value.valueDataDynamic.fields);
 				
-					// console.log(optionsInput.dynamicOptions);
 				for (const [kDynamic, vDynamic] of Object.entries(optionsInput.dynamicOptions.record)) {
 					// console.log(kDynamic, vDynamic);
 					//self.otherRecords.push(console.log(kDynamic));
@@ -617,6 +715,7 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 				self.subtitle = (self.options_form.subtitulo != undefined) ? self.options_form.subtitulo : '';
 				self.contentDescription = (self.options_form.descripcion != undefined) ? self.options_form.descripcion : '';
 				self.table = (self.options_form.tabla != undefined) ? self.options_form.tabla : 'none';
+				self.idUpdate = (self.options_form.id_edit != undefined) ? self.options_form.id_edit : 0;
 				self.callEvent = (self.options_form.callEvent != undefined) ? self.options_form.callEvent : function(){
 					console.log("No hay respuesta configurada.");
 				};
@@ -636,7 +735,5 @@ var FormsCreateDynamic = Vue.component('forms-create-dynamic', {
 	computed: {
 	},
 });
+
 </script>
- 
-	
-	

@@ -25,6 +25,8 @@
 					<div class="x_panel">
 						<div class="x_title">
 							<h2>PQRs <small> Viendo PQRS - Queja</small></h2>
+							
+							<!-- //
 							<ul class="nav navbar-right panel_toolbox">
 								<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 								<li class="dropdown">
@@ -36,10 +38,13 @@
 								</li>
 								<li><a class="close-link"><i class="fa fa-close"></i></a></li>
 							</ul>
+							-->
 							<div class="clearfix"></div>
 						</div>
 						<div class="x_content">
 							<template v-if="record !== null">
+								<div class="progress"><div class="progress-bar bg-warning" role="progressbar" v-bind:style="'width: ' + record.status.porcentage + '%'" v-bind:data-transitiongoal="record.status.porcentage" v-bind:aria-valuenow="record.status.porcentage" aria-valuemin="0" aria-valuemax="100"></div></div>
+							
 								<section class="content invoice">
 									<div class="row">
 										<div class="col-xs-12 invoice-header">
@@ -106,6 +111,16 @@
 														<tr>
 															<th>Última Actualización:</th>
 															<td>{{ record.updated }}</td>
+														</tr>
+														<tr>
+															<th>Estado actual: </th>
+															<td>{{ record.status.name }}</td>
+														</tr>
+														<tr>
+															<th>Tipo de PQRs: </th>
+															<td>
+																{{ record.type.name }}
+															</td>
 														</tr>
 													</tbody>
 												</table>
@@ -210,6 +225,8 @@ var SearchPQRsQueja = Vue.extend({
 								'types_identifications',
 								'geo_departments',
 								'geo_citys',
+								'status_pqrs',
+								'types_pqrs',
 							]
 						}
 					})

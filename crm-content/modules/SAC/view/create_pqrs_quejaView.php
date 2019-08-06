@@ -36,7 +36,7 @@ var AddPQRsPeticion = Vue.extend({
 						value: 3
 					},
 					name: {
-						label: "Nombres o Razon social",
+						label: "Nombres o Razón social",
 						required: true,
 						typeInput: "text"
 					},
@@ -118,7 +118,12 @@ var AddPQRsPeticion = Vue.extend({
 									typeInput: "textarea"
 								},
 								"daño": {
-									label: "Daño de los hechos",
+									label: "Daño causado",
+									required: true,
+									typeInput: "textarea"
+								},
+								"masinfo": {
+									label: "Información Adicional",
 									required: true,
 									typeInput: "textarea"
 								}
@@ -137,12 +142,17 @@ var AddPQRsPeticion = Vue.extend({
 								[
 									"Daño: ",
 									"daño",
+									'\n'
+								],
+								[
+									"Información Adicional: ",
+									"masinfo",
 								]
 							]
 						},
 					},
 					event_date: {
-						label: "Fecha del evento",
+						label: "Fecha y Hora de los hechos",
 						required: true,
 						typeInput: "datetime",
 						valueDataDynamic: {
@@ -158,23 +168,14 @@ var AddPQRsPeticion = Vue.extend({
 									typeInput: "time"
 								}
 							},
-							result: [ [ "fecha", "hora" ] ]
+							result: [ [ "fecha", " ", "hora" ] ]
 						},
 					},
-					created: {
-						label: "Fecha de la queja",
-						required: true,
-						typeInput: "datetime-local"
-					},
-					
 				},
 				callEvent(resultado){
-					console.log('resultado callback');
-					console.log(resultado);
-					
-					if(Number(resultado) > 0 && Number(resultado) != 'NaN'){
+					if(resultado.id != undefined && resultado.id > 0){
 						bootbox.alert({
-							message: "<h1>Muy Bien!</h1><br>La PQRs se a creado y enviado con éxito, el # del Radicado es <h5>" + resultado + "</h5>",
+							message: "<h1>Muy Bien!</h1><br>La PQRs se a creado y enviado con éxito, el # del Radicado es <h5>" + resultado.recordId + "</h5>",
 							callback: function () {
 								// console.log('This was logged in the callback!');
 								location.reload();

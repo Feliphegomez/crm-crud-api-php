@@ -1,51 +1,27 @@
+<?php
+	$idpqrs = (isset($_GET) && isset($_GET['id_pqrs']) && $_GET['id_pqrs'] > 0) ? $_GET['id_pqrs'] : 0;
+	$typepqrs = (isset($_GET) && isset($_GET['type_pqrs']) && $_GET['type_pqrs'] > 0) ? $_GET['type_pqrs'] : 0;
+?>
 <div class="" id="app">
 	<router-view></router-view>
 </div>
 
-<template id="search-PQRs-Peticion">
+<template id="response-PQRs-AsistenciaJuridica">
 	<div>
 		<div class="clearfix"></div>
-		<div class="x_panel">
-			<div id="custom-search-input">				
-				<div class="input-group col-md-12">
-					<input type="text" class="  search-query form-control" v-model="searchBox.text" placeholder="Radicado" @change="runSearch"  @keypress="runSearch" />
-					<span class="input-group-btn">
-						<button @click="runSearch" class="btn btn-danger" type="button">
-							<span class=" glyphicon glyphicon-search"></span>
-						</button>
-					</span>
-				</div>
-            </div>
-		</div>
-		
-		
 		<template v-if="searchBox.error === false">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="x_panel">
 						<div class="x_title">
-							<h2>PQRs <small> Viendo PQRS - Peticion</small></h2>
+							<h2>{{ record.type.name }}</h2>
 							
-							<!-- //
-							<ul class="nav navbar-right panel_toolbox">
-								<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-									<ul class="dropdown-menu" role="menu">
-										<li><a href="#">Settings 1</a></li>
-										<li><a href="#">Settings 2</a></li>
-									</ul>
-								</li>
-								<li><a class="close-link"><i class="fa fa-close"></i></a></li>
-							</ul>
-							-->
 							<div class="clearfix"></div>
 						</div>
 						<div class="x_content">
 							<template v-if="record !== null">
-								
 								<div class="progress"><div class="progress-bar bg-warning" role="progressbar" v-bind:style="'width: ' + record.status.porcentage + '%'" v-bind:data-transitiongoal="record.status.porcentage" v-bind:aria-valuenow="record.status.porcentage" aria-valuemin="0" aria-valuemax="100"></div></div>
-								
+							
 								<section class="content invoice">
 									<div class="row">
 										<div class="col-xs-12 invoice-header">
@@ -129,17 +105,26 @@
 										</div>
 									</div>
 									
+									
 									<div class="row no-print">
 										<div class="col-xs-12">
-											<button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-											<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-											<button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+											<button class="btn btn-default" onclick="window.print();">
+												<i class="fa fa-print"></i> Imprimir
+											</button>
+											<button class="btn btn-success pull-right">
+												<i class="fa fa-credit-card"></i> ¿?¿?
+											</button>
+											<button class="btn btn-primary pull-right" style="margin-right: 5px;">
+												<i class="fa fa-download"></i> ¿?¿?
+											</button>
 										</div>
 									</div>
 								</section>
 							</template>
 						</div>
+						
 					</div>
+					<forms-create-dynamic :options_form="closedPQRs"></forms-create-dynamic>
 				</div>
 			</div>
 		</template>
@@ -154,8 +139,8 @@
 </template>
 
 <script>
-var SearchPQRsPeticion = Vue.extend({
-	template: '#search-PQRs-Peticion',
+var SearchPQRsRespuesta = Vue.extend({
+	template: '#response-PQRs-AsistenciaJuridica',
 	data: function () {
 		return {
 			searchBox: {
@@ -166,7 +151,152 @@ var SearchPQRsPeticion = Vue.extend({
 			record: null,
 			recordDateText: '',
 			recordId: '',
+			
+			/*
+			responsePQRs: {
+				id_edit: <?php echo $idpqrs; ?>,
+				titulo: 'Ingresar Respuesta',
+				subtitulo: 'Responder',
+				descripcion: 'Esta información XXXX <code>XXXXX</code> y serán ellos los encargados de continuar su  <a href="#">proceso</a>',
+				action: "edit",
+				tabla: "pqrs",
+				fields: {
+					status: {
+						label: "Estado",
+						required: true,
+						value: "",
+						typeInput: "select",
+						options: "status_pqrs"
+					},
+					response: {
+						label: "Respuesta",
+						required: true,
+						typeInput: "textarea",
+						valueDataDynamic: {
+							fields: {
+								"response": {
+									label: "Agregar",
+									required: true,
+									value: "",
+									typeInput: "textarea"
+								},
+							},
+							result: [
+								[
+									{ "parent": "response" }, 
+									"\n - - - - \n", 
+									"response"
+								]
+							]
+						},
+					},
+				},
+				callEvent(resultado){
+					if(resultado.id != undefined && resultado.id > 0){
+						bootbox.alert({
+							message: "<h1>Muy Bien!</h1><br>La PQRs se a creado y enviado con éxito, el # del Radicado es <h5>" + resultado.recordId + "</h5>",
+							callback: function () {
+								// console.log('This was logged in the callback!');
+								location.reload();
+							}
+						})
+					}
+				}
+			},
+			*/
+			closedPQRs: {
+				id_edit: <?php echo $idpqrs; ?>,
+				titulo: 'PQRs',
+				subtitulo: 'Cerrar',
+				descripcion: 'Esta información XXXX <code>XXXXX</code> y serán ellos los encargados de continuar su  <a href="#">proceso</a>',
+				action: "edit",
+				tabla: "pqrs",
+				fields: {
+					spanTitle001: {
+						label: "Cerrar",
+						typeInput: "section",
+					},
+					response: {
+						label: "Respuesta",
+						required: true,
+						typeInput: "textarea",
+						valueDataDynamic: {
+							fields: {
+								"response": {
+									label: "Agregar",
+									required: true,
+									value: "",
+									typeInput: "textarea"
+								},
+							},
+							result: [
+								[
+									{ "parent": "response" }, 
+									"\n - - - - \n", 
+									"response"
+								]
+							]
+						},
+					},
+					status: {
+						label: "Estado",
+						required: true,
+						value: "",
+						typeInput: "select",
+						options: "status_pqrs"
+					},
+					close: {
+						label: "¿Cerrar PQRs?",
+						required: false,
+						value: 0,
+						typeInput: "checkbox",
+					},
+					closed	: {
+						label: "Fecha y Hora de cierre",
+						required: false,
+						typeInput: "datetime",
+						valueDataDynamic: {
+							fields: {
+								"fecha": {
+									label: "Fecha",
+									required: false,
+									typeInput: "date"
+								},
+								"hora": {
+									label: "Hora",
+									required: false,
+									typeInput: "time"
+								}
+							},
+							result: [ [ "fecha", "hora" ] ]
+						},
+					},
+				},
+				callEvent(resultado){
+					if(resultado.id != undefined && resultado.id > 0){
+						bootbox.alert({
+							className: 'rubberBand animated',
+							size: 'small',
+							buttons: {
+								ok: {
+									label: 'Vale',
+									className: 'btn-success'
+								},
+							},
+							message: "<h1>Guardado!</h1><br>La PQRs se a guardado con éxito, el radicado modificado fue <h5>" + resultado.recordId + "</h5>",
+							callback: function () {
+								// console.log('This was logged in the callback!');
+								location.reload();
+							}
+						})
+					}
+				}
+			},
 		};
+	},
+	created(){
+		var self = this;
+		self.getPQRs();
 	},
 	methods: {
 		zfill: zfill,
@@ -202,53 +332,41 @@ var SearchPQRsPeticion = Vue.extend({
 				 console.log(response.data); 
 			}
 		},
-		runSearch(){
+		getPQRs(){
 			var self = this;
 			self.record = null;
 			self.searchBox.error = true;
-			if(self.searchBox.text != ""){
-				// 2019080500003
-				var radic = self.validateNumberPQRs(self.searchBox.text);
-				console.log(radic);
-				
-				if(radic.error === false){
-					api.get('/records/pqrs', {
-						params: {
-							core: 'api',
-							filter: [
-								'id,eq,' + radic.id,
-								// 'created_t,bt,' + radic.datumIn + ',' + radic.datumOut,
-								'created,ge,' + radic.created + ' 00:00:00',
-								'created,le,' + radic.created + ' 23:59:00',
-								'type,eq,1',
-							],
-							join: [
-								'types_identifications',
-								'geo_departments',
-								'geo_citys',
-								'status_pqrs',
-								'types_pqrs',
-							]
-						}
-					})
-					.then(response => {
-						// Obtenemos los datos
-						self.validateResult(response);
-					})
-					.catch(e => {
-						// Capturamos los errores
-						console.log(e);
-						console.log(e.response);
-					});
-				} else {
-					self.searchBox.errorText = radic.message;
+			
+			api.get('/records/pqrs', {
+				params: {
+					core: 'api',
+					filter: [
+						'id,eq,' + <?php echo $idpqrs; ?>,
+						'type,eq,' + <?php echo $typepqrs; ?>,
+					],
+					join: [
+						'types_identifications',
+						'geo_departments',
+						'geo_citys',
+						'status_pqrs',
+						'types_pqrs',
+					]
 				}
-			}
+			})
+			.then(response => {
+				// Obtenemos los datos
+				self.validateResult(response);
+			})
+			.catch(e => {
+				// Capturamos los errores
+				console.log(e);
+				console.log(e.response);
+			});
 		},
 		validateNumberPQRs(text){
 			var a = { "error": true, "message": "", "id":0, "created": '2019-01-01', "datumIn": 0, "datumOut": 0 };
 			if(text.length <= 8){
-				a.message = "El numero del radico del PQRs es demaciado corto."
+				a.message = "El numero del radico no fue encontrado."
 			} else {
 				radId = text.slice(8, text.length);
 				radFecha = text.substr(0, 8);
@@ -275,7 +393,7 @@ var SearchPQRsPeticion = Vue.extend({
 var router = new VueRouter({
 	linkActiveClass: 'active',
 	routes:[
-		{ path: '/', component: SearchPQRsPeticion, name: 'SearchPQRs-Peticion', params: { subject: 'pqrs' } },
+		{ path: '/', component: SearchPQRsRespuesta, name: 'SearchPQRs-Peticion', params: { subject: 'pqrs' } },
 	]
 });
 

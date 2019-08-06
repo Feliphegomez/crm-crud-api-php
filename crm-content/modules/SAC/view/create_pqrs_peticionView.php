@@ -12,7 +12,6 @@
 </template>
 
 <script>
-
 var AddPQRsPeticion = Vue.extend({
 	template: '#create-PQRs-Peticion',
 	data: function () {
@@ -108,50 +107,6 @@ var AddPQRsPeticion = Vue.extend({
 									label: "Dirección de los hechos",
 									required: true,
 									typeInput: "textarea",
-									/*
-									valueDataDynamic: {
-										fields: {
-											"typevia": {
-												label: "Tipo de Vía",
-												required: true,
-												typeInput: "text"
-											},
-											"numberI": {
-												label: "Num",
-												required: true,
-												typeInput: "text"
-											},
-											"letterI": {
-												label: "Letra",
-												required: true,
-												typeInput: "text"
-											},
-											"quadrantI": {
-												label: "Cuadrante",
-												required: true,
-												typeInput: "text"
-											}
-										},
-										result: [
-											[
-												"typevia",
-												', '
-											],
-											[
-												"numberI",
-												', '
-											],
-											[
-												"letterI",
-												', '
-											],
-											[
-												"quadrantI",
-												', '
-											]
-										]
-									},
-									*/
 								},
 								"daño": {
 									label: "Daño causado",
@@ -188,7 +143,7 @@ var AddPQRsPeticion = Vue.extend({
 						},
 					},
 					event_date: {
-						label: "Fecha del evento",
+						label: "Fecha y Hora de los hechos",
 						required: true,
 						typeInput: "datetime",
 						valueDataDynamic: {
@@ -204,7 +159,7 @@ var AddPQRsPeticion = Vue.extend({
 									typeInput: "time"
 								}
 							},
-							result: [ [ "fecha", "hora" ] ]
+							result: [ [ "fecha", " ", "hora" ] ]
 						},
 					},
 					spanTitle003: {
@@ -250,4 +205,3 @@ var app = new Vue({
 }).$mount('#app');
 </script>
  
-</div>

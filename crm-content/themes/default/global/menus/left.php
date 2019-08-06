@@ -27,7 +27,7 @@ class MenuLeft extends MenuBase {
 		$tagIcon = (isset($section->icon) && $section->icon != null && $section->icon != "") ? " <i class=\"{$section->icon}\"></i> " : "";
 		
 		$r = "";
-		if($this->validatePermission($section->controller, $section->action) == true){
+		if(ControladorBase::validatePermission($section->controller, $section->action) == true){
 			if(isset($section->tree) && count($section->tree) > 0){
 				$r .= "<li{$classLink1}>\n".
 					"<a>{$tagIcon} {$section->title} <span class=\"fa fa-chevron-down\"></span></a>\n".
@@ -113,25 +113,31 @@ if($this->userActive() === true){ ?>
 	<div class="clearfix"></div>
 
 	<div class="profile clearfix">
-	  <div class="profile_pic">
-		<img src="/crm-content/uploads/avatar001.jpg" alt="..." class="img-circle profile_img">
-	  </div>
-	  <div class="profile_info">
-		<span>Bienvenid@,</span>
-		<h2><?php echo $this->getUserNames(); ?></h2>
-		<h2><?php echo $this->getUserSurname(); ?></h2>
-	  </div>
+		<div class="profile_pic">
+			<img src="/crm-content/uploads/avatar001.jpg" alt="..." class="img-circle profile_img">
+		</div>
+		<div class="profile_info">
+			<span>Bienvenid@,</span>
+			<h2><?php echo $this->getUserNames(); ?></h2>
+			<h2><?php echo $this->getUserSurname(); ?></h2>
+		</div>
 	</div>
 	<br />
 	<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-	  <?php echo "<div class=\"menu_section\"><h3>Modulos</h3>".$menu->listMenuLeft001()."</div>"; ?>
-	  <?php #echo "<div class=\"menu_section\">".$menu->listMenuLeft001(true)."</div>"; ?>
+		<?php echo "<div class=\"menu_section\"><h3>Modulos</h3>".$menu->listMenuLeft001()."</div>"; ?>
 	</div>
-	<!-- /menu footer buttons -->
 	<div class="sidebar-footer hidden-small">
-	  <a data-toggle="tooltip" data-placement="top" title="Settings">
-		<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-	  </a>
+		<!-- //
+		<a data-toggle="tooltip" data-placement="top" title="Settings">
+			<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+		</a>
+		-->
+		
+		<a data-toggle="tooltip" data-placement="top" title="Salir" href="#">
+			<form method="POST" action="/logout">
+				<button style="background-color: transparent;border: 0px;" type="submit"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></button>
+			</form>
+		</a>
 	<!-- //
 	  <a data-toggle="tooltip" data-placement="top" title="FullScreen">
 		<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
@@ -144,12 +150,16 @@ if($this->userActive() === true){ ?>
 	  <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
 		<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 	  </a>-->
-	  
-	  <a data-toggle="tooltip" data-placement="top" title="Salir" href="#">
-		<form method="POST" action="/logout">
-			<button style="background-color: transparent;border: 0px;" type="submit"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></button>
-		</form>
-	  </a>
 	</div>
 	<!-- /menu footer buttons -->
+<?php } else { ?>
+<style>
+	.right_col {
+		margin-left: 0px !important;
+	}
+	.left_col {
+		visibility: hidden !important;
+		display: none !important;
+	}
+</style>
 <?php } ?>

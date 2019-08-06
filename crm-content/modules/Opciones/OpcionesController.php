@@ -1,6 +1,6 @@
 <?php 
 
-class AdminSACController extends ControladorBase {
+class OpcionesController extends ControladorBase {
 	public function __construct(){
 		parent::__construct();
 	}
@@ -25,4 +25,14 @@ class AdminSACController extends ControladorBase {
 			)
 		);
 	}
+	
+	public function status_pqrs(){
+		$this->viewInTemplate(
+			"status_pqrs", array(
+				"title" => "Vista FrontPage",
+				"template" => $this->template,
+			)
+		);
+	}
+	
 }
