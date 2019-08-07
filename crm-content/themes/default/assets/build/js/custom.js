@@ -1195,7 +1195,7 @@ if (typeof NProgress != 'undefined') {
 
 
 			// Download
-			if (typeof $download[0].download === 'undefined') {
+			if ($download[0] != undefined && typeof $download[0].download === 'undefined') {
 			  $download.addClass('disabled');
 			}
 

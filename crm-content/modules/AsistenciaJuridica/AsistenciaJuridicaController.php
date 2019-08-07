@@ -8,31 +8,4 @@ class AsistenciaJuridicaController extends ControladorBase {
 	public function index(){
 	}
 	
-	public function peticiones_pendientes(){
-		$this->viewInTemplate(
-			"consola_pqrs_peticiones", array(
-				"title" => "Vista FrontPage",
-				"template" => $this->template,
-			)
-		);
-	}
-	
-	public function quejas_pendientes(){
-		$this->viewInTemplate(
-			"consola_pqrs_quejas", array(
-				"title" => "Vista FrontPage",
-				"template" => $this->template,
-			)
-		);
-	}
-	
-	public function pqrs_respuesta(){
-		$this->viewInTemplate(
-			"pqrs_respuesta", array(
-				"title" => "Vista FrontPage",
-				"template" => $this->template,
-			)
-		);
-	}
-	
 }

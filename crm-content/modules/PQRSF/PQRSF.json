@@ -1,0 +1,249 @@
+{
+	"name": "PQRSF",
+	"isActive": true,
+	"author": "FelipheGomez - Andres Felipe Gomez Maya",
+	"icon": "fa fa-question",
+	"showTitleModule": true,
+	"sections": [
+		{
+			"title": "Introduccion",
+			"controller": "PQRSF",
+			"action": "index",
+			"icon": "fa fa-home",
+			"tree": [
+			],
+			"params": {
+			}
+		},
+		{
+			"title": "Crear - ADMIN",
+			"controller": "PQRSF",
+			"action": "create_pqrsf",
+			"icon": "fa fa-plus",
+			"tree": [
+			],
+			"params": {
+			}
+		},
+		{
+			"title": "Crear",
+			"controller": "PQRSF",
+			"action": null,
+			"icon": "fa fa-plus",
+			"tree": [
+				{
+					"title": "Nueva Peticion",
+					"controller": "PQRSF",
+					"action": "create_pqrsf_peticion",
+					"icon": "",
+					"tree": [
+					],
+					"params": {
+					}
+				},
+				{
+					"title": "Nueva Queja",
+					"controller": "PQRSF",
+					"action": "create_pqrsf_queja",
+					"icon": "",
+					"tree": [
+					],
+					"params": {
+					}
+				},
+				{
+					"title": "Nuevo Reclamo",
+					"controller": "PQRSF",
+					"action": "create_pqrsf_reclamo",
+					"icon": "",
+					"tree": [
+					],
+					"params": {
+					}
+				}
+			],
+			"params": {
+			}
+		},
+		{
+			"title": "Listar",
+			"controller": "PQRSF",
+			"action": null,
+			"icon": "fa fa-list",
+			"tree": [
+				{
+					"title": "Peticiones",
+					"controller": "PQRSF",
+					"action": "listar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "1"
+					}
+				},
+				{
+					"title": "Reclamos",
+					"controller": "PQRSF",
+					"action": "listar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "2"
+					}
+				},
+				{
+					"title": "Quejas",
+					"controller": "PQRSF",
+					"action": "listar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "3"
+					}
+				},
+				{
+					"title": "Sugerencias",
+					"controller": "PQRSF",
+					"action": "listar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "4"
+					}
+				},
+				{
+					"title": "Denuncias",
+					"controller": "PQRSF",
+					"action": "listar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "5"
+					}
+				},
+				{
+					"title": "Felicitaciones",
+					"controller": "PQRSF",
+					"action": "listar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "6"
+					}
+				}
+			],
+			"params": {
+			}
+		},
+		{
+			"title": "Buscar",
+			"controller": "PQRSF",
+			"action": null,
+			"icon": "fa fa-search",
+			"tree": [
+				{
+					"title": "Peticiones",
+					"controller": "PQRSF",
+					"action": "buscar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "1"
+					}
+				},
+				{
+					"title": "Reclamos",
+					"controller": "PQRSF",
+					"action": "buscar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "2"
+					}
+				},
+				{
+					"title": "Quejas",
+					"controller": "PQRSF",
+					"action": "buscar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "3"
+					}
+				},
+				{
+					"title": "Sugerencias",
+					"controller": "PQRSF",
+					"action": "buscar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "4"
+					}
+				},
+				{
+					"title": "Denuncias",
+					"controller": "PQRSF",
+					"action": "buscar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "5"
+					}
+				},
+				{
+					"title": "Felicitaciones",
+					"controller": "PQRSF",
+					"action": "buscar_pqrsf",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params": {
+						"type": "6"
+					}
+				}
+			]
+		},
+		{
+			"title": "Opciones",
+			"controller": "PQRSF",
+			"action": null,
+			"icon": "fa fa-cog",
+			"tree": [
+				{
+					"title": "Estados de PQRSF",
+					"controller": "PQRSF",
+					"action": "status_pqrsf",
+					"icon": "",
+					"tree": [
+					],
+					"params": {
+					}
+				},
+				{
+					"title": "Tipos de PQRSF",
+					"controller": "PQRSF",
+					"action": "types_pqrsf",
+					"icon": "",
+					"tree": [
+					],
+					"params": {
+					}
+				}
+			],
+			"params": {
+			}
+		}
+	]
+}

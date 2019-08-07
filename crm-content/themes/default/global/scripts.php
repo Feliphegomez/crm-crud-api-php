@@ -18,7 +18,8 @@
 				api.get('/records/pqrs', {
 					params: {
 						filter: [
-							'status,eq,1',
+							'type,in,1,2,3',
+							'status,in,1',
 						],
 						join: [
 							'types_identifications',
@@ -42,7 +43,7 @@
 				action = '';
 				pqrs.id = (pqrs.id != undefined && pqrs.id > 0) ? pqrs.id : 0;
 				typeId = (pqrs.type.id != undefined && pqrs.type.id > 0) ? pqrs.type.id : ((pqrs.type != undefined && pqrs.type > 0) ? pqrs.type : 0);
-				return '/index.php?controller=AsistenciaJuridica&action=pqrs_respuesta&type_pqrs=' + typeId + '&id_pqrs=' + pqrs.id;
+				return '/index.php?controller=PQRSF&action=ver_pqrsf&type=' + typeId + '&id=' + pqrs.id;
 			},
 			validateResult(response){
 				var self = this;

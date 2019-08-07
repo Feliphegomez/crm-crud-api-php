@@ -1,17 +1,15 @@
 <?php 
 class MenuLeft extends MenuBase {
+	/*
 	public function __construct(){
 		parent::__construct();
-	}
-	
-    public function linkUrl($controlador=CONTROLADOR_DEFECTO,$accion=ACCION_DEFECTO){
-        return ("index.php?controller=".$controlador."&action=".$accion);
-    }
+	}*/
 	
 	public function menuConHijos($section){
 		$section->action = (!isset($section->action)) ? "index" : $section->action;
 		$section->title = (!isset($section->title) || $section->title == "" || $section->title == null) ? "Sin Titulo" : $section->title;
-		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action) : "#";
+		$section->params = (!isset($section->params)) ? null : $section->params;
+		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action, $section->params) : "#";
 		$classLink1 = "";
 		if(isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action'])){
 			$classLink1 = ($_GET['action'] == $section->action) ? " class=\"active\"" : "";
@@ -56,7 +54,9 @@ class MenuLeft extends MenuBase {
 	public function menuSinHijos($section){
 		$section->action = (!isset($section->action)) ? "index" : $section->action;
 		$section->title = (!isset($section->title) || $section->title == "" || $section->title == null) ? "Sin Titulo" : $section->title;
-		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action) : "#";
+		$section->params = (!isset($section->params)) ? null : $section->params;
+		$urlLink = (isset($section->controller)) ? $this->linkUrl($section->controller, $section->action, $section->params) : "#";
+		
 		$classLink1 = (isset($section->controller) && isset($_GET['controller']) && $section->controller == $_GET['controller'] && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"active\"" : "";
 		$classLink2 = (isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action']) && $_GET['action'] == $section->action) ? " class=\"current-page\"" : "";
 		$tagIcon = (isset($section->icon) && $section->icon != null && $section->icon != "") ? " <i class=\"{$section->icon}\"></i> " : "";
@@ -75,8 +75,6 @@ class MenuLeft extends MenuBase {
 			$infoThisModule->name = (!isset($infoThisModule->name) || $infoThisModule->name == "") ? $modulo : $infoThisModule->name;
 			$classLink = (isset($_GET['controller']) && $_GET['controller'] == ucwords($modulo)) ? " class=\"active\"" : "";
 			$classLink2 = (isset($_GET['controller']) && $_GET['controller'] == ucwords($modulo)) ? " style=\"display: block;\"" : "";
-			
-			#
 			$moduloIcon = (isset($infoThisModule->icon) && $infoThisModule->icon != null && $infoThisModule->icon != "") ? " <i class=\"{$infoThisModule->icon}\"></i> " : "";
 			if(ControladorBase::validatePermission(ucwords($modulo), null) == true){
 				if(isset($infoThisModule->showTitleModule) && $infoThisModule->showTitleModule == true){

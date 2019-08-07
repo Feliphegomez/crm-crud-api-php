@@ -359,25 +359,6 @@ class ControladorBase {
 		
 		return (!isset($infoModulo->sections)) ? array() : $infoModulo->sections;
 		
-		/*
-		$nombreModulo = str_replace(array(
-			"controller",
-			"Controller",
-		), array(
-			"",
-			"",
-		), get_called_class());
-		
-		$urlInfoModulo = folder_content . "/modules/{$nombreModulo}/{$nombreModulo}.json";
-		if(ControladorBase::validateFileExist($urlInfoModulo)){
-			return json_decode(@file_get_contents($urlInfoModulo));
-		}else{
-			$r = json_decode(json_encode(array(
-				'name' => "Modulo {$nombreModulo}",
-				"isActive" => false
-			)));
-			return $r->
-		}*/
 		
 	}
 	
@@ -544,9 +525,22 @@ class ControladorBase {
     public function redirect($controlador=CONTROLADOR_DEFECTO,$accion=ACCION_DEFECTO){
         header("Location:index.php?controller=".$controlador."&action=".$accion);
     }
+	
+	public static function returnParamsUrl($z){
+		$a = '';
+		if(is_object($z) || is_array($z)){
+			foreach($z as $k => $v){
+				$a .= $k . '=' . ControladorBase::returnParamsUrl($v);
+			}
+		} else {
+			$a .= $z;
+		}
+		return $a;
+	}
      
-    public function linkUrl($controlador=CONTROLADOR_DEFECTO,$accion=ACCION_DEFECTO){
-        return ("index.php?controller=".$controlador."&action=".$accion);
+    public function linkUrl($controlador=CONTROLADOR_DEFECTO, $accion=ACCION_DEFECTO, $params=null){
+		$urlParams = ControladorBase::returnParamsUrl($params);
+        return ("index.php?controller={$controlador}&action={$accion}&{$urlParams}");
     }
      
     public function json(){
