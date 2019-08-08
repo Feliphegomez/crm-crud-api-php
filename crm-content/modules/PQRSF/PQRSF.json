@@ -16,6 +16,16 @@
 			}
 		},
 		{
+			"title": "Dashboard",
+			"controller": "PQRSF",
+			"action": "dashboard",
+			"icon": "fa fa-home",
+			"tree": [
+			],
+			"params": {
+			}
+		},
+		{
 			"title": "Crear - ADMIN",
 			"controller": "PQRSF",
 			"action": "create_pqrsf",

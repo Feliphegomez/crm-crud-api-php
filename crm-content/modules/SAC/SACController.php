@@ -13,4 +13,13 @@ class SACController extends ControladorBase {
 			)
 		);
 	}
+	
+	public function calendar(){
+		$this->viewInTemplate(
+			"calendar", array(
+				"title" => "Calendario SAC",
+				"template" => $this->template,
+			)
+		);
+	}
 }

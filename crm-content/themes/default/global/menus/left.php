@@ -5,7 +5,7 @@ class MenuLeft extends MenuBase {
 		parent::__construct();
 	}*/
 	
-	public function menuConHijos($section){
+	public function menuConHijos($section, $active = false){
 		$section->action = (!isset($section->action)) ? "index" : $section->action;
 		$section->title = (!isset($section->title) || $section->title == "" || $section->title == null) ? "Sin Titulo" : $section->title;
 		$section->params = (!isset($section->params)) ? null : $section->params;
@@ -19,8 +19,30 @@ class MenuLeft extends MenuBase {
 		if(isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action'])){
 			$classLink2 = ($_GET['action'] == $section->action) ? " style=\"display: block;\"" : "";
 			$classLink2 = ($_GET['action'] == "#") ? " style=\"display: block;\"" : "";
-			$classLink2 = " style=\"display: block;\"";
+			# $classLink2 = " style=\"display: block;\"";
 		}
+		
+		
+		/*
+		$classLink1 = "";
+		if(isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action'])){
+			$classLink1 = ($_GET['action'] == $section->action) ? " class=\"active\"" : "";
+			$classLink1 = ($_GET['action'] == "#") ? " class=\"active\"" : "";
+			if($active == false){
+				$active = true;
+			}
+		}|
+		$classLink2 = "";
+		if(isset($section->controller) && isset($_GET['controller']) && $_GET['controller'] == $section->controller && isset($_GET['action'])){
+			$classLink2 = ($_GET['action'] == $section->action) ? " style=\"display: block;\"" : "";
+			$classLink2 = ($_GET['action'] == "#") ? " style=\"display: block;\"" : "";
+			
+			if($_GET['action'] == $section->action){
+				$classLink1 = " class=\"active\"";
+				$classLink2 = " style=\"display: block;\"";
+			}
+		}
+		*/
 		
 		$tagIcon = (isset($section->icon) && $section->icon != null && $section->icon != "") ? " <i class=\"{$section->icon}\"></i> " : "";
 		
@@ -35,7 +57,7 @@ class MenuLeft extends MenuBase {
 							if(ControladorBase::validatePermission($item->controller, $item->action) == true){
 								
 								if(isset($item->tree) && count($item->tree) > 0){
-									$r .= $this->menuConHijos($item);
+									$r .= $this->menuConHijos($item, $active);
 								}else{
 									$r .= $this->menuSinHijos($item);
 								}

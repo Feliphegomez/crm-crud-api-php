@@ -1,13 +1,10 @@
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="images/favicon.ico" type="image/ico" />
-
     <title>CMS  | </title>
-
     <!-- Bootstrap -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -15,18 +12,15 @@
     <!-- NProgress -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
-    <link href="<?php echo $this->urlNav; ?>/assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-	
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">	
     <!-- bootstrap-progressbar -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
     <!-- Custom Theme Style -->
     <link href="<?php echo $this->urlNav; ?>/assets/build/css/custom.min.css" rel="stylesheet">
-
     <!-- bootstrap-datetimepicker -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
     <!-- Ion.RangeSlider -->
@@ -35,15 +29,16 @@
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
     <!-- Bootstrap Colorpicker -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
-
-    <link href="<?php echo $this->urlNav; ?>/assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
-	
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">	
     <!-- Datatables -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">	
+    <!-- FullCalendar -->
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" media="print">
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
@@ -241,12 +236,8 @@
 		  }
 		};
 	</script>
-	
-	
-	
-	
+		
 	<!-- FOOTER FROM -->
-	
     <!-- jQuery -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -255,7 +246,6 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/nprogress/nprogress.js"></script>
-	
     <!-- Chart.js -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/Chart.js/dist/Chart.min.js"></script>
     <!-- gauge.js -->
@@ -272,6 +262,25 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.time.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.stack.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.saturated.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.browser.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.drawSeries.js"></script> -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.errorbars.js"></script>
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.uiConstants.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.logaxis.js"></script> -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.symbol.js"></script>
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.flatdata.js"></script> -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.navigate.js"></script>
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.fillbetween.js"></script>
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.touchNavigate.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.hover.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.touch.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.axislabels.js"></script> -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.selection.js"></script>
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.composeImages.js"></script> -->
+    <!-- // <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.legend.js"></script> -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/Flot/jquery.flot.categories.js"></script>
+	
     <!-- Flot plugins -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
@@ -287,7 +296,6 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- bootstrap-datetimepicker -->    
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-	
     <!-- Ion.RangeSlider -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
     <!-- Bootstrap Colorpicker -->
@@ -300,14 +308,9 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/cropper/dist/cropper.min.js"></script>
     <!-- validator -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/validator/validator.js"></script>
-
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery-validation/jquery.validate.js"></script>
-	
 	<script src="<?php echo $this->urlNav; ?>/assets/vendors/bootbox/bootbox.min.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootbox/bootbox.locales.min.js"></script>
-	
-	
-	
     <!-- Datatables -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -324,3 +327,10 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/jszip/dist/jszip.min.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/pdfmake/build/pdfmake.min.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/pdfmake/build/vfs_fonts.js"></script>
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/fullcalendar/dist/fullcalendar.min.js"></script>
+	
+    <!-- jQuery Sparklines -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- morris.js -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/raphael/raphael.min.js"></script>
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/morris.js/morris.min.js"></script>

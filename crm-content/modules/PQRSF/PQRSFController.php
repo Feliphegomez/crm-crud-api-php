@@ -121,6 +121,14 @@ class PQRSFController extends ControladorBase {
 		);
 	}
 	
+	public function dashboard(){
+		$this->viewInTemplate(
+			"dashboard", array(
+				"title" => "Calendario SAC",
+				"template" => $this->template,
+			)
+		);
+	}
 	
 	
 	

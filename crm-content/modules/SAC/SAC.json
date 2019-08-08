@@ -12,6 +12,14 @@
 			"icon": "fa fa-home",
 			"tree": [
 			]
+		},
+		{
+			"title": "Calendario General",
+			"controller": "SAC",
+			"action": "calendar",
+			"icon": "fa fa-home",
+			"tree": [
+			]
 		}
 	]
 }
