@@ -126,17 +126,6 @@
 					}
 				},
 				{
-					"title": "Denuncias",
-					"controller": "PQRSF",
-					"action": "listar_pqrsf",
-					"icon": "fa fa-",
-					"tree": [
-					],
-					"params": {
-						"type": "5"
-					}
-				},
-				{
 					"title": "Felicitaciones",
 					"controller": "PQRSF",
 					"action": "listar_pqrsf",
@@ -144,7 +133,7 @@
 					"tree": [
 					],
 					"params": {
-						"type": "6"
+						"type": "5"
 					}
 				}
 			],
@@ -202,17 +191,6 @@
 					}
 				},
 				{
-					"title": "Denuncias",
-					"controller": "PQRSF",
-					"action": "buscar_pqrsf",
-					"icon": "fa fa-",
-					"tree": [
-					],
-					"params": {
-						"type": "5"
-					}
-				},
-				{
 					"title": "Felicitaciones",
 					"controller": "PQRSF",
 					"action": "buscar_pqrsf",
@@ -220,7 +198,7 @@
 					"tree": [
 					],
 					"params": {
-						"type": "6"
+						"type": "5"
 					}
 				}
 			]

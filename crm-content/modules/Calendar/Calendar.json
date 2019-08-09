@@ -1,0 +1,59 @@
+{
+	"name": "Calendario",
+	"isActive": true,
+	"author": "FelipheGomez - Andres Felipe Gomez Maya",
+	"icon": "fa fa-calendar",
+	"showTitleModule": true,
+	"sections": [
+		{
+			"title": "Cesar - (Operacion)",
+			"controller": "Calendar",
+			"action": "calendar1",
+			"icon": "fa fa-",
+			"tree": [
+			],
+			"params":[
+			]
+		},
+		{
+			"title": "Visitas Tecnicas",
+			"controller": "Calendar",
+			"action": "calendar2",
+			"icon": "fa fa-",
+			"tree": [
+			],
+			"params":[
+			]
+		},
+		{
+			"title": "Salas y Auditorios",
+			"controller": "Calendar",
+			"action": null,
+			"icon": "fa fa-",
+			"tree": [
+			],
+			"params":[
+			]
+		},
+		{
+			"title": "Opciones",
+			"controller": "Calendar",
+			"action": null,
+			"icon": "fa fa-cog",
+			"tree": [
+				{
+					"title": "Crear Sala",
+					"controller": "Calendar",
+					"action": "create_rooms_and_auditoriums",
+					"icon": "fa fa-",
+					"tree": [
+					],
+					"params":[
+					]
+				}
+			],
+			"params":[
+			]
+		}
+	]
+}

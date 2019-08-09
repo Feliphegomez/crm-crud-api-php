@@ -12,7 +12,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-define("CONTROLADOR_DEFECTO", "wellcome");
+define("CONTROLADOR_DEFECTO", "MiCuenta");
 define("ACCION_DEFECTO", "index");
 
 define("TEMA_DEFECTO", "default");

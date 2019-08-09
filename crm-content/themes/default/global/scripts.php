@@ -1,6 +1,11 @@
+
+<?php $myInfo = (isset($_SESSION['user'])) ? $_SESSION['user'] : null; ?>
+
 <!-- Custom Theme Scripts -->
 <script src="<?php echo $this->urlNav; ?>/assets/build/js/custom.js"></script>
 <script>
+	
+<?php if(ControladorBase::validatePermission("PQRSF", "navbar_legal") == true){ ?>
 	var NotificationsLegalNavbarTop = new Vue({
 		data(){
 			return {
@@ -77,4 +82,136 @@
 			},
 		},
 	}).$mount('#navbartop-notifications-legal');
+<?php } ?>
+
+<?php if(ControladorBase::validatePermission("MiCuenta", "inbox") == true && $myInfo != null){ ?>
+	var NotificationsInboxNavbarTop = new Vue({
+		data(){
+			return {
+				count: 0,
+				records: []
+			};
+		},
+		created(){
+			var self = this;
+			self.load();
+		},
+		methods: {
+			load(){
+				var self = this;
+				api.get('/records/conversations_groups', {
+					params: {
+						filter: [
+							'user,in,<?php echo ($myInfo['id']); ?>',
+							// 'conversations.status,eq,2'
+						],
+						join: [
+							'conversations',
+							'conversations,conversations_replys',
+							'conversations,conversations_replys,users_login',
+						]
+					}
+				})
+				.then(response => {
+					self.validateResult(response);
+				})
+				.catch(e => {
+					// Capturamos los errores
+					self.validateResult(e);
+				});
+			},
+			getLink(pqrs){
+				var self = this;
+				action = '';
+				pqrs.id = (pqrs.id != undefined && pqrs.id > 0) ? pqrs.id : 0;
+				typeId = (pqrs.type.id != undefined && pqrs.type.id > 0) ? pqrs.type.id : ((pqrs.type != undefined && pqrs.type > 0) ? pqrs.type : 0);
+				return '/index.php?controller=PQRSF&action=ver_pqrsf&type=' + typeId + '&id=' + pqrs.id;
+			},
+			validateResult(response){
+				var self = this;
+				if (response.data != undefined && response.data.records != undefined){
+					self.records = [];
+					self.count = 0;
+					if(response.data.records[0]){
+						response.data.records.forEach(item => {
+								self.records.push(item);
+							if(item.status === 2){
+								self.count++;
+							}
+						});
+					} else {
+						self.searchBox.errorText = "Esta queja no fue encontrada";
+					}
+				} else {
+					 console.log('Error: consulta'); 
+					 console.log(response.data); 
+				}
+			},
+		},
+	}).$mount('#navbartop-notifications-inbox');
+<?php } ?>
+<?php if(ControladorBase::validatePermission("SAC", "inbox") == true && $myInfo != null){ ?>
+	var NotificationsInboxSACNavbarTop = new Vue({
+		data(){
+			return {
+				count: 0,
+				records: []
+			};
+		},
+		created(){
+			var self = this;
+			self.load();
+		},
+		methods: {
+			load(){
+				var self = this;
+				api.get('/records/conversations', {
+					params: {
+						filter: [
+							// 'user,in,<?php echo ($myInfo['id']); ?>',
+							'status,in,0,2'
+						],
+						join: [
+							'conversations_replys',
+							'conversations_replys,users_login',
+						]
+					}
+				})
+				.then(response => {
+					self.validateResult(response);
+				})
+				.catch(e => {
+					// Capturamos los errores
+					self.validateResult(e);
+				});
+			},
+			getLink(pqrs){
+				var self = this;
+				action = '';
+				pqrs.id = (pqrs.id != undefined && pqrs.id > 0) ? pqrs.id : 0;
+				typeId = (pqrs.type.id != undefined && pqrs.type.id > 0) ? pqrs.type.id : ((pqrs.type != undefined && pqrs.type > 0) ? pqrs.type : 0);
+				return '/index.php?controller=PQRSF&action=ver_pqrsf&type=' + typeId + '&id=' + pqrs.id;
+			},
+			validateResult(response){
+				console.log(response);
+				var self = this;
+				if (response.data != undefined && response.data.records != undefined){
+					self.records = [];
+					self.count = 0;
+					if(response.data.records[0]){
+						response.data.records.forEach(item => {
+							self.records.push(item);
+							self.count++;
+						});
+					} else {
+						self.searchBox.errorText = "Esta queja no fue encontrada";
+					}
+				} else {
+					 console.log('Error: consulta'); 
+					 console.log(response.data); 
+				}
+			},
+		},
+	}).$mount('#navbartop-notifications-inbox-sac');
+<?php } ?>
 </script>

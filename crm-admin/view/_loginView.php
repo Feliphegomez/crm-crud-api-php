@@ -6,25 +6,29 @@
 		<div class="login_wrapper">
 			<div class="animate form login_form">
 				<section class="login_content">
-					<form action="/login" method="post">
-						<h2><?php echo $title; ?></h2>
-						<p><?php echo $description; ?></p>
+					<form action="<?php echo $helper->url("Login","login"); ?>" method="post">
+						<h1><?php echo $title; ?></h1>
+						
 						<div>
-							<input class="form-control" name="username" type="text" value="" required autocomplete="off" />
+							<select class="form-control" name="identification_type" required>
+								<option value="">Seleccione una option.</option>
+								<?php foreach($options->types_identifications as $type_identification) {
+								echo "<option value=\"{$type_identification->id}\">
+									{$type_identification->code} - {$type_identification->name}
+								</option>";
+								} ?>
+							</select>
 						</div>
 						<div>
-							<input class="form-control" name="password" type="password"  Placeholder="Tu contraseña" required />
+							<input class="form-control" name="identification_number" type="text"  Placeholder="# Documento" required autocomplete="off" />
 						</div>
 						<div>
 							<span style="width:48%; text-align:left;  display: inline-block;">
 								<a class="small-text" href="#">
-									<a class="small-text" href="/<?php echo $helper->url('Login', 'index'); ?>">
-										¿No eres tu?
-									</a>
+									
 								</a>
 							</span>
 							<span style="width:50%; text-align:right;  display: inline-block;">
-						
 							</span>
 						</div>
 						

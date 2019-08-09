@@ -1,0 +1,162 @@
+{
+	"name": "Mi Cuenta",
+	"isActive": true,
+	"author": "FelipheGomez - Andres Felipe Gomez Maya",
+	"icon": "glyphicon glyphicon-briefcase",
+	"showTitleModule": true,
+	"sections": [
+		{
+			"title": "Mis Cuentas",
+			"controller": "MiCuenta",
+			"action": "mis_cuentas",
+			"icon": "fa fa-legal",
+			"tree": [
+			],
+			"params":{}
+		},
+		{
+			"title": "Mensajes",
+			"controller": "MiCuenta",
+			"action": null,
+			"icon": "fa fa-envelope",
+			"tree": [
+				{
+					"id": "compose",
+					"title": "Redactar",
+					"controller": "MiCuenta",
+					"action": "#",
+					"icon": "fa fa-italic",
+					"tree": [
+					],
+					"params":[
+					]
+				},
+				{
+					"title": "Inbox",
+					"controller": "MiCuenta",
+					"action": "inbox",
+					"icon": "fa fa-inbox",
+					"tree": [
+					],
+					"params":[
+					]
+				}
+			],
+			"params":{}
+		},
+		{
+			"title": "PQRSF",
+			"controller": "MiCuenta",
+			"action": null,
+			"icon": "fa fa-question",
+			"tree": [
+				{
+					"title": "Mis PQRSF",
+					"controller": "MiCuenta",
+					"action": "mis_pqrsf",
+					"icon": "fa fa-list",
+					"tree": [
+					],
+					"params":{}
+				},
+				{
+					"title": "Crear",
+					"controller": "MiCuenta",
+					"action": null,
+					"icon": "fa fa-plus",
+					"tree": [
+						{
+							"title": "Peticion",
+							"controller": "MiCuenta",
+							"action": "create_pqrsf",
+							"icon": "fa fa-plus",
+							"tree": [
+							],
+							"params": {
+								"type": "peticion"
+							}
+						},
+						{
+							"title": "Queja",
+							"controller": "MiCuenta",
+							"action": "create_pqrsf",
+							"icon": "fa fa-plus",
+							"tree": [
+							],
+							"params": {
+								"type": "queja"
+							}
+						},
+						{
+							"title": "Reclamo",
+							"controller": "MiCuenta",
+							"action": "create_pqrsf",
+							"icon": "fa fa-plus",
+							"tree": [
+							],
+							"params": {
+								"type": "reclamo"
+							}
+						},
+						{
+							"title": "Sugerencia",
+							"controller": "MiCuenta",
+							"action": "create_pqrsf",
+							"icon": "fa fa-plus",
+							"tree": [
+							],
+							"params": {
+								"type": "sugerencia"
+							}
+						},
+						{
+							"title": "Felicitacion",
+							"controller": "MiCuenta",
+							"action": "create_pqrsf",
+							"icon": "fa fa-plus",
+							"tree": [
+							],
+							"params": {
+								"type": "felicitacion"
+							}
+						}
+					],
+					"params":{}
+				}
+			],
+			"params":{}
+		},
+		{
+			"title": "Solicitudes",
+			"controller": "MiCuenta",
+			"action": null,
+			"icon": "fa fa-tag",
+			"tree": [
+				{
+					"title": "Nueva Solicitud",
+					"controller": "MiCuenta",
+					"action": "crear_solicitud",
+					"icon": "fa fa-plus",
+					"tree": [
+						
+					],
+					"params": {
+					}
+				},
+				{
+					"title": "Mis Solicitudes",
+					"controller": "MiCuenta",
+					"action": "mis_solicitudes",
+					"icon": "fa fa-tags",
+					"tree": [
+						
+					],
+					"params": {
+					}
+				}
+			],
+			"params": {
+			}
+		}
+	]
+}

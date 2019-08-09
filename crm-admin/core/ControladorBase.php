@@ -186,6 +186,16 @@ class ControladorBase {
 		#exit();
 	}
 	
+	public function index(){
+		$this->viewSystemInTemplate(
+			"index", array(
+				"title" => "Titulo",
+				"subtitle" => "",
+				"description" => "Los datos estan incorrectos intenta nuevamente."
+			)
+		);
+	}
+	
 	public static function validateSession(){
 		if (isset($_SESSION) && isset($_SESSION['user']) && is_array($_SESSION['user']) && isset($_SESSION['user']['id'])){
 			$userid = (int) $_SESSION['user']['id'];

@@ -67,7 +67,7 @@ var PQRSFList = new Vue({
 		zfill: zfill,
 		loadType(){
 			var self = this;
-			api.get('/records/types_pqrs/' + self.typeId, {
+			api.get('/records/pqrs_types/' + self.typeId, {
 				params: {
 				}
 			})
@@ -102,8 +102,8 @@ var PQRSFList = new Vue({
 						'types_identifications',
 						'geo_departments',
 						'geo_citys',
-						'status_pqrs',
-						'types_pqrs',
+						'pqrs_status',
+						'pqrs_types',
 					]
 				}
 			})

@@ -883,8 +883,8 @@ var PQRSF_Dashboard = Vue.extend({
 						'types_identifications',
 						'geo_departments',
 						'geo_citys',
-						'status_pqrs',
-						'types_pqrs',
+						'pqrs_status',
+						'pqrs_types',
 					]
 				}
 			})

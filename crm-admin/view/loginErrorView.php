@@ -11,17 +11,10 @@
 						<p><?php echo $description; ?></p>
 						
 						<div>
-							<select class="form-control" name="identification_type" required>
-								<option value="">Seleccione una option.</option>
-								<?php foreach($options->types_identifications as $type_identification) {
-								echo "<option value=\"{$type_identification->id}\">
-									{$type_identification->code} - {$type_identification->name}
-								</option>";
-								} ?>
-							</select>
+							<input class="form-control" name="username" type="text" value="" required autocomplete="off" />
 						</div>
 						<div>
-							<input class="form-control" name="identification_number" type="text"  Placeholder="# Documento" required autocomplete="off" />
+							<input class="form-control" name="password" type="password"  Placeholder="Tu contraseña" required />
 						</div>
 						<div>
 							<span style="width:48%; text-align:left;  display: inline-block;">
@@ -62,4 +55,3 @@
 		</div>
 	</div>
 </body>
-

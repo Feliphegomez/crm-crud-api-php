@@ -536,7 +536,7 @@ app = new Vue({
     return {definition: null};
   },
   mounted: function () {
-	  this.$router.push({path: '/status_pqrs/list'});
+	  this.$router.push({path: '/pqrs_status/list'});
   },
   created: function () {
     var self = this;

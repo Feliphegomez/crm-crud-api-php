@@ -39,6 +39,8 @@
     <!-- FullCalendar -->
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
     <link href="<?php echo $this->urlNav; ?>/assets/vendors/fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" media="print">
+    <!-- bootstrap-wysiwyg -->
+    <link href="<?php echo $this->urlNav; ?>/assets/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
@@ -334,3 +336,7 @@
     <!-- morris.js -->
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/raphael/raphael.min.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/morris.js/morris.min.js"></script>
+    <!-- bootstrap-wysiwyg -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/google-code-prettify/src/prettify.js"></script>
