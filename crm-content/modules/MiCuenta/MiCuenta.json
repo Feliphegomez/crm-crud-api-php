@@ -15,34 +15,25 @@
 			"params":{}
 		},
 		{
-			"title": "Mensajes",
+			"id": "compose",
+			"title": "Redactar mensaje",
 			"controller": "MiCuenta",
-			"action": null,
-			"icon": "fa fa-envelope",
+			"action": "#",
+			"icon": "fa fa-italic",
 			"tree": [
-				{
-					"id": "compose",
-					"title": "Redactar",
-					"controller": "MiCuenta",
-					"action": "#",
-					"icon": "fa fa-italic",
-					"tree": [
-					],
-					"params":[
-					]
-				},
-				{
-					"title": "Inbox",
-					"controller": "MiCuenta",
-					"action": "inbox",
-					"icon": "fa fa-inbox",
-					"tree": [
-					],
-					"params":[
-					]
-				}
 			],
-			"params":{}
+			"params":[
+			]
+		},
+		{
+			"title": "Bandeja de Mensajes",
+			"controller": "MiCuenta",
+			"action": "inbox",
+			"icon": "fa fa-inbox",
+			"tree": [
+			],
+			"params":[
+			]
 		},
 		{
 			"title": "PQRSF",

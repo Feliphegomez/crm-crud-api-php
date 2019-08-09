@@ -29,7 +29,7 @@
 							</div>
 							<div class="right">
 								<h3>{{ inbox.conversations_replys[0].user.names }} <small>{{ inbox.conversations_replys[0].created }}</small> </h3>
-								<p>{{ inbox.conversations_replys[0].reply.slice(0,100) }}...</p>
+								<p v-html="inbox.conversations_replys[0].reply.slice(0,100)"></p>
 							</div>
 						</div>
 					</router-link>
@@ -71,8 +71,9 @@
 
 <template id="micuenta-inbox-conversations-view">
 	<div>
-		<div class="inbox-body">
-			<template v-if="replys[0]">
+		<template v-if="replys[0]">
+			ID: {{ replys[0].id }}
+			<div class="inbox-body">
 				<div class="mail_heading row">
 					<div class="col-md-8">
 						<div class="btn-group">
@@ -89,33 +90,88 @@
 						<h4> {{ replys[0].user.names }} {{ replys[0].user.surname }}</h4>
 					</div>
 				</div>
-				
-				<div class="sender-info">
-					<div class="row">
-						<div class="col-md-12">
-							<strong>{{ conversation.status.name }}</strong>
-							<span>Usuario: ({{ replys[0].user.username }})</span> <strong></strong>
-							<a class="sender-dropdown"><i class="fa fa-chevron-down"></i></a>
+			
+				<template v-for="(item, a) in replys">
+					<div class="sender-info">
+						<div class="row">
+							<div class="col-md-12">
+								<strong>{{ conversation.status.name }}</strong>
+								<span>Usuario: ({{ item.user.username }})</span> <strong></strong>
+								<a class="sender-dropdown"><i class="fa fa-chevron-down"></i></a>
+							</div>
 						</div>
 					</div>
-				</div>
-			
-				<div class="view-mail" v-html="replys[0].reply">
-				</div>
-				<div class="ln_solid"></div>
+					<div class="view-mail" v-html="item.reply">
+					</div>
+					<div class="ln_solid"></div>
+				</template>
+				
 				<div class="x_content">
-					<textarea class="form-control"></textarea>
+					<textarea v-model="me.compose.text" rows="6" class="form-control"></textarea>
 				</div>
 				
 				<div class="btn-group pull-right">
 					<!-- // <button v-if="conversation.status.id == 0 || conversation.status.id == 2" class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> </button> -->
-					<button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i> Responder</button>
+					<button @click="sendMessage" class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i> Responder</button>
 					<!-- // <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button> -->
 				</div>
-			</template>
-		
+			</div>
+		</template>
+		<!-- //
+		<div>
+			<div>
+				<div class="mail_heading row">
+					<div class="col-md-8">
+						<div class="btn-group">
+							<!-- // <button class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> Responder</button> -- >
+							<!-- // <button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i></button> -- >
+							<button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Print"><i class="fa fa-print"></i></button>
+							<!-- // <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button> -- >
+						</div>
+					</div>
+					<div class="col-md-4 text-right">
+						<p class="date"> {{ replys[0].created }}</p>
+					</div>
+					<div class="col-md-12">
+						<h4> {{ replys[0].user.names }} {{ replys[0].user.surname }}</h4>
+					</div>
+				</div>
+				<template class="inbox-body" v-for="(item, a) in replys">
+					
+					<div class="sender-info">
+						<div class="row">
+							<div class="col-md-12">
+								<strong>{{ conversation.status.name }}</strong>
+								<span>Usuario: ({{ replys[0].user.username }})</span> <strong></strong>
+								<a class="sender-dropdown"><i class="fa fa-chevron-down"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="ln_solid"></div>
+					
+					<div class="view-mail" v-html="item.reply"></div>
+				</template>
+				<template v-if="replys[0]">
+					
+					
 			
+					<div class="view-mail" v-html="replys[0].reply">
+					</div>
+					<div class="ln_solid"></div>
+					<div class="x_content">
+						<textarea rows="6" v-model="me.compose.text" class="form-control"></textarea>
+					</div>
+					
+					<div class="btn-group pull-right">
+						<!-- // <button v-if="conversation.status.id == 0 || conversation.status.id == 2" class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> </button> -- >
+						<button @click="sendMessage" class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i> Enviar Mensaje</button>
+						<!-- // <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button> -- >
+					</div>
+				</template>
+				
+			</div>
 		</div>
+		-->
 	</div>
 </template>
 
@@ -134,6 +190,7 @@ var InboxConversationsView = Vue.extend({
 	template: '#micuenta-inbox-conversations-view',
 	data: function () {
 		return {
+			user_id: <?php echo (isset($myInfo['id'])) ? $myInfo['id'] : 0; ?>,
 			replys: [],
 			conversation: {
 				id: '',
@@ -145,7 +202,10 @@ var InboxConversationsView = Vue.extend({
 				updated: ''
 			},
 			me: {
-				avatar: "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48"
+				avatar: "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48",
+				compose: {
+					text: '',
+				},
 			},
 			you: {
 				avatar: "https://a11.t26.net/taringa/avatares/9/1/2/F/7/8/Demon_King1/48x48_5C5.jpg"
@@ -166,30 +226,55 @@ var InboxConversationsView = Vue.extend({
 				 console.log('Error: consulta validateResultConversation'); 
 				 console.log(response); 
 			}
-		}
+		},
+		sendMessage(){
+			var self = this;
+			obj_message = {};
+			
+			if(self.me.compose.text != ''){
+				console.log('enviar');
+				obj_message.reply = self.me.compose.text;
+				obj_message.conversation = self.$route.params.conversation_id;
+				obj_message.user = self.user_id;
+				
+				console.log(self.me.compose.text);
+				console.log(obj_message);
+				api.post('/records/conversations_replys/', obj_message)
+				.then(response => {
+					self.me.compose.text = '';
+					self.load();
+				})
+				.catch(e => {
+					console.log("Error");
+					console.log(e.response);
+				});
+				
+				
+				// Se reinicia por que se detecta que se esta viendo la pantalla en otros pcs. Se retoma 20190809-154200	
+			}
+		},
+		load(){
+			var self = this;
+			conversation_id = (!self.$route.params.conversation_id) ? 0 : self.$route.params.conversation_id;
+			console.log(conversation_id);
+			api.get('/records/conversations/' + conversation_id, {
+				params: {
+					filter: [],
+					join: [
+						'conversations_status',
+						'conversations_replys',
+						'conversations_replys,users_login',
+					]
+				}
+			})
+			.then(response => { self.validateResultConversation(response); })
+			.catch(e => { self.validateResultConversation(e); });
+		},
 	},
-	created(){
-		
-		var self = this;
-		
-	},
+	created(){},
 	mounted(){
 		var self = this;
-		conversation_id = (!self.$route.params.conversation_id) ? 0 : self.$route.params.conversation_id;
-		console.log(conversation_id);
-		api.get('/records/conversations/' + conversation_id, {
-			params: {
-				filter: [],
-				join: [
-					'conversations_status',
-					'conversations_replys',
-					'conversations_replys,users_login',
-				]
-			}
-		})
-		.then(response => { self.validateResultConversation(response); })
-		.catch(e => { self.validateResultConversation(e); });
-		
+		self.load();		
 	},
 });
 
@@ -227,7 +312,8 @@ var Inbox = new Vue({
 						'conversations_status',
 						'conversations_replys',
 						'conversations_replys,users_login',
-					]
+					],
+					order: 'id,desc'
 				}
 			})
 			.then(response => {
