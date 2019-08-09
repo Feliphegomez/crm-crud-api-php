@@ -31,6 +31,7 @@
 					<a  href="#"></a>
 				</ul>
 			</li>
+			
 			<?php if(ControladorBase::validatePermission("PQRSF", "navbar_legal") == true){ ?>
 				<li role="presentation" class="dropdown" id="navbartop-notifications-legal" @click="load()">
 					<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
@@ -65,22 +66,23 @@
 					</ul>
 				</li>
 			<?php } ?>
+			
 			<?php if(ControladorBase::validatePermission("SAC", "inbox") == true){ ?>
 				<li role="presentation" class="dropdown" id="navbartop-notifications-inbox-sac" @click="load()">
-					<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+					<a class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
 						<i class="fa fa-envelope-square"></i>
 						<span class="badge bg-green" v-if="count > 0">{{ count }}</span>
 					</a>
 					<ul class="dropdown-menu list-unstyled msg_list" role="menu">
 						<template v-if="records.length > 0">
 							<li v-for="(inbox, i) in records">
-								<a v-if="inbox.conversations_replys[0]"> <!-- //  v-bind:href="getLink(inbox)" -->
+								<a v-bind:href="'/index.php?controller=SAC&action=inbox#/conversation/' + inbox.id + '/view'" v-if="inbox.conversations_replys[0]">
 									<span>
 										<span><b>{{ inbox.conversations_replys[0].user.names }} </b></span>
 										<span class="time">{{ inbox.conversations_replys[0].created }}</span>
 									</span>
 									<span class="message">
-										{{ inbox.conversations_replys[0].reply }}
+										{{ inbox.conversations_replys[0].reply.slice(0,150) }}...
 										<!-- <br><b>Estado PQRS: </b> {{ inbox.status.name }} -->
 									</span>
 								</a>
@@ -97,7 +99,7 @@
 						
 						<li>
 							<div class="text-center">
-								<a href="<?php echo $this->linkUrl('MiCuenta', 'inbox'); ?>">
+								<a href="<?php echo $this->linkUrl('SAC', 'inbox'); ?>">
 									<strong>Bandeja de Mensajes</strong>
 									<i class="fa fa-angle-right"></i>
 								</a>
@@ -116,13 +118,13 @@
 					<ul class="dropdown-menu list-unstyled msg_list" role="menu">
 						<template v-if="records.length > 0">
 							<li v-for="(inbox, i) in records">
-								<a v-if="inbox.conversation.conversations_replys[0]"> <!-- //  v-bind:href="getLink(inbox)" -->
+								<a v-bind:href="'/index.php?controller=MiCuenta&action=inbox#/conversation/' + inbox.conversation.id + '/view'" v-if="inbox.conversation.conversations_replys[0]">
 									<span>
 										<span><b>{{ inbox.conversation.conversations_replys[0].user.names }} </b></span>
 										<span class="time">{{ inbox.conversation.conversations_replys[0].created }}</span>
 									</span>
 									<span class="message">
-										{{ inbox.conversation.conversations_replys[0].reply }}
+										{{ inbox.conversation.conversations_replys[0].reply.slice(0,150) }}...
 										<!-- <br><b>Estado PQRS: </b> {{ inbox.status.name }} -->
 									</span>
 								</a>

@@ -1,3 +1,4 @@
+
 <?php $myInfo = (isset($_SESSION['user'])) ? $_SESSION['user'] : null; ?>
 <div class="" id="micuenta-inbox">
 	<div class="page-title">
@@ -8,56 +9,59 @@
 	<div class="clearfix"></div>
 	
 	<div class="row">
-		<div class="col-md-12">
-			<div class="x_panel">
-				<div class="x_title">
-					<h2>Inbox <small>Bandeja de mensajes</small></h2>
-					<div class="clearfix"></div>
-				</div>
+	  <div class="col-md-12">
+		<div class="x_panel">
+		  <div class="x_title">
+			<h2>Inbox <small>Bandeja de mensajes</small></h2>
+			<div class="clearfix"></div>
+		  </div>
+		  <div class="x_content">
+			<div class="row">
+			  <div class="col-sm-3 mail_list_column">
+			  
+				<template v-if="records.length > 0" v-for="(inbox, i) in records">
+					<router-link tag="a" :to="{ name: 'MiCuenta-Inbox-Conversation-View', params: { conversation_id: inbox.id }}">
+						<div class="mail_list">
+							<div class="left">
+								<i class="fa fa-circle" v-if="inbox.status.id == 0 || inbox.status.id == 2"></i> 
+								<i class="fa fa-circle-o" v-else></i> 
+								<!-- // <i class="fa fa-edit"></i> -->
+							</div>
+							<div class="right">
+								<h3>{{ inbox.conversations_replys[0].user.names }} <small>{{ inbox.conversations_replys[0].created }}</small> </h3>
+								<p>{{ inbox.conversations_replys[0].reply.slice(0,100) }}...</p>
+							</div>
+						</div>
+					</router-link>
+				</template>
+				<template v-else>
+					<a href="#">
+						<div class="mail_list">
+							<div class="left">
+								<i class="fa fa-circle"></i> <i class="fa fa-edit"></i>
+							</div>
+							<div class="right">
+								<h3> <small></small></h3>
+								<p>No hay conversaciones.</p>
+							</div>
+						</div>
+					</a>
+				</template>
 				
-				<div class="x_content">
-					<div class="row">
-						<div class="col-sm-3 mail_list_column">
-							<button id="compose" class="btn btn-sm btn-success btn-block" type="button">Redactar</button>
-							<template v-if="records.length > 0" v-for="(inbox, i) in records">
-								<router-link tag="a" :to="{ name: 'MiCuenta-Inbox-Conversation-View', params: { conversation_id: inbox.conversation.id }}">
-									<div class="mail_list">
-										<div class="left">
-											<i class="fa fa-circle" v-if="inbox.conversation.status.id == 1"></i> 
-											<i class="fa fa-circle-o" v-else></i> 
-											<!-- // <i class="fa fa-edit"></i> -->
-										</div>
-										<div class="right">
-											<h3>{{ inbox.conversation.conversations_replys[0].user.names }} <small>{{ inbox.conversation.conversations_replys[0].created }}</small> </h3>
-											<p>{{ inbox.conversation.conversations_replys[0].reply.slice(0,100) }}...</p>
-										</div>
-									</div>
-								</router-link>
-							</template>
-							<template v-else>
-								<a href="#">
-									<div class="mail_list">
-										<div class="left">
-											<i class="fa fa-circle"></i> <i class="fa fa-edit"></i>
-										</div>
-										<div class="right">
-											<h3> <small></small></h3>
-											<p>No hay conversaciones.</p>
-										</div>
-									</div>
-								</a>
-							</template>
-						</div>
-						
-						<div class="col-sm-9 mail_view">
-							<router-view></router-view>
-						</div>
-					</div>
-				</div>
+			  </div>
+			  <!-- /MAIL LIST -->
+
+			  <!-- CONTENT MAIL -->
+			  <div class="col-sm-9 mail_view">
+				<router-view></router-view>
+			  </div>
+			  <!-- /CONTENT MAIL -->
 			</div>
+		  </div>
 		</div>
+	  </div>
 	</div>
-</div>
+  </div>
 
 <template id="micuenta-inbox-home">
 	<div>
@@ -98,21 +102,18 @@
 			
 				<div class="view-mail" v-html="replys[0].reply">
 				</div>
-				
-			
-				<div class="view-mail" v-html="replys[0].reply">
-				</div>
 				<div class="ln_solid"></div>
 				<div class="x_content">
-					<textarea v-model="me.compose.text" class="form-control"></textarea>
+					<textarea class="form-control"></textarea>
 				</div>
 				
 				<div class="btn-group pull-right">
 					<!-- // <button v-if="conversation.status.id == 0 || conversation.status.id == 2" class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> </button> -->
-					<button @click="sendMessage" class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i> Enviar Mensaje</button>
+					<button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i> Responder</button>
 					<!-- // <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button> -->
 				</div>
 			</template>
+		
 			
 		</div>
 	</div>
@@ -144,10 +145,7 @@ var InboxConversationsView = Vue.extend({
 				updated: ''
 			},
 			me: {
-				avatar: "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48",				
-				compose: {
-					text: '',
-				},
+				avatar: "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48"
 			},
 			you: {
 				avatar: "https://a11.t26.net/taringa/avatares/9/1/2/F/7/8/Demon_King1/48x48_5C5.jpg"
@@ -168,26 +166,13 @@ var InboxConversationsView = Vue.extend({
 				 console.log('Error: consulta validateResultConversation'); 
 				 console.log(response); 
 			}
-		},
-		showErrorAlert(reason, detail){
-          var msg = '';
-          if (reason === 'unsupported-file-type') {
-            msg = "Unsupported format " + detail;
-          } else {
-            console.log("error uploading file", reason, detail);
-          }
-          $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>' +
-            '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
-		},
-		sendMessage(){
-			var self = this;
-if(self.me.compose.text != ''{
-	console.log('enviar');
-	// Se reinicia por que se detecta que se esta viendo la pantalla en otros pcs.
-}
-		},
+		}
 	},
-	created(){},
+	created(){
+		
+		var self = this;
+		
+	},
 	mounted(){
 		var self = this;
 		conversation_id = (!self.$route.params.conversation_id) ? 0 : self.$route.params.conversation_id;
@@ -204,6 +189,7 @@ if(self.me.compose.text != ''{
 		})
 		.then(response => { self.validateResultConversation(response); })
 		.catch(e => { self.validateResultConversation(e); });
+		
 	},
 });
 
@@ -231,17 +217,16 @@ var Inbox = new Vue({
 	methods: {
 		load(){
 			var self = this;
-			api.get('/records/conversations_groups', {
+			api.get('/records/conversations', {
 				params: {
 					filter: [
-						'user,in,<?php echo ($myInfo['id']); ?>',
-						//'status,in,0,1'
+						// 'user,in,<?php echo ($myInfo['id']); ?>',
+						'status,in,0,2'
 					],
 					join: [
-						'conversations',
-						'conversations,conversations_status',
-						'conversations,conversations_replys',
-						'conversations,conversations_replys,users_login',
+						'conversations_status',
+						'conversations_replys',
+						'conversations_replys,users_login',
 					]
 				}
 			})
@@ -252,6 +237,7 @@ var Inbox = new Vue({
 				// Capturamos los errores
 				self.validateResult(e);
 			});
+			
 		},
 		getLink(pqrs){
 			var self = this;
@@ -270,12 +256,12 @@ var Inbox = new Vue({
 							self.records.push(item);
 							self.count++;
 					});
-				} else {
-					self.searchBox.errorText = "Esta queja no fue encontrada";
 				}
+				
+				
 			} else {
 				 console.log('Error: consulta validateResult'); 
-				 console.log(response); 
+				 // console.log(response); 
 			}
 		},
 	},

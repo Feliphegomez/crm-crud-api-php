@@ -30,8 +30,8 @@
 							'types_identifications',
 							'geo_departments',
 							'geo_citys',
-							'status_pqrs',
-							'types_pqrs',
+							'pqrs_status',
+							'pqrs_types',
 						]
 					}
 				})
@@ -150,6 +150,7 @@
 		},
 	}).$mount('#navbartop-notifications-inbox');
 <?php } ?>
+
 <?php if(ControladorBase::validatePermission("SAC", "inbox") == true && $myInfo != null){ ?>
 	var NotificationsInboxSACNavbarTop = new Vue({
 		data(){
@@ -193,7 +194,6 @@
 				return '/index.php?controller=PQRSF&action=ver_pqrsf&type=' + typeId + '&id=' + pqrs.id;
 			},
 			validateResult(response){
-				console.log(response);
 				var self = this;
 				if (response.data != undefined && response.data.records != undefined){
 					self.records = [];
