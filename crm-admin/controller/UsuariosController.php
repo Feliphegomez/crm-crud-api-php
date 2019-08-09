@@ -10,7 +10,7 @@ class UsuariosController extends ControladorBase {
 	}
 	
     public function mi_perfil(){
-		$this->viewInTemplate(
+		$this->viewSystemInTemplate(
 			"mi_perfil", array(
 				"title" => "mi_perfil",
 				"template" => $this->template,

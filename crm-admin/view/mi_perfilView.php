@@ -86,7 +86,7 @@
 			  </div>
 			</li>
 			<li>
-			  <p><?php echo json_encode($myInfo); ?>
+			  <p><?php #echo json_encode($myInfo); ?>
 			  <div class="progress progress_sm">
 				<div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
 			  </div>

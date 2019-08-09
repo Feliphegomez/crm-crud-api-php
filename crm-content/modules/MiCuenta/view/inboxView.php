@@ -181,10 +181,10 @@ var InboxConversationsView = Vue.extend({
 		},
 		sendMessage(){
 			var self = this;
-if(self.me.compose.text != ''{
-	console.log('enviar');
-	// Se reinicia por que se detecta que se esta viendo la pantalla en otros pcs.
-}
+			if(self.me.compose.text != ''){
+				console.log('enviar');
+				// Se reinicia por que se detecta que se esta viendo la pantalla en otros pcs. Se retoma 20190809-154200	
+			}
 		},
 	},
 	created(){},
