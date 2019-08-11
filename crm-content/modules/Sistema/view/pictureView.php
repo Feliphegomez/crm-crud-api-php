@@ -58,5 +58,38 @@ if(isset($pictureData[1])){
 			}
 	}
 }else{
-	exit("Error");
+		$data = $b->getData();
+		//$data = base64_decode($data);
+		$im = ImageCreateFromString($data);
+		if ($im !== false) 
+			{
+				header('Content-Type: image/png');
+				
+				if(isset($_GET['w']) && $_GET['w'] == 'original')
+					{
+						imagepng($im);
+						imagedestroy($im);
+					} 
+				else if(!isset($_GET['thumb']) || $_GET['thumb'] == false)
+					{
+						$height = true;
+						$width = 150;
+						if(isset($_GET['w']) && $_GET['w'] > 0){ $width = (int) $_GET['w']; }
+						$height = $height === true ? (ImageSY($im) * $width / ImageSX($im)) : $height;
+						$output = ImageCreateTrueColor($width, $height);
+						ImageCopyResampled($output, $im, 0, 0, 0, 0, $width, $height, ImageSX($im), ImageSY($im));
+						# ImageJPEG($output, "temp/images/{$picture->name}", 95);
+						imagepng($output);
+						imagedestroy($output);
+					} 
+				else
+					{
+						imagepng($im);
+						imagedestroy($im);
+					}
+			}
+		else
+			{
+				echo 'Ocurrió un error.';
+			}
 }

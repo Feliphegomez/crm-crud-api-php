@@ -340,3 +340,16 @@
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
     <script src="<?php echo $this->urlNav; ?>/assets/vendors/google-code-prettify/src/prettify.js"></script>
+
+    <!-- jQuery Smart Wizard -->
+    <script src="<?php echo $this->urlNav; ?>/assets/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+	<script>
+		Date.prototype.toMysqlFormat = function() {
+			function twoDigits(d) {
+				if(0 <= d && d < 10) return "0" + d.toString();
+				if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+				return d.toString();
+			}
+			return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+		};
+	</script>
